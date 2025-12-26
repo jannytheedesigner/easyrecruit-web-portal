@@ -4,7 +4,7 @@
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { useAuth } from "@/hooks/useAuth"
-import { Bell, Moon, Sun, Search } from "lucide-react"
+import { Bell, Moon, Sun, Search, PowerOff, CirclePowerIcon } from "lucide-react"
 import { useMemo, useState } from "react"
 import { Logo } from "oxisverse-logo-system"
 import { getRoleBasePath, getRoleDashboardPath } from "@/lib/roleRoutes"
@@ -29,15 +29,14 @@ export function Navbar() {
   const navLinks = useMemo(() => {
     if (user?.role === "employer") {
       return [
-        { href: `${basePath}/dashboard`, label: "Home" },
+        { href: `${basePath}/dashboard`, label: "Overview" },
         { href: `${basePath}/jobs`, label: "Jobs" },
         { href: `${basePath}/users`, label: "Talent" },
-        { href: `${basePath}/contracts`, label: "Contracts" },
-        { href: `${basePath}/payments`, label: "Payments" },
+        { href: `${basePath}/contracts`, label: "Quizes & Interviews" },
       ]
     }
     return [
-      { href: `${basePath}/dashboard`, label: "Home" },
+      { href: `${basePath}/dashboard`, label: "Overview" },
       { href: `${basePath}/jobs`, label: "Find Jobs" },
       { href: `${basePath}/contracts`, label: "Contracts" },
       { href: `${basePath}/payments`, label: "Earnings" },
@@ -51,7 +50,7 @@ export function Navbar() {
   }
 
   return (
-    <header className="h-16 bg-card border-b border-border flex items-center justify-between px-4 sm:px-6">
+    <header className="bg-card border-b border-border flex items-center justify-between px-4 sm:px-6">
       <div className="flex items-center gap-4 min-w-0">
         <Link href={homeHref} className="text-base font-semibold text-primary whitespace-nowrap">
           <Logo
@@ -62,10 +61,13 @@ export function Navbar() {
             width={180}
             height={40}
             alt="EasyRecruit Logo"
-            className="flex w-[10em]"
+            className="flex w-[8em]"
             priority
           />
         </Link>
+
+      </div>
+      <div className="max-w-5xl mx-auto flex flex-row">
         <div className="hidden md:flex items-center gap-1">
           {navLinks.map((l) => {
             const active = pathname?.startsWith(l.href)
@@ -73,7 +75,7 @@ export function Navbar() {
               <Link
                 key={l.href}
                 href={l.href}
-                className={`px-3 py-1.5 rounded-md text-sm transition-colors ${active ? "bg-primary text-primary-foreground" : "hover:bg-accent hover:text-accent-foreground"
+                className={`px-3 py-5 text-sm border-b-4 transition-colors hover:text-gray-600 ${active ? "bg-none border-b-4 border-er-primary font-medium text-er-primary-dark" : "border-er-primary/0 hover:border-b-accent hover:text-accent-foreground"
                   }`}
               >
                 {l.label}
@@ -81,33 +83,21 @@ export function Navbar() {
             )
           })}
         </div>
+        <form onSubmit={onSearch} className="hidden lg:flex items-center gap-2 flex-1 max-w-xl mx-4">
+          <div className="flex items-center gap-2 w-full bg-background border border-border rounded-lg px-3 h-10">
+            <Search className="w-4 h-4 text-muted-foreground" />
+            <input
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Search jobs"
+              className="w-full bg-transparent outline-none text-sm"
+            />
+          </div>
+        </form>
       </div>
 
-      <form onSubmit={onSearch} className="hidden lg:flex items-center gap-2 flex-1 max-w-xl mx-4">
-        <div className="flex items-center gap-2 w-full bg-background border border-border rounded-lg px-3 h-10">
-          <Search className="w-4 h-4 text-muted-foreground" />
-          <input
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search jobs"
-            className="w-full bg-transparent outline-none text-sm"
-          />
-        </div>
-      </form>
 
       <div className="flex items-center gap-3">
-        <span className="hidden sm:block text-sm font-medium">{wallTitle}</span>
-        <button
-          onClick={() => setDark((p) => !p)}
-          className="w-9 h-9 rounded-full bg-accent text-accent-foreground flex items-center justify-center"
-          aria-label="Toggle theme"
-        >
-          {dark ? (
-            <Sun className="w-4 h-4" />
-          ) : (
-            <Moon className="w-4 h-4" />
-          )}
-        </button>
         <Link
           href={`${basePath}/notifications`}
           className="w-9 h-9 rounded-full bg-accent text-accent-foreground flex items-center justify-center"
@@ -121,7 +111,7 @@ export function Navbar() {
             <p className="text-xs text-muted-foreground capitalize">{user?.role || "user"}</p>
           </div>
           <button onClick={logout} className="text-xs text-muted-foreground hover:text-foreground">
-            Logout
+            <CirclePowerIcon className="text-red-500" />
           </button>
         </div>
       </div>

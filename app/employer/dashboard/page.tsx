@@ -5,6 +5,7 @@ import { Loader } from "@/components/Loader";
 import axiosClient from "@/lib/axiosClient";
 import { Briefcase, Users, FileText, DollarSign, TrendingUp, TrendingDown, ChevronRight, Plus, Search, Calendar, Clock, Award, Target, Zap, Star, CheckCircle, AlertCircle } from "lucide-react";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line, PieChart, Pie, Cell } from "recharts";
+import Link from "next/link";
 
 interface EmployerStats {
   total_jobs: number;
@@ -89,8 +90,8 @@ export default function EmployerDashboardPage() {
       value: stats?.total_jobs || 0,
       change: stats?.jobs_growth || 0,
       icon: Briefcase,
-      color: "from-blue-500 to-blue-600",
-      bgColor: "bg-gradient-to-br from-blue-50 to-blue-100",
+      color: "bg-er-primary",
+      bgColor: "bg-er-primary/5",
       trendIcon: TrendingUp,
     },
     {
@@ -98,8 +99,8 @@ export default function EmployerDashboardPage() {
       value: stats?.total_users || 0,
       change: stats?.users_growth || 0,
       icon: Users,
-      color: "from-green-500 to-green-600",
-      bgColor: "bg-gradient-to-br from-green-50 to-green-100",
+      color: "bg-er-primary",
+      bgColor: "bg-er-primary/5",
       trendIcon: TrendingUp,
     },
     {
@@ -107,26 +108,26 @@ export default function EmployerDashboardPage() {
       value: stats?.total_contracts || 0,
       change: 8.2,
       icon: FileText,
-      color: "from-purple-500 to-purple-600",
-      bgColor: "bg-gradient-to-br from-purple-50 to-purple-100",
+      color: "bg-er-primary",
+      bgColor: "bg-er-primary/5",
       trendIcon: TrendingUp,
     },
     {
-      title: "Revenue",
-      value: `$${(stats?.total_revenue || 0).toLocaleString()}`,
-      change: 12.5,
-      icon: DollarSign,
-      color: "from-yellow-500 to-yellow-600",
-      bgColor: "bg-gradient-to-br from-yellow-50 to-yellow-100",
+      title: "Hires",
+      value: `${(stats?.total_revenue || 0).toLocaleString()}`,
+      change: -12.5,
+      icon: CheckCircle,
+      color: "bg-er-primary",
+      bgColor: "bg-er-primary/5",
       trendIcon: TrendingUp,
     },
   ];
 
   const quickActions = [
-    { title: "Post New Job", icon: Plus, color: "bg-primary text-primary-foreground" },
-    { title: "Find Talent", icon: Search, color: "bg-blue-500 text-white" },
-    { title: "Schedule Interview", icon: Calendar, color: "bg-green-500 text-white" },
-    { title: "Review Contracts", icon: FileText, color: "bg-purple-500 text-white" },
+    { title: "Post New Job", icon: Plus, color: "bg-er-primary text-primary-foreground" },
+    { title: "Find Talent", icon: Search, color: "bg-er-complimentary text-white" },
+    { title: "Interviews", icon: Calendar, color: "bg-er-secondary-dark text-white" },
+    { title: "Contracts", icon: FileText, color: "bg-er-dark text-white" },
   ];
 
   return (
@@ -155,28 +156,24 @@ export default function EmployerDashboardPage() {
           const Icon = stat.icon;
           const TrendIcon = stat.trendIcon;
           const isPositive = stat.change >= 0;
-          
+
           return (
-            <div key={stat.title} className={`${stat.bgColor} border border-border/50 rounded-2xl p-6 relative overflow-hidden group hover:shadow-lg transition-all duration-300`}>
+            <div key={stat.title} className={`${stat.bgColor} border border-er-primary/10 rounded-2xl p-6 relative overflow-hidden group hover:shadow-lg shadow-er-primary/5 transition-all duration-300`}>
               <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-white/10 to-transparent rounded-full -translate-y-8 translate-x-8" />
-              
+
               <div className="flex items-start justify-between mb-4">
-                <div className={`p-3 rounded-xl bg-gradient-to-br ${stat.color} text-white shadow-lg`}>
+                <div className={`p-3 rounded-md bg-gradient-to-br ${stat.color} text-white`}>
                   <Icon className="w-6 h-6" />
                 </div>
-                <div className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold ${isPositive ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                <div className="text-4xl font-semibold my-auto">{stat.value}</div>
+              </div>
+
+              <div className="space-y-2 flex flex-row">
+                <div className="text-sm text-muted-foreground my-auto">{stat.title}</div>
+                <div className={`inline-flex ml-auto w-fit items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold ${isPositive ? 'bg-white text-green-700' : 'bg-white text-red-700'}`}>
                   <TrendIcon className="w-3 h-3" />
                   {isPositive ? '+' : ''}{stat.change}%
                 </div>
-              </div>
-              
-              <div className="space-y-2">
-                <div className="text-3xl font-bold">{stat.value}</div>
-                <div className="text-sm text-muted-foreground">{stat.title}</div>
-              </div>
-              
-              <div className="mt-4 pt-4 border-t border-border/50">
-                <div className="text-xs text-muted-foreground">Updated just now</div>
               </div>
             </div>
           );
@@ -187,18 +184,18 @@ export default function EmployerDashboardPage() {
         {/* Left Column - Charts */}
         <div className="lg:col-span-2 space-y-6">
           {/* Quick Actions */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="flex gap-4 w-full">
             {quickActions.map((action) => {
               const Icon = action.icon;
               return (
                 <button
                   key={action.title}
-                  className={`${action.color} rounded-xl p-4 flex flex-col items-center justify-center gap-3 hover:opacity-90 transition-all duration-300 hover:-translate-y-1`}
+                  className={`${action.color} rounded-xl w-full p-3 flex flex-row gap-3 hover:opacity-90 transition-all duration-300`}
                 >
-                  <div className="p-2 bg-white/20 rounded-lg">
+                  <div className="p-2 bg-white/20 rounded-md my-auto w-fit">
                     <Icon className="w-5 h-5" />
                   </div>
-                  <span className="text-sm font-medium">{action.title}</span>
+                  <span className="text-sm font-medium my-auto flex">{action.title}</span>
                 </button>
               );
             })}
@@ -224,30 +221,30 @@ export default function EmployerDashboardPage() {
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={jobsData}>
                     <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
-                    <XAxis 
-                      dataKey="month" 
-                      stroke="#6b7280" 
-                      axisLine={false} 
+                    <XAxis
+                      dataKey="month"
+                      stroke="#6b7280"
+                      axisLine={false}
                       tickLine={false}
                       tick={{ fill: '#6b7280', fontSize: 12 }}
                     />
-                    <YAxis 
-                      stroke="#6b7280" 
-                      axisLine={false} 
+                    <YAxis
+                      stroke="#6b7280"
+                      axisLine={false}
                       tickLine={false}
                       tick={{ fill: '#6b7280', fontSize: 12 }}
                     />
-                    <Tooltip 
-                      contentStyle={{ 
+                    <Tooltip
+                      contentStyle={{
                         backgroundColor: 'white',
                         border: '1px solid #e5e7eb',
                         borderRadius: '8px',
                         boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)'
                       }}
                     />
-                    <Bar 
-                      dataKey="jobs" 
-                      radius={[8, 8, 0, 0]} 
+                    <Bar
+                      dataKey="jobs"
+                      radius={[8, 8, 0, 0]}
                       gradientTransform="90deg"
                     >
                       <linearGradient id="jobsGradient" x1="0" y1="0" x2="0" y2="1">
@@ -277,21 +274,21 @@ export default function EmployerDashboardPage() {
                 <ResponsiveContainer width="100%" height="100%">
                   <LineChart data={revenueData}>
                     <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
-                    <XAxis 
-                      dataKey="month" 
-                      stroke="#6b7280" 
-                      axisLine={false} 
+                    <XAxis
+                      dataKey="month"
+                      stroke="#6b7280"
+                      axisLine={false}
                       tickLine={false}
                       tick={{ fill: '#6b7280', fontSize: 12 }}
                     />
-                    <YAxis 
-                      stroke="#6b7280" 
-                      axisLine={false} 
+                    <YAxis
+                      stroke="#6b7280"
+                      axisLine={false}
                       tickLine={false}
                       tick={{ fill: '#6b7280', fontSize: 12 }}
                     />
-                    <Tooltip 
-                      contentStyle={{ 
+                    <Tooltip
+                      contentStyle={{
                         backgroundColor: 'white',
                         border: '1px solid #e5e7eb',
                         borderRadius: '8px',
@@ -299,10 +296,10 @@ export default function EmployerDashboardPage() {
                       }}
                       formatter={(value) => [`$${value}`, 'Revenue']}
                     />
-                    <Line 
-                      type="monotone" 
-                      dataKey="revenue" 
-                      stroke="#49b70e" 
+                    <Line
+                      type="monotone"
+                      dataKey="revenue"
+                      stroke="#49b70e"
                       strokeWidth={3}
                       dot={{ fill: "#49b70e", r: 6, strokeWidth: 2, stroke: 'white' }}
                       activeDot={{ r: 8, fill: "#49b70e", stroke: 'white', strokeWidth: 2 }}
@@ -318,13 +315,13 @@ export default function EmployerDashboardPage() {
             <div className="flex items-center justify-between mb-6">
               <div>
                 <h3 className="text-lg font-semibold flex items-center gap-2">
-                  <Zap className="w-5 h-5 text-yellow-500" />
+                  <Zap className="w-5 h-5 text-er-secondary" />
                   Recent Activity
                 </h3>
                 <p className="text-sm text-muted-foreground mt-1">Latest updates from your team</p>
               </div>
               <button className="text-sm text-primary hover:underline flex items-center gap-1">
-                View All <ChevronRight className="w-4 h-4" />
+                View All
               </button>
             </div>
             <div className="space-y-4">
@@ -332,7 +329,7 @@ export default function EmployerDashboardPage() {
                 const Icon = activity.icon;
                 return (
                   <div key={activity.id} className="flex items-start gap-4 p-4 rounded-xl border border-border hover:bg-accent/50 transition-colors group">
-                    <div className="p-2 bg-primary/10 text-primary rounded-lg group-hover:scale-110 transition-transform">
+                    <div className="p-3 bg-primary/10 text-primary rounded-md transition-transform">
                       <Icon className="w-4 h-4" />
                     </div>
                     <div className="flex-1">
@@ -356,30 +353,30 @@ export default function EmployerDashboardPage() {
           <div className="bg-card border border-border rounded-2xl p-6">
             <h3 className="text-lg font-semibold mb-4">Quick Stats</h3>
             <div className="space-y-4">
-              <div className="flex items-center justify-between p-4 rounded-xl bg-blue-50 border border-blue-100">
+              <div className="flex items-center justify-between p-4 rounded-lg bg-er-secondary/10 border border-er-secondary/30">
                 <div className="flex items-center gap-3">
-                  <div className="p-2 bg-blue-500 text-white rounded-lg">
-                    <Briefcase className="w-4 h-4" />
+                  <div className="p-3 bg-er-secondary text-white rounded-sm">
+                    <Briefcase className="w-5 h-5" />
                   </div>
                   <div>
                     <div className="text-sm text-muted-foreground">Active Jobs</div>
                     <div className="text-2xl font-bold">{stats?.active_jobs || 0}</div>
                   </div>
                 </div>
-                <div className="text-sm font-semibold text-green-600">+5 this week</div>
+                <div className="text-sm font-semibold text-green-600 mr-2">+5 this week</div>
               </div>
-              
-              <div className="flex items-center justify-between p-4 rounded-xl bg-yellow-50 border border-yellow-100">
+
+              <div className="flex items-center justify-between p-4 rounded-lg bg-er-complimentary/10 border border-er-complimentary/30">
                 <div className="flex items-center gap-3">
-                  <div className="p-2 bg-yellow-500 text-white rounded-lg">
+                  <div className="p-3 bg-er-complimentary text-white rounded-sm">
                     <AlertCircle className="w-4 h-4" />
                   </div>
                   <div>
-                    <div className="text-sm text-muted-foreground">Pending Payments</div>
-                    <div className="text-2xl font-bold">${(stats?.pending_payments || 0).toLocaleString()}</div>
+                    <div className="text-sm text-muted-foreground">Upcoming Interviews</div>
+                    <div className="text-2xl font-bold">{(stats?.pending_payments || 0).toLocaleString()}</div>
                   </div>
                 </div>
-                <button className="text-sm text-primary hover:underline">View</button>
+                <Link href={"/dashboard/"} className="mr-4 text-sm font-medium transition-all duration-200 hover:text-er-complimentary">View All</Link>
               </div>
             </div>
           </div>
@@ -424,7 +421,7 @@ export default function EmployerDashboardPage() {
           <div className="bg-card border border-border rounded-2xl p-6">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-semibold flex items-center gap-2">
-                <Award className="w-5 h-5 text-purple-500" />
+                <Award className="w-5 h-5 text-er-complimentary" />
                 Top Candidates
               </h3>
               <button className="text-sm text-primary hover:underline">See All</button>
@@ -433,7 +430,7 @@ export default function EmployerDashboardPage() {
               {topCandidates.map((candidate) => (
                 <div key={candidate.id} className="flex items-center justify-between p-3 rounded-lg border border-border hover:bg-accent/50 transition-colors group">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-gradient-to-br from-primary to-blue-600 rounded-full flex items-center justify-center text-white font-semibold">
+                    <div className="w-10 h-10 bg-er-primary rounded-full flex items-center justify-center text-white font-semibold">
                       {candidate.name.charAt(0)}
                     </div>
                     <div>
