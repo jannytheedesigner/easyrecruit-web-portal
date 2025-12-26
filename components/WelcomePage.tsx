@@ -7,6 +7,7 @@ import OnboardingLayout from "./layout/OnboardingLayout";
 import { useAuth } from "@/hooks/useAuth";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import { getRoleDashboardPath } from "@/lib/roleRoutes";
 
 export default function WelcomePage() {
     const [selected, setSelected] = useState<"jobseeker" | "employer" | null>(
@@ -32,7 +33,7 @@ export default function WelcomePage() {
 
     useEffect(() => {
         if (!loading && user) {
-            router.replace("/dashboard");
+            router.replace(getRoleDashboardPath(user.role));
         }
     }, [user, loading, router]);
 

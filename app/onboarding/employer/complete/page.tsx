@@ -35,7 +35,7 @@ export default function OnboardingCompletePage() {
   }
 
   const handleContinue = () => {
-    router.push("/dashboard")
+    router.push("/employer/dashboard")
   }
 
   return (

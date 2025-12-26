@@ -143,7 +143,7 @@ export default function CompanyDetails() {
                 onClick={() => {
                   saveEmployerDraft("company-details", form);
                   toast({ title: "Draft saved" });
-                  router.replace("/dashboard");
+                  router.replace("/employer/dashboard");
                 }}
                 className="rounded-full border border-slate-200 px-6 py-2 text-sm text-slate-700 hover:bg-slate-50"
               >

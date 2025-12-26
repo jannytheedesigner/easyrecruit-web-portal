@@ -7,6 +7,7 @@ import { useAuth } from "@/hooks/useAuth"
 import { Bell, Moon, Sun, Search } from "lucide-react"
 import { useMemo, useState } from "react"
 import { Logo } from "oxisverse-logo-system"
+import { getRoleBasePath, getRoleDashboardPath } from "@/lib/roleRoutes"
 
 
 export function Navbar() {
@@ -22,34 +23,37 @@ export function Navbar() {
     return "Dashboard"
   }, [user?.role])
 
+  const basePath = getRoleBasePath(user?.role)
+  const homeHref = getRoleDashboardPath(user?.role)
+
   const navLinks = useMemo(() => {
     if (user?.role === "employer") {
       return [
-        { href: "/dashboard/employer", label: "Home" },
-        { href: "/dashboard/jobs", label: "Jobs" },
-        { href: "/dashboard/users", label: "Talent" },
-        { href: "/dashboard/contracts", label: "Contracts" },
-        { href: "/dashboard/payments", label: "Payments" },
+        { href: `${basePath}/dashboard`, label: "Home" },
+        { href: `${basePath}/jobs`, label: "Jobs" },
+        { href: `${basePath}/users`, label: "Talent" },
+        { href: `${basePath}/contracts`, label: "Contracts" },
+        { href: `${basePath}/payments`, label: "Payments" },
       ]
     }
     return [
-      { href: "/dashboard/jobseeker", label: "Home" },
-      { href: "/dashboard/jobs", label: "Find Jobs" },
-      { href: "/dashboard/contracts", label: "Contracts" },
-      { href: "/dashboard/payments", label: "Earnings" },
+      { href: `${basePath}/dashboard`, label: "Home" },
+      { href: `${basePath}/jobs`, label: "Find Jobs" },
+      { href: `${basePath}/contracts`, label: "Contracts" },
+      { href: `${basePath}/payments`, label: "Earnings" },
     ]
-  }, [user?.role])
+  }, [basePath, user?.role])
 
   const onSearch = (e: React.FormEvent) => {
     e.preventDefault()
-    const target = `/dashboard/jobs?search=${encodeURIComponent(query.trim())}`
+    const target = `${basePath}/jobs?search=${encodeURIComponent(query.trim())}`
     router.push(target)
   }
 
   return (
     <header className="h-16 bg-card border-b border-border flex items-center justify-between px-4 sm:px-6">
       <div className="flex items-center gap-4 min-w-0">
-        <Link href="/dashboard" className="text-base font-semibold text-primary whitespace-nowrap">
+        <Link href={homeHref} className="text-base font-semibold text-primary whitespace-nowrap">
           <Logo
             brandName="easyrecruit"
             type="horizontal"
@@ -105,7 +109,7 @@ export function Navbar() {
           )}
         </button>
         <Link
-          href="/dashboard/notifications"
+          href={`${basePath}/notifications`}
           className="w-9 h-9 rounded-full bg-accent text-accent-foreground flex items-center justify-center"
           aria-label="Notifications"
         >

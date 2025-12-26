@@ -7,6 +7,7 @@ import { Loader2 } from "lucide-react";
 
 import { TopBar } from "../layout/TopBar"
 import StripPattern from "../easycomponents/strip-pattern";
+import { getRoleDashboardPath } from "@/lib/roleRoutes";
 
 export default function GuestLayout({ children }: { children: React.ReactNode }) {
     const { user, loading } = useAuth();
@@ -14,7 +15,7 @@ export default function GuestLayout({ children }: { children: React.ReactNode })
 
     useEffect(() => {
         if (!loading && user) {
-            router.replace("/dashboard");
+            router.replace(getRoleDashboardPath(user.role));
         }
     }, [user, loading, router]);
 

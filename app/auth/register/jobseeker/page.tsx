@@ -7,13 +7,14 @@ import RegisterForm from "@/components/auth/RegisterForm";
 import GuestLayout from "@/components/layout/GuestLayout";
 import { useAuth } from "@/hooks/useAuth";
 import { Loader } from "@/components/Loader";
+import { getRoleDashboardPath } from "@/lib/roleRoutes";
 
 export default function JobseekerRegisterPage() {
   const { user, loading } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
-    if (user) router.replace("/dashboard");
+    if (user) router.replace(getRoleDashboardPath(user.role));
   }, [user, router]);
 
   if (loading) {

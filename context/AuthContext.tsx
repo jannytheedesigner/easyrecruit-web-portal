@@ -12,6 +12,7 @@ import { useRouter } from "next/navigation";
 import axiosClient, { initCsrf } from "@/lib/axiosClient";
 import { User } from "@/types";
 import { toast } from "@/components/ui/use-toast";
+import { getRoleDashboardPath } from "@/lib/roleRoutes";
 
 export interface AuthContextType {
   user: User | null;
@@ -89,7 +90,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setUser(user || res.data);
 
       toast({ title: "Welcome back!", description: `Logged in as ${user.name}` });
-      router.push("/dashboard");
+      router.push(getRoleDashboardPath(user.role));
     } catch (err: any) {
       toast({
         variant: "destructive",

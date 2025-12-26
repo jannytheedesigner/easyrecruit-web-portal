@@ -8,6 +8,7 @@ import { toast } from "@/components/ui/use-toast"
 import OnboardingLayout from "@/components/layout/OnboardingLayout"
 import { useAuth } from "@/hooks/useAuth"
 import ProgressIndicator from "@/components/onboarding/ProgressIndicator"
+import { getRoleDashboardPath } from "@/lib/roleRoutes"
 
 export default function JobseekerPersonalDetailsPage() {
   const router = useRouter()
@@ -82,7 +83,7 @@ export default function JobseekerPersonalDetailsPage() {
 
     checkOnboarding()
       .then((completed) => {
-        if (completed) router.replace("/dashboard")
+        if (completed) router.replace(getRoleDashboardPath(user.role))
         else if (user.role === "employer")
           router.replace("/onboarding/employer/company-details")
       })

@@ -31,7 +31,7 @@ export default function JobseekerOnboardingCompletePage() {
   }
 
   const handleContinue = () => {
-    router.push("/dashboard")
+    router.push("/jobseeker/dashboard")
   }
 
   return (

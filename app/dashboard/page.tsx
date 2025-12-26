@@ -4,6 +4,7 @@ import { useEffect } from "react"
 import { useAuth } from "@/hooks/useAuth"
 import { Loader } from "@/components/Loader"
 import { useRouter } from "next/navigation"
+import { getRoleDashboardPath } from "@/lib/roleRoutes"
 
 export default function DashboardPage() {
   const { user } = useAuth()
@@ -11,7 +12,7 @@ export default function DashboardPage() {
 
   useEffect(() => {
     if (!user) return
-    const target = user.role === "employer" ? "/dashboard/employer" : "/dashboard/jobseeker"
+    const target = getRoleDashboardPath(user.role)
     router.replace(target)
   }, [user, router])
 

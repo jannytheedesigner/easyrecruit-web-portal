@@ -1,0 +1,481 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { Loader } from "@/components/Loader";
+import axiosClient from "@/lib/axiosClient";
+import { Briefcase, Users, FileText, DollarSign, TrendingUp, TrendingDown, ChevronRight, Plus, Search, Calendar, Clock, Award, Target, Zap, Star, CheckCircle, AlertCircle } from "lucide-react";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line, PieChart, Pie, Cell } from "recharts";
+
+interface EmployerStats {
+  total_jobs: number;
+  active_jobs: number;
+  total_users: number;
+  total_contracts: number;
+  total_revenue: number;
+  pending_payments: number;
+  jobs_growth: number;
+  users_growth: number;
+}
+
+export default function EmployerDashboardPage() {
+  const [stats, setStats] = useState<EmployerStats | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchStats();
+  }, []);
+
+  const fetchStats = async () => {
+    try {
+      const response = await axiosClient.get("/admin/dashboard/stats");
+      setStats(response.data.data);
+    } catch (e) {
+      console.error("Failed to fetch employer stats", e);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Mock data
+  const jobsData = [
+    { month: "Jan", jobs: 45 },
+    { month: "Feb", jobs: 52 },
+    { month: "Mar", jobs: 61 },
+    { month: "Apr", jobs: 58 },
+    { month: "May", jobs: 70 },
+    { month: "Jun", jobs: 85 },
+  ];
+
+  const revenueData = [
+    { month: "Jan", revenue: 12000 },
+    { month: "Feb", revenue: 15000 },
+    { month: "Mar", revenue: 18000 },
+    { month: "Apr", revenue: 16500 },
+    { month: "May", revenue: 22000 },
+    { month: "Jun", revenue: 28000 },
+  ];
+
+  const jobStatusData = [
+    { name: "Active", value: 65, color: "#0d21a1" },
+    { name: "Pending", value: 20, color: "#49b70e" },
+    { name: "Closed", value: 15, color: "#6366f1" },
+  ];
+
+  const recentActivities = [
+    { id: 1, action: "New candidate applied", job: "Senior React Developer", time: "10 min ago", icon: Users },
+    { id: 2, action: "Contract signed", job: "Project Alpha", time: "1 hour ago", icon: FileText },
+    { id: 3, action: "Payment received", job: "Frontend Development", time: "2 hours ago", icon: DollarSign },
+    { id: 4, action: "New job posted", job: "UX Designer", time: "1 day ago", icon: Briefcase },
+  ];
+
+  const topCandidates = [
+    { id: 1, name: "Alex Johnson", role: "Senior Developer", score: 95, status: "Available" },
+    { id: 2, name: "Maria Garcia", role: "Product Designer", score: 92, status: "Interviewing" },
+    { id: 3, name: "David Chen", role: "DevOps Engineer", score: 89, status: "Available" },
+    { id: 4, name: "Sarah Williams", role: "Project Manager", score: 87, status: "Hired" },
+  ];
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-full py-20">
+        <Loader size="lg" />
+      </div>
+    );
+  }
+
+  const statCards = [
+    {
+      title: "Total Jobs",
+      value: stats?.total_jobs || 0,
+      change: stats?.jobs_growth || 0,
+      icon: Briefcase,
+      color: "from-blue-500 to-blue-600",
+      bgColor: "bg-gradient-to-br from-blue-50 to-blue-100",
+      trendIcon: TrendingUp,
+    },
+    {
+      title: "Active Users",
+      value: stats?.total_users || 0,
+      change: stats?.users_growth || 0,
+      icon: Users,
+      color: "from-green-500 to-green-600",
+      bgColor: "bg-gradient-to-br from-green-50 to-green-100",
+      trendIcon: TrendingUp,
+    },
+    {
+      title: "Contracts",
+      value: stats?.total_contracts || 0,
+      change: 8.2,
+      icon: FileText,
+      color: "from-purple-500 to-purple-600",
+      bgColor: "bg-gradient-to-br from-purple-50 to-purple-100",
+      trendIcon: TrendingUp,
+    },
+    {
+      title: "Revenue",
+      value: `$${(stats?.total_revenue || 0).toLocaleString()}`,
+      change: 12.5,
+      icon: DollarSign,
+      color: "from-yellow-500 to-yellow-600",
+      bgColor: "bg-gradient-to-br from-yellow-50 to-yellow-100",
+      trendIcon: TrendingUp,
+    },
+  ];
+
+  const quickActions = [
+    { title: "Post New Job", icon: Plus, color: "bg-primary text-primary-foreground" },
+    { title: "Find Talent", icon: Search, color: "bg-blue-500 text-white" },
+    { title: "Schedule Interview", icon: Calendar, color: "bg-green-500 text-white" },
+    { title: "Review Contracts", icon: FileText, color: "bg-purple-500 text-white" },
+  ];
+
+  return (
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight">Dashboard Overview</h1>
+          <p className="text-muted-foreground mt-1">Welcome back! Here's what's happening with your team today.</p>
+        </div>
+        <div className="flex items-center gap-3">
+          <button className="inline-flex items-center gap-2 px-4 py-2.5 bg-primary text-primary-foreground rounded-lg font-medium hover:opacity-90 transition-opacity">
+            <Plus className="w-4 h-4" />
+            Create New Job
+          </button>
+          <button className="inline-flex items-center gap-2 px-4 py-2.5 border border-border rounded-lg font-medium hover:bg-accent transition-colors">
+            <Calendar className="w-4 h-4" />
+            Schedule
+          </button>
+        </div>
+      </div>
+
+      {/* Stats Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {statCards.map((stat) => {
+          const Icon = stat.icon;
+          const TrendIcon = stat.trendIcon;
+          const isPositive = stat.change >= 0;
+          
+          return (
+            <div key={stat.title} className={`${stat.bgColor} border border-border/50 rounded-2xl p-6 relative overflow-hidden group hover:shadow-lg transition-all duration-300`}>
+              <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-white/10 to-transparent rounded-full -translate-y-8 translate-x-8" />
+              
+              <div className="flex items-start justify-between mb-4">
+                <div className={`p-3 rounded-xl bg-gradient-to-br ${stat.color} text-white shadow-lg`}>
+                  <Icon className="w-6 h-6" />
+                </div>
+                <div className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold ${isPositive ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                  <TrendIcon className="w-3 h-3" />
+                  {isPositive ? '+' : ''}{stat.change}%
+                </div>
+              </div>
+              
+              <div className="space-y-2">
+                <div className="text-3xl font-bold">{stat.value}</div>
+                <div className="text-sm text-muted-foreground">{stat.title}</div>
+              </div>
+              
+              <div className="mt-4 pt-4 border-t border-border/50">
+                <div className="text-xs text-muted-foreground">Updated just now</div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Left Column - Charts */}
+        <div className="lg:col-span-2 space-y-6">
+          {/* Quick Actions */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {quickActions.map((action) => {
+              const Icon = action.icon;
+              return (
+                <button
+                  key={action.title}
+                  className={`${action.color} rounded-xl p-4 flex flex-col items-center justify-center gap-3 hover:opacity-90 transition-all duration-300 hover:-translate-y-1`}
+                >
+                  <div className="p-2 bg-white/20 rounded-lg">
+                    <Icon className="w-5 h-5" />
+                  </div>
+                  <span className="text-sm font-medium">{action.title}</span>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Charts */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Jobs Chart */}
+            <div className="bg-card border border-border rounded-2xl p-6">
+              <div className="flex items-center justify-between mb-6">
+                <div>
+                  <h3 className="text-lg font-semibold flex items-center gap-2">
+                    <Target className="w-5 h-5 text-primary" />
+                    Jobs Overview
+                  </h3>
+                  <p className="text-sm text-muted-foreground mt-1">Monthly job postings</p>
+                </div>
+                <button className="text-sm text-primary hover:underline flex items-center gap-1">
+                  View Details <ChevronRight className="w-4 h-4" />
+                </button>
+              </div>
+              <div className="h-72">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={jobsData}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
+                    <XAxis 
+                      dataKey="month" 
+                      stroke="#6b7280" 
+                      axisLine={false} 
+                      tickLine={false}
+                      tick={{ fill: '#6b7280', fontSize: 12 }}
+                    />
+                    <YAxis 
+                      stroke="#6b7280" 
+                      axisLine={false} 
+                      tickLine={false}
+                      tick={{ fill: '#6b7280', fontSize: 12 }}
+                    />
+                    <Tooltip 
+                      contentStyle={{ 
+                        backgroundColor: 'white',
+                        border: '1px solid #e5e7eb',
+                        borderRadius: '8px',
+                        boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)'
+                      }}
+                    />
+                    <Bar 
+                      dataKey="jobs" 
+                      radius={[8, 8, 0, 0]} 
+                      gradientTransform="90deg"
+                    >
+                      <linearGradient id="jobsGradient" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor="#0d21a1" stopOpacity={0.8} />
+                        <stop offset="100%" stopColor="#0d21a1" stopOpacity={0.3} />
+                      </linearGradient>
+                      <Bar dataKey="jobs" fill="url(#jobsGradient)" />
+                    </Bar>
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+
+            {/* Revenue Chart */}
+            <div className="bg-card border border-border rounded-2xl p-6">
+              <div className="flex items-center justify-between mb-6">
+                <div>
+                  <h3 className="text-lg font-semibold flex items-center gap-2">
+                    <TrendingUp className="w-5 h-5 text-green-500" />
+                    Revenue Trend
+                  </h3>
+                  <p className="text-sm text-muted-foreground mt-1">Monthly revenue growth</p>
+                </div>
+                <div className="text-sm font-semibold text-green-600">+12.5% growth</div>
+              </div>
+              <div className="h-72">
+                <ResponsiveContainer width="100%" height="100%">
+                  <LineChart data={revenueData}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
+                    <XAxis 
+                      dataKey="month" 
+                      stroke="#6b7280" 
+                      axisLine={false} 
+                      tickLine={false}
+                      tick={{ fill: '#6b7280', fontSize: 12 }}
+                    />
+                    <YAxis 
+                      stroke="#6b7280" 
+                      axisLine={false} 
+                      tickLine={false}
+                      tick={{ fill: '#6b7280', fontSize: 12 }}
+                    />
+                    <Tooltip 
+                      contentStyle={{ 
+                        backgroundColor: 'white',
+                        border: '1px solid #e5e7eb',
+                        borderRadius: '8px',
+                        boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)'
+                      }}
+                      formatter={(value) => [`$${value}`, 'Revenue']}
+                    />
+                    <Line 
+                      type="monotone" 
+                      dataKey="revenue" 
+                      stroke="#49b70e" 
+                      strokeWidth={3}
+                      dot={{ fill: "#49b70e", r: 6, strokeWidth: 2, stroke: 'white' }}
+                      activeDot={{ r: 8, fill: "#49b70e", stroke: 'white', strokeWidth: 2 }}
+                    />
+                  </LineChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+          </div>
+
+          {/* Recent Activity */}
+          <div className="bg-card border border-border rounded-2xl p-6">
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <h3 className="text-lg font-semibold flex items-center gap-2">
+                  <Zap className="w-5 h-5 text-yellow-500" />
+                  Recent Activity
+                </h3>
+                <p className="text-sm text-muted-foreground mt-1">Latest updates from your team</p>
+              </div>
+              <button className="text-sm text-primary hover:underline flex items-center gap-1">
+                View All <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
+            <div className="space-y-4">
+              {recentActivities.map((activity) => {
+                const Icon = activity.icon;
+                return (
+                  <div key={activity.id} className="flex items-start gap-4 p-4 rounded-xl border border-border hover:bg-accent/50 transition-colors group">
+                    <div className="p-2 bg-primary/10 text-primary rounded-lg group-hover:scale-110 transition-transform">
+                      <Icon className="w-4 h-4" />
+                    </div>
+                    <div className="flex-1">
+                      <div className="font-medium">{activity.action}</div>
+                      <div className="text-sm text-muted-foreground">{activity.job}</div>
+                    </div>
+                    <div className="text-sm text-muted-foreground flex items-center gap-1">
+                      <Clock className="w-3 h-3" />
+                      {activity.time}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+
+        {/* Right Column - Sidebar */}
+        <div className="space-y-6">
+          {/* Active Jobs & Pending Payments */}
+          <div className="bg-card border border-border rounded-2xl p-6">
+            <h3 className="text-lg font-semibold mb-4">Quick Stats</h3>
+            <div className="space-y-4">
+              <div className="flex items-center justify-between p-4 rounded-xl bg-blue-50 border border-blue-100">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-blue-500 text-white rounded-lg">
+                    <Briefcase className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <div className="text-sm text-muted-foreground">Active Jobs</div>
+                    <div className="text-2xl font-bold">{stats?.active_jobs || 0}</div>
+                  </div>
+                </div>
+                <div className="text-sm font-semibold text-green-600">+5 this week</div>
+              </div>
+              
+              <div className="flex items-center justify-between p-4 rounded-xl bg-yellow-50 border border-yellow-100">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-yellow-500 text-white rounded-lg">
+                    <AlertCircle className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <div className="text-sm text-muted-foreground">Pending Payments</div>
+                    <div className="text-2xl font-bold">${(stats?.pending_payments || 0).toLocaleString()}</div>
+                  </div>
+                </div>
+                <button className="text-sm text-primary hover:underline">View</button>
+              </div>
+            </div>
+          </div>
+
+          {/* Job Status Chart */}
+          <div className="bg-card border border-border rounded-2xl p-6">
+            <h3 className="text-lg font-semibold mb-4">Job Status</h3>
+            <div className="h-48">
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie
+                    data={jobStatusData}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={40}
+                    outerRadius={70}
+                    paddingAngle={5}
+                    dataKey="value"
+                  >
+                    {jobStatusData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.color} />
+                    ))}
+                  </Pie>
+                  <Tooltip />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+            <div className="space-y-2 mt-4">
+              {jobStatusData.map((status) => (
+                <div key={status.name} className="flex items-center justify-between text-sm">
+                  <div className="flex items-center gap-2">
+                    <div className="w-3 h-3 rounded-full" style={{ backgroundColor: status.color }} />
+                    {status.name}
+                  </div>
+                  <div className="font-semibold">{status.value}%</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Top Candidates */}
+          <div className="bg-card border border-border rounded-2xl p-6">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold flex items-center gap-2">
+                <Award className="w-5 h-5 text-purple-500" />
+                Top Candidates
+              </h3>
+              <button className="text-sm text-primary hover:underline">See All</button>
+            </div>
+            <div className="space-y-4">
+              {topCandidates.map((candidate) => (
+                <div key={candidate.id} className="flex items-center justify-between p-3 rounded-lg border border-border hover:bg-accent/50 transition-colors group">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-gradient-to-br from-primary to-blue-600 rounded-full flex items-center justify-center text-white font-semibold">
+                      {candidate.name.charAt(0)}
+                    </div>
+                    <div>
+                      <div className="font-medium">{candidate.name}</div>
+                      <div className="text-sm text-muted-foreground">{candidate.role}</div>
+                    </div>
+                  </div>
+                  <div className="flex flex-col items-end gap-1">
+                    <div className="flex items-center gap-1 text-sm">
+                      <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
+                      <span className="font-semibold">{candidate.score}</span>
+                    </div>
+                    <div className={`text-xs px-2 py-1 rounded-full ${candidate.status === 'Available' ? 'bg-green-100 text-green-700' : candidate.status === 'Hired' ? 'bg-blue-100 text-blue-700' : 'bg-yellow-100 text-yellow-700'}`}>
+                      {candidate.status}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Performance */}
+          <div className="bg-gradient-to-br from-primary to-blue-600 rounded-2xl p-6 text-white">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="p-2 bg-white/20 rounded-lg">
+                <CheckCircle className="w-5 h-5" />
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold">Performance Score</h3>
+                <p className="text-sm text-white/80">Based on all metrics</p>
+              </div>
+            </div>
+            <div className="text-center py-4">
+              <div className="text-5xl font-bold mb-2">87%</div>
+              <div className="text-sm text-white/80">Excellent performance</div>
+            </div>
+            <div className="mt-4 pt-4 border-t border-white/20">
+              <div className="text-sm">Top 15% of employers this month</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

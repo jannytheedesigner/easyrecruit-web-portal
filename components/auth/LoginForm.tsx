@@ -21,7 +21,6 @@ export default function LoginForm() {
         setLoading(true);
         try {
             await login(email, password);
-            router.push("/dashboard");
         } catch (err: any) {
             // handled in context
         } finally {

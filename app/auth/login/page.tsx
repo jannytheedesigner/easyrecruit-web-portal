@@ -7,13 +7,14 @@ import LoginForm from "@/components/auth/LoginForm";
 import OnboardingLayout from "@/components/layout/OnboardingLayout";
 import { useAuth } from "@/hooks/useAuth";
 import { Loader } from "@/components/Loader";
+import { getRoleDashboardPath } from "@/lib/roleRoutes";
 
 export default function LoginPage() {
   const { user, loading } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
-    if (user) router.replace("/dashboard");
+    if (user) router.replace(getRoleDashboardPath(user.role));
   }, [user, router]);
 
   if (loading) {

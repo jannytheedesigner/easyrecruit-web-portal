@@ -119,7 +119,7 @@ export default function EmployerCompanyProfilePage() {
               <Button type="submit" disabled={loading} className="flex-1">{loading ? "Saving..." : "Continue"}</Button>
               <button
                 type="button"
-                onClick={() => { saveEmployerDraft("company-profile", form); toast({ title: "Draft saved" }); router.replace("/dashboard"); }}
+                onClick={() => { saveEmployerDraft("company-profile", form); toast({ title: "Draft saved" }); router.replace("/employer/dashboard"); }}
                 className="rounded-full border border-slate-200 px-6 py-2 text-sm text-slate-700 hover:bg-slate-50"
               >Save & Exit</button>
             </div>
