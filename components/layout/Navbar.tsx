@@ -31,7 +31,7 @@ export function Navbar() {
       return [
         { href: `${basePath}/dashboard`, label: "Overview" },
         { href: `${basePath}/jobs`, label: "Jobs" },
-        { href: `${basePath}/users`, label: "Talent" },
+        { href: `${basePath}/candidates`, label: "Candidates" },
         { href: `${basePath}/contracts`, label: "Quizes & Interviews" },
       ]
     }
@@ -50,7 +50,7 @@ export function Navbar() {
   }
 
   return (
-    <header className="bg-card border-b border-border flex items-center justify-between px-4 sm:px-6">
+    <header className="sticky top-0 z-50 bg-white border-b border-border flex items-center justify-between px-4 sm:px-6">
       <div className="flex items-center gap-4 min-w-0">
         <Link href={homeHref} className="text-base font-semibold text-primary whitespace-nowrap">
           <Logo

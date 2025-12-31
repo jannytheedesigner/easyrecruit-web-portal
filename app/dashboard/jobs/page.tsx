@@ -6,7 +6,7 @@ import { Loader } from "@/components/Loader"
 import type { Job } from "@/types/job"
 import { Plus, Search, Filter, MapPin, DollarSign, Briefcase, Clock, Users, TrendingUp, Calendar, Building, ExternalLink, MoreVertical, Eye, Edit, Trash2 } from "lucide-react"
 import Link from "next/link"
-import { formatDate, formatCurrency } from "@/lib/helpers"
+import { formatDate, formatCurrency, formatRelativeTime } from "@/lib/helpers"
 import { useAuth } from "@/hooks/useAuth"
 import { getRoleBasePath } from "@/lib/roleRoutes"
 
@@ -36,19 +36,21 @@ export default function JobsPage() {
 
   const filteredJobs = jobs.filter((job) => {
     const matchesSearch = job.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         job.description?.toLowerCase().includes(searchTerm.toLowerCase())
+      job.description?.toLowerCase().includes(searchTerm.toLowerCase())
     const matchesFilter = filterStatus === "all" || job.status === filterStatus
     return matchesSearch && matchesFilter
   })
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "open":
+      case "active":
         return "bg-gradient-to-r from-green-500 to-emerald-600"
       case "closed":
         return "bg-gradient-to-r from-gray-500 to-gray-600"
       case "draft":
         return "bg-gradient-to-r from-yellow-500 to-amber-600"
+      case "paused":
+        return "bg-gradient-to-r from-orange-500 to-orange-600"
       default:
         return "bg-gradient-to-r from-gray-500 to-gray-600"
     }
@@ -56,7 +58,7 @@ export default function JobsPage() {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "open":
+      case "active":
         return "🔵"
       case "closed":
         return "⚫"
@@ -69,7 +71,7 @@ export default function JobsPage() {
 
   const stats = {
     total: jobs.length,
-    open: jobs.filter(j => j.status === 'open').length,
+    active: jobs.filter(j => j.status === 'active').length,
     closed: jobs.filter(j => j.status === 'closed').length,
     drafts: jobs.filter(j => j.status === 'draft').length,
   }
@@ -123,8 +125,8 @@ export default function JobsPage() {
         <div className="bg-gradient-to-br from-green-50 to-green-100 border border-green-200 rounded-2xl p-6">
           <div className="flex items-center justify-between">
             <div>
-              <div className="text-sm text-green-700 font-medium">Open Positions</div>
-              <div className="text-3xl font-bold text-green-900 mt-1">{stats.open}</div>
+              <div className="text-sm text-green-700 font-medium">Active Positions</div>
+              <div className="text-3xl font-bold text-green-900 mt-1">{stats.active}</div>
             </div>
             <div className="p-3 bg-green-500 text-white rounded-xl">
               <TrendingUp className="w-6 h-6" />
@@ -185,7 +187,7 @@ export default function JobsPage() {
                 className="px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent bg-gray-50 min-w-40"
               >
                 <option value="all">All Status</option>
-                <option value="open">Open Positions</option>
+                <option value="active">Active Positions</option>
                 <option value="closed">Closed</option>
                 <option value="draft">Drafts</option>
               </select>
@@ -227,10 +229,10 @@ export default function JobsPage() {
             All Jobs
           </button>
           <button
-            onClick={() => setFilterStatus("open")}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${filterStatus === "open" ? "bg-green-500 text-white" : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`}
+            onClick={() => setFilterStatus("active")}
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${filterStatus === "active" ? "bg-green-500 text-white" : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`}
           >
-            Open Positions
+            Active Positions
           </button>
           <button
             onClick={() => setFilterStatus("draft")}
@@ -282,7 +284,7 @@ export default function JobsPage() {
                 <div className="space-y-3">
                   <div className="flex items-center gap-2 text-sm text-gray-600">
                     <Building className="w-4 h-4" />
-                    <span>{job.department || "Not specified"}</span>
+                    <span>{job.job_category?.name || "Not specified"}</span>
                   </div>
                   <div className="flex items-center gap-2 text-sm text-gray-600">
                     <MapPin className="w-4 h-4" />
@@ -290,13 +292,13 @@ export default function JobsPage() {
                   </div>
                   <div className="flex items-center gap-2 text-sm text-gray-600">
                     <Briefcase className="w-4 h-4" />
-                    <span>{job.type}</span>
+                    <span>{job.job_type}</span>
                   </div>
                   <div className="flex items-center gap-2 text-sm text-gray-600">
                     <DollarSign className="w-4 h-4" />
                     <span>
-                      {job.salary_min && job.salary_max
-                        ? `${formatCurrency(job.salary_min)} - ${formatCurrency(job.salary_max)}`
+                      {job.budget_min && job.budget_max
+                        ? `${formatCurrency(Number(job.budget_min))} - ${formatCurrency(Number(job.budget_max))}`
                         : "Salary not specified"}
                     </span>
                   </div>
@@ -314,7 +316,7 @@ export default function JobsPage() {
                     </div>
                     <div className="flex items-center gap-2 text-sm">
                       <Clock className="w-4 h-4 text-gray-400" />
-                      <span className="text-gray-600">{formatTimeAgo(job.created_at)}</span>
+                      <span className="text-gray-600">{formatRelativeTime(job.created_at)}</span>
                     </div>
                   </div>
                   <Link
@@ -381,7 +383,7 @@ export default function JobsPage() {
                       </div>
                     </td>
                     <td className="py-4 px-6">
-                      <div className="text-gray-700">{job.type}</div>
+                      <div className="text-gray-700">{job.job_type}</div>
                     </td>
                     <td className="py-4 px-6">
                       <div className="flex items-center gap-2">

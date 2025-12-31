@@ -4,18 +4,37 @@ import { useEffect, useState } from "react";
 import { Loader } from "@/components/Loader";
 import axiosClient from "@/lib/axiosClient";
 import { Briefcase, Users, FileText, DollarSign, TrendingUp, TrendingDown, ChevronRight, Plus, Search, Calendar, Clock, Award, Target, Zap, Star, CheckCircle, AlertCircle } from "lucide-react";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line, PieChart, Pie, Cell } from "recharts";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line, PieChart, Pie, Cell, AreaChart, Area } from "recharts";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { formatDate, formatCurrency, formatRelativeTime } from "@/lib/helpers"
+
+
+interface User {
+  id: number;
+  name: string;
+  email: string;
+  role: string;
+  created_at: string;
+}
+
+interface Job {
+  id: number;
+  title: string;
+  status: string;
+  created_at: string;
+  job_type: string;
+}
 
 interface EmployerStats {
-  total_jobs: number;
-  active_jobs: number;
   total_users: number;
+  total_jobs: number;
   total_contracts: number;
   total_revenue: number;
-  pending_payments: number;
-  jobs_growth: number;
-  users_growth: number;
+  active_tickets: number;
+  recent_users: User[];
+  recent_jobs: Job[];
+  recent_contracts: any[];
 }
 
 export default function EmployerDashboardPage() {
@@ -28,8 +47,9 @@ export default function EmployerDashboardPage() {
 
   const fetchStats = async () => {
     try {
-      const response = await axiosClient.get("/admin/dashboard/stats");
-      setStats(response.data.data);
+      const response = await axiosClient.get("/employer/dashboard/stats");
+      // Assuming the response structure matches the user provided JSON directly or is wrapped in data
+      setStats(response.data);
     } catch (e) {
       console.error("Failed to fetch employer stats", e);
     } finally {
@@ -47,13 +67,13 @@ export default function EmployerDashboardPage() {
     { month: "Jun", jobs: 85 },
   ];
 
-  const revenueData = [
-    { month: "Jan", revenue: 12000 },
-    { month: "Feb", revenue: 15000 },
-    { month: "Mar", revenue: 18000 },
-    { month: "Apr", revenue: 16500 },
-    { month: "May", revenue: 22000 },
-    { month: "Jun", revenue: 28000 },
+  const applicationsData = [
+    { month: "Jan", applications: 120 },
+    { month: "Feb", applications: 132 },
+    { month: "Mar", applications: 101 },
+    { month: "Apr", applications: 154 },
+    { month: "May", applications: 190 },
+    { month: "Jun", applications: 230 },
   ];
 
   const jobStatusData = [
@@ -88,38 +108,30 @@ export default function EmployerDashboardPage() {
     {
       title: "Total Jobs",
       value: stats?.total_jobs || 0,
-      change: stats?.jobs_growth || 0,
       icon: Briefcase,
       color: "bg-er-primary",
       bgColor: "bg-er-primary/5",
-      trendIcon: TrendingUp,
     },
     {
-      title: "Active Users",
+      title: "Total Users",
       value: stats?.total_users || 0,
-      change: stats?.users_growth || 0,
       icon: Users,
       color: "bg-er-primary",
       bgColor: "bg-er-primary/5",
-      trendIcon: TrendingUp,
     },
     {
       title: "Contracts",
       value: stats?.total_contracts || 0,
-      change: 8.2,
       icon: FileText,
       color: "bg-er-primary",
       bgColor: "bg-er-primary/5",
-      trendIcon: TrendingUp,
     },
     {
-      title: "Hires",
-      value: `${(stats?.total_revenue || 0).toLocaleString()}`,
-      change: -12.5,
-      icon: CheckCircle,
+      title: "Revenue",
+      value: formatCurrency(stats?.total_revenue || 0),
+      icon: DollarSign,
       color: "bg-er-primary",
       bgColor: "bg-er-primary/5",
-      trendIcon: TrendingUp,
     },
   ];
 
@@ -139,14 +151,16 @@ export default function EmployerDashboardPage() {
           <p className="text-muted-foreground mt-1">Welcome back! Here's what's happening with your team today.</p>
         </div>
         <div className="flex items-center gap-3">
-          <button className="inline-flex items-center gap-2 px-4 py-2.5 bg-primary text-primary-foreground rounded-lg font-medium hover:opacity-90 transition-opacity">
-            <Plus className="w-4 h-4" />
-            Create New Job
-          </button>
-          <button className="inline-flex items-center gap-2 px-4 py-2.5 border border-border rounded-lg font-medium hover:bg-accent transition-colors">
+          <Button variant={"outline"} className="">
             <Calendar className="w-4 h-4" />
             Schedule
-          </button>
+          </Button>
+          <Link href={"/employer/jobs/create"}>
+            <Button className="">
+              <Plus className="w-4 h-4" />
+              Create New Job
+            </Button>
+          </Link>
         </div>
       </div>
 
@@ -170,10 +184,7 @@ export default function EmployerDashboardPage() {
 
               <div className="space-y-2 flex flex-row">
                 <div className="text-sm text-muted-foreground my-auto">{stat.title}</div>
-                <div className={`inline-flex ml-auto w-fit items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold ${isPositive ? 'bg-white text-green-700' : 'bg-white text-red-700'}`}>
-                  <TrendIcon className="w-3 h-3" />
-                  {isPositive ? '+' : ''}{stat.change}%
-                </div>
+                {/* Trend removed as api does not support it yet */}
               </div>
             </div>
           );
@@ -213,12 +224,14 @@ export default function EmployerDashboardPage() {
                   </h3>
                   <p className="text-sm text-muted-foreground mt-1">Monthly job postings</p>
                 </div>
-                <button className="text-sm text-primary hover:underline flex items-center gap-1">
-                  View Details <ChevronRight className="w-4 h-4" />
-                </button>
+                <Link href="/employer/jobs">
+                  <Button className="bg-er-primary/5 text-primary py-2 px-4 hover:bg-er-primary/10">
+                    View Details <ChevronRight className="w-4 h-4" />
+                  </Button>
+                </Link>
               </div>
-              <div className="h-72">
-                <ResponsiveContainer width="100%" height="100%">
+              <div className="h-72 w-full">
+                <ResponsiveContainer width="100%" height="100%" className="">
                   <BarChart data={jobsData}>
                     <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
                     <XAxis
@@ -240,39 +253,47 @@ export default function EmployerDashboardPage() {
                         border: '1px solid #e5e7eb',
                         borderRadius: '8px',
                         boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)'
+
                       }}
                     />
                     <Bar
                       dataKey="jobs"
-                      radius={[8, 8, 0, 0]}
+                      radius={[50, 50, 50, 50]}
                       gradientTransform="90deg"
+                      fill="#5662acff"
                     >
                       <linearGradient id="jobsGradient" x1="0" y1="0" x2="0" y2="1">
                         <stop offset="0%" stopColor="#0d21a1" stopOpacity={0.8} />
                         <stop offset="100%" stopColor="#0d21a1" stopOpacity={0.3} />
                       </linearGradient>
-                      <Bar dataKey="jobs" fill="url(#jobsGradient)" />
+                      <Bar dataKey="jobs" fill="#0d21a1" />
                     </Bar>
                   </BarChart>
                 </ResponsiveContainer>
               </div>
             </div>
 
-            {/* Revenue Chart */}
+            {/* Applications Chart */}
             <div className="bg-card border border-border rounded-2xl p-6">
               <div className="flex items-center justify-between mb-6">
                 <div>
                   <h3 className="text-lg font-semibold flex items-center gap-2">
-                    <TrendingUp className="w-5 h-5 text-green-500" />
-                    Revenue Trend
+                    <Users className="w-5 h-5 text-er-primary" />
+                    Applications Trend
                   </h3>
-                  <p className="text-sm text-muted-foreground mt-1">Monthly revenue growth</p>
+                  <p className="text-sm text-muted-foreground mt-1">Monthly candidate applications</p>
                 </div>
-                <div className="text-sm font-semibold text-green-600">+12.5% growth</div>
+                <div className="text-sm font-semibold text-green-600">+12.5% vs last month</div>
               </div>
               <div className="h-72">
                 <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={revenueData}>
+                  <AreaChart data={applicationsData}>
+                    <defs>
+                      <linearGradient id="colorApps" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.3} />
+                        <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0} />
+                      </linearGradient>
+                    </defs>
                     <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
                     <XAxis
                       dataKey="month"
@@ -294,17 +315,16 @@ export default function EmployerDashboardPage() {
                         borderRadius: '8px',
                         boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)'
                       }}
-                      formatter={(value) => [`$${value}`, 'Revenue']}
                     />
-                    <Line
+                    <Area
                       type="monotone"
-                      dataKey="revenue"
-                      stroke="#49b70e"
+                      dataKey="applications"
+                      stroke="#8b5cf6"
                       strokeWidth={3}
-                      dot={{ fill: "#49b70e", r: 6, strokeWidth: 2, stroke: 'white' }}
-                      activeDot={{ r: 8, fill: "#49b70e", stroke: 'white', strokeWidth: 2 }}
+                      fillOpacity={1}
+                      fill="url(#colorApps)"
                     />
-                  </LineChart>
+                  </AreaChart>
                 </ResponsiveContainer>
               </div>
             </div>
@@ -360,10 +380,12 @@ export default function EmployerDashboardPage() {
                   </div>
                   <div>
                     <div className="text-sm text-muted-foreground">Active Jobs</div>
-                    <div className="text-2xl font-bold">{stats?.active_jobs || 0}</div>
+                    <div className="text-2xl font-bold">
+                      {stats?.recent_jobs?.filter(j => j.status === 'active').length || 0}
+                    </div>
                   </div>
                 </div>
-                <div className="text-sm font-semibold text-green-600 mr-2">+5 this week</div>
+                {/* <div className="text-sm font-semibold text-green-600 mr-2">+5 this week</div> */}
               </div>
 
               <div className="flex items-center justify-between p-4 rounded-lg bg-er-complimentary/10 border border-er-complimentary/30">
@@ -372,8 +394,8 @@ export default function EmployerDashboardPage() {
                     <AlertCircle className="w-4 h-4" />
                   </div>
                   <div>
-                    <div className="text-sm text-muted-foreground">Upcoming Interviews</div>
-                    <div className="text-2xl font-bold">{(stats?.pending_payments || 0).toLocaleString()}</div>
+                    <div className="text-sm text-muted-foreground">Active Tickets</div>
+                    <div className="text-2xl font-bold">{(stats?.active_tickets || 0).toLocaleString()}</div>
                   </div>
                 </div>
                 <Link href={"/dashboard/"} className="mr-4 text-sm font-medium transition-all duration-200 hover:text-er-complimentary">View All</Link>

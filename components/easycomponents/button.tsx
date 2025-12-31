@@ -31,7 +31,7 @@ const buttonVariants = cva(
 
                 // Outline styles
                 outlinePrimary:
-                    "border border-gray-400 text-gray-600 hover:bg-gray-200 hover:text-gray-600",
+                    "border border-gray-400 text-gray-600 hover:bg-er-primary/5 hover:text-gray-600",
                 outlineBlue:
                     "border border-[#3B5BDB] text-[#3B5BDB] hover:bg-[#3B5BDB] hover:text-white",
                 outlineGray:
