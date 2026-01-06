@@ -18,7 +18,7 @@ export default function PricingPage() {
                 {/* Pricing Tabs */}
                 <Tabs defaultValue="employers" className="w-full max-w-5xl mx-auto">
                     <div className="flex justify-center mb-12">
-                        <TabsList className="grid w-full max-w-md grid-cols-2">
+                        <TabsList className="grid w-fit grid-cols-2">
                             <TabsTrigger value="employers">For Employers</TabsTrigger>
                             <TabsTrigger value="jobseekers">For Job Seekers</TabsTrigger>
                         </TabsList>
@@ -114,7 +114,7 @@ export default function PricingPage() {
                                 <CardHeader>
                                     <CardTitle className="text-xl text-er-primary">Standard Profile</CardTitle>
                                     <CardDescription>Everything you need to get hired</CardDescription>
-                                    <div className="mt-4"><span className="text-3xl font-bold">Free</span><span className="text-gray-500">/forever</span></div>
+                                    <div className="mt-4"><span className="text-3xl font-bold">MWK5000</span></div>
                                 </CardHeader>
                                 <CardContent>
                                     <ul className="space-y-3 text-sm">
@@ -129,14 +129,14 @@ export default function PricingPage() {
                                 </CardFooter>
                             </Card>
 
-                            <Card className="border-gray-200 opacity-60">
+                            <Card className="border-gray-200">
                                 <CardHeader>
                                     <div className="flex justify-between items-center">
                                         <CardTitle className="text-xl">Premium</CardTitle>
                                         <span className="text-xs bg-gray-200 px-2 py-1 rounded">Coming Soon</span>
                                     </div>
                                     <CardDescription>Stand out from the crowd</CardDescription>
-                                    <div className="mt-4"><span className="text-3xl font-bold">MK 5,000</span><span className="text-gray-500">/mo</span></div>
+                                    <div className="mt-4"><span className="text-3xl font-bold">MK 14,000</span><span className="text-gray-500">/mo</span></div>
                                 </CardHeader>
                                 <CardContent>
                                     <ul className="space-y-3 text-sm text-gray-500">

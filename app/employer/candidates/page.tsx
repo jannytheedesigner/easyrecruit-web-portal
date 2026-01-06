@@ -54,7 +54,7 @@ export default function TalentDirectoryPage() {
             skills: ["Figma", "Adobe XD", "User Research", "Prototyping", "Design Systems"],
             experience: 6,
             salary_expectation: 95000,
-            availability: "2 Weeks",
+            availability: "Immediate",
             rating: 4.9,
             profile_views: 189,
             applications: 8,

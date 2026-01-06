@@ -32,14 +32,16 @@ export function Navbar() {
         { href: `${basePath}/dashboard`, label: "Overview" },
         { href: `${basePath}/jobs`, label: "Jobs" },
         { href: `${basePath}/candidates`, label: "Candidates" },
-        { href: `${basePath}/contracts`, label: "Quizes & Interviews" },
+        { href: `${basePath}/hires`, label: "Hires" },
+        { href: `${basePath}/assessments`, label: "Assessments" },
       ]
     }
     return [
       { href: `${basePath}/dashboard`, label: "Overview" },
       { href: `${basePath}/jobs`, label: "Find Jobs" },
+      { href: `${basePath}/applications`, label: "My Applications" },
       { href: `${basePath}/contracts`, label: "Contracts" },
-      { href: `${basePath}/payments`, label: "Earnings" },
+      { href: `${basePath}/cvs`, label: "CVs & Resumes" },
     ]
   }, [basePath, user?.role])
 

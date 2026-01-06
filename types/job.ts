@@ -53,9 +53,9 @@ export interface Job {
   job_type: string // "full_time"
   experience_level: string // "intermediate"
   job_category_id: number
-  budget_type: string // "fixed"
-  budget_min: string // "200000.00"
-  budget_max: string // "2000000.00"
+  budget_type: number // "fixed"
+  budget_min: number // "200000.00"
+  budget_max: number // "2000000.00"
   duration: string // "12"
   status: "draft" | "active" | "paused" | "archived" | "closed"
   payment_status: string // "pending"

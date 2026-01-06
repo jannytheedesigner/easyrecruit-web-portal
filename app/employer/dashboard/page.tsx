@@ -120,14 +120,14 @@ export default function EmployerDashboardPage() {
       bgColor: "bg-er-primary/5",
     },
     {
-      title: "Contracts",
+      title: "Total Hires",
       value: stats?.total_contracts || 0,
-      icon: FileText,
+      icon: CheckCircle,
       color: "bg-er-primary",
       bgColor: "bg-er-primary/5",
     },
     {
-      title: "Revenue",
+      title: "Finances",
       value: formatCurrency(stats?.total_revenue || 0),
       icon: DollarSign,
       color: "bg-er-primary",
@@ -139,7 +139,7 @@ export default function EmployerDashboardPage() {
     { title: "Post New Job", icon: Plus, color: "bg-er-primary text-primary-foreground" },
     { title: "Find Talent", icon: Search, color: "bg-er-complimentary text-white" },
     { title: "Interviews", icon: Calendar, color: "bg-er-secondary-dark text-white" },
-    { title: "Contracts", icon: FileText, color: "bg-er-dark text-white" },
+    { title: "Tutorials", icon: FileText, color: "bg-er-dark text-white" },
   ];
 
   return (
@@ -168,8 +168,6 @@ export default function EmployerDashboardPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {statCards.map((stat) => {
           const Icon = stat.icon;
-          const TrendIcon = stat.trendIcon;
-          const isPositive = stat.change >= 0;
 
           return (
             <div key={stat.title} className={`${stat.bgColor} border border-er-primary/10 rounded-2xl p-6 relative overflow-hidden group hover:shadow-lg shadow-er-primary/5 transition-all duration-300`}>

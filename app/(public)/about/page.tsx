@@ -25,8 +25,8 @@ export default function AboutPage() {
                             <div className="relative z-10 h-full flex items-center justify-center text-white">
                                 <Logo
                                     brandName="easyrecruit"
-                                    type="icon"
-                                    variant="bg"
+                                    type="brandmark"
+                                    variant="main"
                                     format="svg"
                                     width={150}
                                     height={150}

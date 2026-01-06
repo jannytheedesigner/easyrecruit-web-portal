@@ -23,7 +23,7 @@ export default function JobDetailPage() {
   const fetchJob = async () => {
     try {
       const response = await axiosClient.get(`/jobs/${params.id}`)
-      setJob(response.data.data)
+      setJob(response.data)
     } catch (error) {
       console.error("Failed to fetch job:", error)
     } finally {
@@ -63,7 +63,7 @@ export default function JobDetailPage() {
             <div className="flex items-center gap-4 text-gray-600">
               <span className="flex items-center gap-1">
                 <Briefcase className="w-4 h-4" />
-                {job.type}
+                {job.job_type}
               </span>
               <span className="flex items-center gap-1">
                 <MapPin className="w-4 h-4" />
@@ -85,11 +85,11 @@ export default function JobDetailPage() {
           </div>
         </div>
 
-        {/* Salary */}
-        {job.salary_min && job.salary_max && (
+        {/* budget */}
+        {job.budget_min && job.budget_max && (
           <div className="flex items-center gap-2 text-lg font-semibold text-gray-900 mb-6">
             <DollarSign className="w-5 h-5" />
-            {formatCurrency(job.salary_min)} - {formatCurrency(job.salary_max)}
+            {formatCurrency(job.budget_min)} - {formatCurrency(job.budget_max)}
           </div>
         )}
 

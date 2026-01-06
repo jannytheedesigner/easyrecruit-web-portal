@@ -128,7 +128,7 @@ export default function ContractsPage() {
                                             <p className="text-sm text-gray-600 line-clamp-1">{contract.description}</p>
                                         </div>
                                     </td>
-                                    <td className="px-6 py-4 font-semibold text-gray-900">{formatCurrency(contract.amount)}</td>
+                                    <td className="px-6 py-4 font-semibold text-gray-900">{formatCurrency(contract.amount || 0)}</td>
                                     <td className="px-6 py-4">
                                         <span className={`px-3 py-1 rounded-full text-xs font-semibold ${getStatusColor(contract.status)}`}>
                                             {contract.status}

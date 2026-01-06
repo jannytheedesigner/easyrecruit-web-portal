@@ -433,7 +433,7 @@ export default function JobsPage() {
                   <th className="text-left py-5 px-6 text-sm font-semibold text-white">Job Title</th>
                   <th className="text-left py-5 px-6 text-sm font-semibold text-white">Location</th>
                   <th className="text-left py-5 px-6 text-sm font-semibold text-white">Budget</th>
-                  <th className="text-left py-5 px-6 text-sm font-semibold text-white">Proposals</th>
+                  <th className="text-left py-5 px-6 text-sm font-semibold text-white">Applications</th>
                   <th className="text-left py-5 px-6 text-sm font-semibold text-white">Status</th>
                   <th className="text-left py-5 px-6 text-sm font-semibold text-white">Posted</th>
                   <th className="text-left py-5 px-6 text-sm font-semibold text-white">Actions</th>
@@ -601,7 +601,7 @@ export default function JobsPage() {
               </p>
               <div className="flex gap-3">
                 <Button
-                  variant={"outline"}
+                  variant={"outlineGray"}
                   onClick={() => setShowDeleteConfirm(false)}
                   className="flex-1 py-3"
                 >
@@ -635,7 +635,7 @@ export default function JobsPage() {
                 </p>
                 <div className="flex gap-3">
                   <Button
-                    variant={"outline"}
+                    variant={"outlineGray"}
                     onClick={() => setStatusUpdateState(null)}
                     disabled={isUpdating}
                     className="flex-1 py-3"
