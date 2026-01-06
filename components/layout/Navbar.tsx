@@ -52,7 +52,7 @@ export function Navbar() {
   }
 
   return (
-    <header className="sticky top-0 z-50 bg-white border-b border-border flex items-center justify-between px-4 sm:px-6">
+    <header className="sticky top-0 z-50 bg-white border-b border-border flex items-center justify-between px-4 sm:px-6 rounded-full">
       <div className="flex items-center gap-4 min-w-0">
         <Link href={homeHref} className="text-base font-semibold text-primary whitespace-nowrap">
           <Logo

@@ -4,61 +4,65 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { CheckCircle2, Search, Briefcase, Users, ArrowRight, Star, TrendingUp, Shield } from "lucide-react";
+import Image from "next/image";
 
 export default function HomePage() {
     return (
         <div className="flex flex-col min-h-screen">
             {/* Hero Section */}
-            <section className="relative py-20 lg:py-32 overflow-hidden bg-er-primary-dark">
+            <section className="relative px-10 py-20 overflow-hidden bg-er-primary-dark max-w-7xl mx-auto rounded-3xl">
                 <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-er-primary/10 via-transparent to-transparent opacity-70" />
                 <div className="container mx-auto px-4 md:px-6 relative z-10">
-                    <div className="grid lg:grid-cols-2 gap-12 items-center">
-                        <div className="flex flex-col gap-6 text-center lg:text-left">
-                            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-white leading-tight">
-                                Hire Faster. <br />
-                                <span className="text-er-secondary primary-font">Get Hired Smarter.</span>
+                    <div className="grid lg:grid-cols-3 gap-12 items-center">
+                        <div className="flex flex-col gap-6 text-center lg:text-left col-span-2 w-[80%]">
+                            <h1 className="text-4xl primary-font md:text-5xl lg:text-6xl tracking-tight text-white leading-[100%]">
+                                Connecting Talents and Employers<span className="text-er-complimentary">.</span>
                             </h1>
                             <p className="text-lg md:text-xl text-white max-w-2xl mx-auto lg:mx-0">
                                 The smartest recruitment platform connecting top talent and forward-thinking employers across Africa.
                             </p>
                             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                                <Button size="lg" className="h-12 px-8 text-base bg-er-primary hover:bg-er-primary-dark">
+                                <Button size="lg" className="h-12 px-8 text-base bg-er-primary hover:bg-er-primary-light">
                                     <Link href="/auth/register?role=employer">Post a Job</Link>
                                 </Button>
-                                <Button size="lg" variant="outline" className="h-12 px-8 text-base border-gray-300 hover:bg-gray-50">
+                                <Button size="lg" variant="outline" className="px-8 text-base bg-er-secondary border-er-secondary-light hover:bg-er-secondary-light">
                                     <Link href="/jobs">Find Jobs</Link>
                                 </Button>
-                            </div>
-                            <div className="flex items-center justify-center lg:justify-start gap-2 text-sm text-white mt-2">
-                                <CheckCircle2 className="w-4 h-4 text-green-500" />
-                                <span>Verified Candidates</span>
-                                <span className="mx-2">•</span>
-                                <CheckCircle2 className="w-4 h-4 text-green-500" />
-                                <span>Trusted Employers</span>
                             </div>
                         </div>
 
                         {/* Visual Mockup */}
-                        <div className="relative mx-auto w-full max-w-[500px] lg:max-w-none">
-                            
+                        <div className="relative mx-auto w-full">
+
                         </div>
                     </div>
                 </div>
             </section>
 
             {/* Stats Section */}
-            <section className="py-12 bg-gray-50 border-y border-gray-100">
-                <div className="container mx-auto px-4">
+            <section className="py-12 border-y border-gray-100">
+                <div className="container mx-auto">
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
                         {[
-                            { label: "Job Seekers", value: "10,000+" },
-                            { label: "Employers", value: "1,200+" },
-                            { label: "Jobs Posted", value: "5,000+" },
-                            { label: "Successful Hires", value: "8,500+" },
+                            { label: "Job Seekers", value: "10,000+", icon: "/brand-assets/visual-assets/visual-icons/jobseekers.svg", color: "bg-er-primary" },
+                            { label: "Employers", value: "1,200+", icon: "/brand-assets/visual-assets/visual-icons/employers.svg", color: "bg-er-secondary" },
+                            { label: "Jobs Posted", value: "5,000+", icon: "/brand-assets/visual-assets/visual-icons/jobs-posted.svg", color: "bg-er-complimentary" },
+                            { label: "Successful Hires", value: "8,500+", icon: "/brand-assets/visual-assets/visual-icons/successful-hires.svg", color: "bg-er-accent" },
                         ].map((stat, idx) => (
-                            <div key={idx}>
-                                <p className="text-3xl md:text-4xl font-bold text-er-primary mb-1">{stat.value}</p>
-                                <p className="text-sm md:text-base text-gray-600">{stat.label}</p>
+                            <div key={idx} className="flex flex-row gap-4 text-left rounded-xl transition-all duration-300 group">
+                                <div className={`rounded-full transition-colors`}>
+                                    <Image
+                                        src={stat.icon}
+                                        width={48}
+                                        height={48}
+                                        alt={stat.label}
+                                        className="w-20 h-20"
+                                    />
+                                </div>
+                                <div className="flex flex-col my-auto">
+                                    <p className={`primary-font text-4xl font-semibold mb-0.5`}>{stat.value}</p>
+                                    <p className="text-[11px] tracking-[0.4em] text-er-primary uppercase font-semibold">{stat.label}</p>
+                                </div>
                             </div>
                         ))}
                     </div>
