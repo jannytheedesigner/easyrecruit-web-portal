@@ -10,7 +10,8 @@ export default function HomePage() {
     return (
         <div className="flex flex-col min-h-screen">
             {/* Hero Section */}
-            <section className="relative px-10 py-20 overflow-hidden bg-er-primary-dark max-w-7xl mx-auto rounded-3xl">
+            <section className="relative px-10 py-26 overflow-hidden bg-er-primary-dark max-w-7xl mx-auto rounded-3xl">
+                <Image src="/brand-assets/visual-assets/illustrations/hero-section.svg" width={400} height={400} alt="hero-section" className="absolute object-cover inset-0 w-full h-full" />
                 <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-er-primary/10 via-transparent to-transparent opacity-70" />
                 <div className="container mx-auto px-4 md:px-6 relative z-10">
                     <div className="grid lg:grid-cols-3 gap-12 items-center">
@@ -22,7 +23,7 @@ export default function HomePage() {
                                 The smartest recruitment platform connecting top talent and forward-thinking employers across Africa.
                             </p>
                             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                                <Button size="lg" className="h-12 px-8 text-base bg-er-primary hover:bg-er-primary-light">
+                                <Button size="lg" className="h-12 px-8 text-base bg-er-primary-light hover:bg-er-primary-dark">
                                     <Link href="/auth/register?role=employer">Post a Job</Link>
                                 </Button>
                                 <Button size="lg" variant="outline" className="px-8 text-base bg-er-secondary border-er-secondary-light hover:bg-er-secondary-light">
