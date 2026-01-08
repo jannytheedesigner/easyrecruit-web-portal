@@ -296,3 +296,17 @@
   clip: rect(1px, 1px, 1px, 1px);
   white-space: nowrap;
 }
+
+@keyframes logo-slide {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-logo-slide {
+  animation: logo-slide 28s linear infinite;
+}
+

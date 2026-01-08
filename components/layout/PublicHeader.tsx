@@ -9,7 +9,6 @@ import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
 
 const NAV_LINKS = [
-    { href: "/", label: "Home" },
     { href: "/employers", label: "For Employers" },
     { href: "/job-seekers", label: "For Job Seekers" },
     { href: "/jobs", label: "Jobs" },
@@ -45,7 +44,7 @@ export function PublicHeader() {
             <div className="container mx-auto px-4 sm:px-6 lg:px-4">
                 <div className="flex items-center justify-between">
                     {/* Logo */}
-                    <Link href="/" className="flex-shrink-0">
+                    <Link href="/" className="flex-shrink-0 pl-4">
                         <Logo
                             brandName="easyrecruit"
                             type="horizontal"

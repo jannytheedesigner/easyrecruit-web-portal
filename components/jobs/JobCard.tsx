@@ -11,22 +11,22 @@ interface JobCardProps {
 
 export function JobCard({ job }: JobCardProps) {
     return (
-        <Card className="hover:border-er-primary/50 transition-colors">
+        <Card className="hover:border-er-primary/50 transition-colors dark:bg-card dark:border-border">
             <CardContent className="p-6">
                 <div className="flex flex-col md:flex-row gap-4 md:items-start justify-between">
                     <div className="flex gap-4">
-                        <div className="w-12 h-12 rounded bg-gray-100 flex items-center justify-center font-bold text-gray-500">
+                        <div className="w-12 h-12 rounded bg-gray-100 dark:bg-muted flex items-center justify-center font-bold text-gray-500 dark:text-muted-foreground">
                             {job.company.charAt(0)}
                         </div>
                         <div>
                             <Link
                                 href={`/jobs/${job.slug}`}
-                                className="text-lg font-bold text-gray-900 hover:text-er-primary transition-colors"
+                                className="text-lg font-bold text-gray-900 dark:text-white hover:text-er-primary transition-colors"
                             >
                                 {job.title}
                             </Link>
-                            <p className="text-gray-600 mb-2">{job.company}</p>
-                            <div className="flex flex-wrap gap-y-2 gap-x-4 text-sm text-gray-500">
+                            <p className="text-gray-600 dark:text-gray-300 mb-2">{job.company}</p>
+                            <div className="flex flex-wrap gap-y-2 gap-x-4 text-sm text-gray-500 dark:text-gray-400">
                                 <span className="flex items-center gap-1">
                                     <MapPin className="w-4 h-4" /> {job.location}
                                 </span>

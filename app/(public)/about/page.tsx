@@ -1,72 +1,117 @@
 import { Logo } from "oxisverse-logo-system";
-import { Users, Globe, Award, Heart } from "lucide-react";
+import { Users, Award, Heart, Globe } from "lucide-react";
+import { AboutHero } from "@/components/easycomponents/about/AboutHero";
+import { MissionVisionCard } from "@/components/easycomponents/about/MissionVisionCard";
+import { CoreValueCard } from "@/components/easycomponents/about/CoreValueCard";
+import { TeamMemberCard } from "@/components/easycomponents/about/TeamMemberCard";
+import { SectionHeader } from "@/components/easycomponents/SectionHeader";
 
 export default function AboutPage() {
     return (
-        <div className="flex flex-col min-h-screen">
+        <div className="flex flex-col gap-10 min-h-screen bg-white dark:bg-background">
             {/* Hero */}
-            <section className="bg-white py-20 lg:py-32">
-                <div className="container mx-auto px-4 text-center">
-                    <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
-                        Empowering Africa's Workforce
-                    </h1>
-                    <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                        We're on a mission to connect talent with opportunity, fostering economic growth and innovation across the continent.
-                    </p>
-                </div>
-            </section>
+            <div className="container mx-auto px-4">
+                <AboutHero
+                    title="Empowering Africa's Workforce"
+                    subtitle="We're on a mission to connect talent with opportunity, fostering economic growth and innovation across the continent."
+                />
+            </div>
 
             {/* Mission & Vision */}
-            <section className="py-20 bg-gray-50">
+            <section className="">
                 <div className="container mx-auto px-4">
-                    <div className="grid md:grid-cols-2 gap-16 items-center">
-                        <div className="aspect-square bg-blue-100 rounded-2xl p-8 relative overflow-hidden">
-                            <div className="absolute inset-0 bg-gradient-to-tr from-blue-600 to-er-primary opacity-90"></div>
-                            <div className="relative z-10 h-full flex items-center justify-center text-white">
-                                <Logo
-                                    brandName="easyrecruit"
-                                    type="brandmark"
-                                    variant="main"
-                                    format="svg"
-                                    width={150}
-                                    height={150}
-                                    alt="EasyRecruit Icon"
-                                    className="bg-white rounded-full p-4"
-                                />
-                            </div>
-                        </div>
-                        <div>
-                            <h2 className="text-3xl font-bold mb-6">Our Vision</h2>
-                            <p className="text-lg text-gray-600 mb-6 leading-relaxed">
-                                We envision a world where every individual has access to meaningful work and every company can find the talent they need to thrive, regardless of location.
-                            </p>
-                            <h2 className="text-3xl font-bold mb-6">Our Mission</h2>
-                            <p className="text-lg text-gray-600 leading-relaxed">
-                                To build the most trusted and efficient recruitment infrastructure in Africa, leveraging technology to remove barriers and create seamless connections.
-                            </p>
-                        </div>
+                    <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
+                        <MissionVisionCard
+                            title="Our Vision"
+                            description="We envision a world where every individual has access to meaningful work and every company can find the talent they need to thrive, regardless of location."
+                        />
+                        <MissionVisionCard
+                            title="Our Mission"
+                            description="To build the most trusted and efficient recruitment infrastructure in Africa, leveraging technology to remove barriers and create seamless connections"
+                        />
                     </div>
                 </div>
             </section>
 
             {/* Values */}
-            <section className="py-24 bg-white">
+            <section className="">
                 <div className="container mx-auto px-4">
-                    <div className="grid md:grid-cols-4 gap-8 text-center">
-                        {[
-                            { icon: <Globe className="w-10 h-10 text-blue-500" />, title: "Pan-African", desc: "Building specifically for the African context." },
-                            { icon: <Award className="w-10 h-10 text-yellow-500" />, title: "Excellence", desc: "Committed to the highest quality standards." },
-                            { icon: <Users className="w-10 h-10 text-green-500" />, title: "Community", desc: "People first, always." },
-                            { icon: <Heart className="w-10 h-10 text-red-500" />, title: "Passion", desc: "Driven by a desire to make a difference." }
-                        ].map((v, i) => (
-                            <div key={i} className="p-6">
-                                <div className="mx-auto w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mb-4">
-                                    {v.icon}
-                                </div>
-                                <h3 className="text-xl font-bold mb-2">{v.title}</h3>
-                                <p className="text-gray-600">{v.desc}</p>
+                    <div className="mb-8 md:mb-10">
+                        <div className="flex flex-col md:flex-row justify-between items-end gap-6">
+                            <div className="max-w-xl">
+                                <SectionHeader
+                                    sectionSubCaption="VALUES & BELIEFS"
+                                    sectionTitle="EasyRecruit Core Values & Beliefs that drives it"
+                                    align="left"
+                                    className="bg-transparent p-0"
+                                    titleClassName="text-3xl md:text-5xl dark:text-white"
+                                />
                             </div>
-                        ))}
+                            <p className="text-gray-600 dark:text-muted-foreground text-sm md:text-base max-w-md text-right md:text-left">
+                                We adhere to the highest standards of quality in all our products and services. From design and development to manufacturing and customer support, we maintain rigorous quality control measures to ensure consistency.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <CoreValueCard
+                            number={1}
+                            title="Pan African"
+                            description="Building specifically for the African context."
+                            icon={Globe}
+                        />
+                        <CoreValueCard
+                            number={2}
+                            title="Excellence"
+                            description="Committed to the highest quality standards."
+                            icon={Award}
+                        />
+                        <CoreValueCard
+                            number={3}
+                            title="Community"
+                            description="Bringing Jobs an Opportunities to the Community of Africa."
+                            icon={Users}
+                        />
+                        <CoreValueCard
+                            number={3}
+                            title="Passion"
+                            description="Driven by a desire to make a difference in the HR sector."
+                            icon={Heart}
+                        />
+                    </div>
+                </div>
+            </section>
+
+            {/* Team */}
+            <section className="pt-6 dark:bg-accent/20">
+                <div className="container mx-auto px-4">
+                    <div className="mb-6 max-w-xl">
+                        <SectionHeader
+                            sectionSubCaption="THE EASYRECRUIT TEAM"
+                            sectionTitle="The Creative Team Powering Our Success"
+                            align="left"
+                            className="bg-transparent p-0"
+                            titleClassName="text-3xl md:text-5xl dark:text-white"
+                        />
+                    </div>
+
+                    <div className="grid md:grid-cols-3 gap-8">
+                        <TeamMemberCard
+                            name="Sebastian Chimwala"
+                            role="FOUNDER & CEO"
+                            image="/brand-assets/visual-assets/illustrations/team-members/member-image-3.png"
+                        />
+                        <TeamMemberCard
+                            name="Ahmed Janny Daud"
+                            role="SYSTEMS ENGINEER"
+                            image="/brand-assets/visual-assets/illustrations/team-members/member-image-2.png"
+                            isCenter={true}
+                        />
+                        <TeamMemberCard
+                            name="Mr Geofrey Damison"
+                            role="HEAD OF HUMAN RESOURCE"
+                            image="/brand-assets/visual-assets/illustrations/team-members/member-image-1.png"
+                        />
                     </div>
                 </div>
             </section>

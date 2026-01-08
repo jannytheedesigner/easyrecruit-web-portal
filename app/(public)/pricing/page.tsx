@@ -7,12 +7,12 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 
 export default function PricingPage() {
     return (
-        <div className="min-h-screen bg-gray-50 flex flex-col items-center py-20">
+        <div className="min-h-screen bg-gray-50 dark:bg-background flex flex-col items-center py-20">
             <div className="container mx-auto px-4">
                 {/* Header */}
                 <div className="text-center max-w-2xl mx-auto mb-16">
-                    <h1 className="text-4xl font-bold text-gray-900 mb-4">Simple, Transparent Pricing</h1>
-                    <p className="text-lg text-gray-600">Start for free and scale as you grow. No hidden fees.</p>
+                    <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">Simple, Transparent Pricing</h1>
+                    <p className="text-lg text-gray-600 dark:text-gray-300">Start for free and scale as you grow. No hidden fees.</p>
                 </div>
 
                 {/* Pricing Tabs */}
@@ -27,11 +27,11 @@ export default function PricingPage() {
                     <TabsContent value="employers">
                         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
                             {/* Free Plan */}
-                            <Card className="border-gray-200">
+                            <Card className="border-gray-200 dark:border-border dark:bg-card">
                                 <CardHeader>
                                     <CardTitle className="text-xl">Free</CardTitle>
                                     <CardDescription>Perfect for testing the waters</CardDescription>
-                                    <div className="mt-4"><span className="text-3xl font-bold">MK 0</span><span className="text-gray-500">/mo</span></div>
+                                    <div className="mt-4"><span className="text-3xl font-bold">MK 0</span><span className="text-gray-500 dark:text-muted-foreground">/mo</span></div>
                                 </CardHeader>
                                 <CardContent>
                                     <ul className="space-y-3 text-sm">
@@ -46,12 +46,12 @@ export default function PricingPage() {
                             </Card>
 
                             {/* Starter Plan */}
-                            <Card className="border-er-primary shadow-lg scale-105 relative z-10">
+                            <Card className="border-er-primary shadow-lg scale-105 relative z-10 dark:bg-card">
                                 <div className="absolute top-0 right-0 bg-er-primary text-white text-xs px-2 py-1 rounded-bl-lg font-bold">POPULAR</div>
                                 <CardHeader>
                                     <CardTitle className="text-xl text-er-primary">Starter</CardTitle>
                                     <CardDescription>For growing businesses</CardDescription>
-                                    <div className="mt-4"><span className="text-3xl font-bold">MK 50,000</span><span className="text-gray-500">/mo</span></div>
+                                    <div className="mt-4"><span className="text-3xl font-bold">MK 50,000</span><span className="text-gray-500 dark:text-muted-foreground">/mo</span></div>
                                 </CardHeader>
                                 <CardContent>
                                     <ul className="space-y-3 text-sm">
@@ -67,11 +67,11 @@ export default function PricingPage() {
                             </Card>
 
                             {/* Pro Plan */}
-                            <Card className="border-gray-200">
+                            <Card className="border-gray-200 dark:border-border dark:bg-card">
                                 <CardHeader>
                                     <CardTitle className="text-xl">Pro</CardTitle>
                                     <CardDescription>For serious hiring needs</CardDescription>
-                                    <div className="mt-4"><span className="text-3xl font-bold">MK 150,000</span><span className="text-gray-500">/mo</span></div>
+                                    <div className="mt-4"><span className="text-3xl font-bold">MK 150,000</span><span className="text-gray-500 dark:text-muted-foreground">/mo</span></div>
                                 </CardHeader>
                                 <CardContent>
                                     <ul className="space-y-3 text-sm">
@@ -87,7 +87,7 @@ export default function PricingPage() {
                             </Card>
 
                             {/* Enterprise Plan */}
-                            <Card className="border-gray-200 bg-gray-50">
+                            <Card className="border-gray-200 bg-gray-50 dark:border-border dark:bg-muted/30">
                                 <CardHeader>
                                     <CardTitle className="text-xl">Enterprise</CardTitle>
                                     <CardDescription>Custom high-volume solution</CardDescription>
@@ -110,7 +110,7 @@ export default function PricingPage() {
 
                     <TabsContent value="jobseekers">
                         <div className="grid md:grid-cols-2 gap-8 max-w-3xl mx-auto">
-                            <Card className="border-er-primary shadow-lg">
+                            <Card className="border-er-primary shadow-lg dark:bg-card">
                                 <CardHeader>
                                     <CardTitle className="text-xl text-er-primary">Standard Profile</CardTitle>
                                     <CardDescription>Everything you need to get hired</CardDescription>
@@ -129,17 +129,17 @@ export default function PricingPage() {
                                 </CardFooter>
                             </Card>
 
-                            <Card className="border-gray-200">
+                            <Card className="border-gray-200 dark:border-border dark:bg-card">
                                 <CardHeader>
                                     <div className="flex justify-between items-center">
                                         <CardTitle className="text-xl">Premium</CardTitle>
-                                        <span className="text-xs bg-gray-200 px-2 py-1 rounded">Coming Soon</span>
+                                        <span className="text-xs bg-gray-200 dark:bg-muted dark:text-muted-foreground px-2 py-1 rounded">Coming Soon</span>
                                     </div>
                                     <CardDescription>Stand out from the crowd</CardDescription>
-                                    <div className="mt-4"><span className="text-3xl font-bold">MK 14,000</span><span className="text-gray-500">/mo</span></div>
+                                    <div className="mt-4"><span className="text-3xl font-bold">MK 14,000</span><span className="text-gray-500 dark:text-muted-foreground">/mo</span></div>
                                 </CardHeader>
                                 <CardContent>
-                                    <ul className="space-y-3 text-sm text-gray-500">
+                                    <ul className="space-y-3 text-sm text-gray-500 dark:text-muted-foreground">
                                         <li className="flex gap-2"><Check className="w-4 h-4" /> Profile Highlighting</li>
                                         <li className="flex gap-2"><Check className="w-4 h-4" /> Application Insights</li>
                                         <li className="flex gap-2"><Check className="w-4 h-4" /> Direct Messaging</li>
@@ -155,7 +155,7 @@ export default function PricingPage() {
 
                 {/* FAQs */}
                 <div className="max-w-3xl mx-auto mt-24">
-                    <h2 className="text-2xl font-bold text-center mb-8">Frequently Asked Questions</h2>
+                    <h2 className="text-2xl font-bold text-center mb-8 dark:text-white">Frequently Asked Questions</h2>
                     <Accordion type="single" collapsible className="w-full">
                         {[
                             { q: "Can I cancel my subscription anytime?", a: "Yes, you can cancel your subscription at any time. Your plan will remain active until the end of the billing period." },
@@ -164,8 +164,8 @@ export default function PricingPage() {
                             { q: "What happens to my data if I downgrade?", a: "Your data remains safe. You will simply lose access to the premium features associated with your previous plan." }
                         ].map((faq, i) => (
                             <AccordionItem key={i} value={`item-${i}`}>
-                                <AccordionTrigger>{faq.q}</AccordionTrigger>
-                                <AccordionContent>{faq.a}</AccordionContent>
+                                <AccordionTrigger className="dark:text-gray-200">{faq.q}</AccordionTrigger>
+                                <AccordionContent className="dark:text-gray-400">{faq.a}</AccordionContent>
                             </AccordionItem>
                         ))}
                     </Accordion>

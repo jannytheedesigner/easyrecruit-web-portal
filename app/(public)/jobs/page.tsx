@@ -33,9 +33,9 @@ export default function JobsPage() {
     }, []);
 
     return (
-        <div className="min-h-screen bg-gray-50 pb-20">
+        <div className="min-h-screen bg-gray-50 dark:bg-background pb-20">
             {/* Search Header */}
-            <div className="bg-white border-b border-gray-200 sticky top-16 z-30">
+            <div className="bg-white dark:bg-background border-b border-gray-200 dark:border-border sticky top-16 z-30">
                 <div className="container mx-auto px-4 py-6">
                     <div className="flex flex-col md:flex-row gap-4">
                         <div className="flex-1 relative">
@@ -57,20 +57,20 @@ export default function JobsPage() {
                 <div className="flex flex-col lg:flex-row gap-8">
                     {/* Sidebar Filters */}
                     <aside className="w-full lg:w-64 flex-shrink-0 space-y-8">
-                        <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
-                            <div className="flex items-center gap-2 font-semibold text-gray-900 mb-4">
+                        <div className="bg-white dark:bg-card p-6 rounded-lg border border-gray-200 dark:border-border shadow-sm">
+                            <div className="flex items-center gap-2 font-semibold text-gray-900 dark:text-white mb-4">
                                 <Filter className="w-4 h-4" />
                                 Filters
                             </div>
 
                             {/* Job Type */}
                             <div className="mb-6">
-                                <h3 className="text-sm font-medium mb-3">Job Type</h3>
+                                <h3 className="text-sm font-medium mb-3 dark:text-gray-200">Job Type</h3>
                                 <div className="space-y-2">
                                     {["Full-time", "Part-time", "Contract", "Freelance", "Internship"].map((type) => (
                                         <div key={type} className="flex items-center space-x-2">
                                             <Checkbox id={`type-${type}`} />
-                                            <Label htmlFor={`type-${type}`} className="text-sm text-gray-600 font-normal">{type}</Label>
+                                            <Label htmlFor={`type-${type}`} className="text-sm text-gray-600 dark:text-gray-400 font-normal">{type}</Label>
                                         </div>
                                     ))}
                                 </div>
@@ -78,12 +78,12 @@ export default function JobsPage() {
 
                             {/* Experience Level */}
                             <div className="mb-6">
-                                <h3 className="text-sm font-medium mb-3">Experience Level</h3>
+                                <h3 className="text-sm font-medium mb-3 dark:text-gray-200">Experience Level</h3>
                                 <div className="space-y-2">
                                     {["Entry Level", "Mid Level", "Senior Level", "Director", "Executive"].map((level) => (
                                         <div key={level} className="flex items-center space-x-2">
                                             <Checkbox id={`level-${level}`} />
-                                            <Label htmlFor={`level-${level}`} className="text-sm text-gray-600 font-normal">{level}</Label>
+                                            <Label htmlFor={`level-${level}`} className="text-sm text-gray-600 dark:text-gray-400 font-normal">{level}</Label>
                                         </div>
                                     ))}
                                 </div>
@@ -91,12 +91,12 @@ export default function JobsPage() {
 
                             {/* Remote / Onsite */}
                             <div className="mb-6">
-                                <h3 className="text-sm font-medium mb-3">Workplace</h3>
+                                <h3 className="text-sm font-medium mb-3 dark:text-gray-200">Workplace</h3>
                                 <div className="space-y-2">
                                     {["On-site", "Remote", "Hybrid"].map((place) => (
                                         <div key={place} className="flex items-center space-x-2">
                                             <Checkbox id={`place-${place}`} />
-                                            <Label htmlFor={`place-${place}`} className="text-sm text-gray-600 font-normal">{place}</Label>
+                                            <Label htmlFor={`place-${place}`} className="text-sm text-gray-600 dark:text-gray-400 font-normal">{place}</Label>
                                         </div>
                                     ))}
                                 </div>
@@ -107,9 +107,9 @@ export default function JobsPage() {
                     {/* Job Listings */}
                     <div className="flex-1">
                         <div className="flex justify-between items-center mb-6">
-                            <h2 className="text-xl font-bold text-gray-900">Recommended Jobs <span className="text-gray-500 font-normal text-base ml-2">({jobs.length} results)</span></h2>
+                            <h2 className="text-xl font-bold text-gray-900 dark:text-white">Recommended Jobs <span className="text-gray-500 dark:text-gray-400 font-normal text-base ml-2">({jobs.length} results)</span></h2>
                             <div className="flex items-center gap-2">
-                                <span className="text-sm text-gray-600">Sort by:</span>
+                                <span className="text-sm text-gray-600 dark:text-gray-400">Sort by:</span>
                                 <Select defaultValue="newest">
                                     <SelectTrigger className="w-[140px] h-9">
                                         <SelectValue placeholder="Sort" />
@@ -133,7 +133,7 @@ export default function JobsPage() {
                                     <JobCard key={job.id} job={job} />
                                 ))}
                                 {jobs.length === 0 && (
-                                    <div className="text-center py-10 text-gray-500">
+                                    <div className="text-center py-10 text-gray-500 dark:text-gray-400">
                                         No jobs found.
                                     </div>
                                 )}
