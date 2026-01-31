@@ -20,6 +20,16 @@ export default function AboutPage() {
             {/* Mission & Vision */}
             <section className="">
                 <div className="container mx-auto px-4">
+                    <div className="flex justify-center mb-10">
+                        <SectionHeader
+                            sectionSubCaption="OUR FOUNDATION"
+                            sectionTitle="Mission & Vision"
+                            align="center"
+                            titleClassName="dark:text-white"
+                            subCaptionClassName="dark:text-er-secondary"
+                            className="bg-transparent p-0 max-w-2xl"
+                        />
+                    </div>
                     <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
                         <MissionVisionCard
                             title="Our Vision"

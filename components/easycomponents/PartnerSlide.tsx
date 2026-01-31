@@ -17,8 +17,8 @@ export const PartnerSlide = () => {
     const sliders = [...PARTNERS, ...PARTNERS];
 
     return (
-        <div className="border-er-primary/30 overflow-hidden bg-white py-10">
-            <div className="relative mx-auto max-w-7xl">
+        <div className="border-er-primary/30 overflow-hidden dark:rounded-2xl bg-white py-10">
+            <div className="relative mx-auto max-w-7xl ">
                 {/* Fade edges */}
                 <div className="pointer-events-none hidden absolute lg:block top-0 left-0 w-32 h-full z-10 bg-gradient-to-r from-white to-transparent" />
                 <div className="pointer-events-none hidden absolute top-0 lg:block right-0 w-32 h-full z-10 bg-gradient-to-l from-white to-transparent" />

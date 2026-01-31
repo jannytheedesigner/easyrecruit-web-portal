@@ -22,6 +22,7 @@ export const TestimonialCard = ({ quote, author, role, image, isEmployer }: Test
                     unoptimized
                 />
             </div>
+            
             <div className="relative z-40">
                 <p className="text-xl md:text-2xl text-gray-800 primary-font leading-[120%] mb-6">
                     {quote}

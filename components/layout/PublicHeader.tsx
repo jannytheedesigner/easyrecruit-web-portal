@@ -35,7 +35,7 @@ export function PublicHeader() {
     return (
         <header
             className={cn(
-                "fixed top-0 left-0 right-0 z-50 transition-all duration-300 m-5 rounded-full bg-white",
+                "fixed top-0 left-0 right-0 z-50 border-8 border-white transition-all duration-300 my-5 mx-8 rounded-full bg-white",
                 scrolled
                     ? "bg-er-accent py-4"
                     : "bg-er-accent py-4"

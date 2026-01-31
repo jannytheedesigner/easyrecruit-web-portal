@@ -4,16 +4,28 @@ import { Check, HelpCircle } from "lucide-react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { SectionHeader } from "@/components/easycomponents/SectionHeader";
 
 export default function PricingPage() {
     return (
         <div className="min-h-screen bg-gray-50 dark:bg-background flex flex-col items-center py-20">
             <div className="container mx-auto px-4">
                 {/* Header */}
-                <div className="text-center max-w-2xl mx-auto mb-16">
-                    <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">Simple, Transparent Pricing</h1>
-                    <p className="text-lg text-gray-600 dark:text-gray-300">Start for free and scale as you grow. No hidden fees.</p>
+                <div className="flex justify-center mb-16">
+                    <SectionHeader
+                        sectionSubCaption="PRICING PLANS"
+                        sectionTitle="Simple, Transparent Pricing"
+                        align="center"
+                        titleClassName="dark:text-white"
+                        subCaptionClassName="dark:text-er-secondary"
+                        className="bg-transparent p-0 max-w-2xl"
+                    />
                 </div>
+                {/* 
+                <div className="text-center max-w-2xl mx-auto mb-16">
+                    <p className="text-lg text-gray-600 dark:text-gray-300">Start for free and scale as you grow. No hidden fees.</p>
+                </div> 
+                */}
 
                 {/* Pricing Tabs */}
                 <Tabs defaultValue="employers" className="w-full max-w-5xl mx-auto">
