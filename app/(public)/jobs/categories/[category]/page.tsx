@@ -4,7 +4,8 @@ import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { JobService, Job } from "@/lib/services/job-service";
+import { JobService } from "@/lib/services/job-service";
+import type { Job } from "@/types/job";
 import { JobCard } from "@/components/jobs/JobCard";
 import { ArrowLeft } from "lucide-react";
 

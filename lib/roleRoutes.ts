@@ -5,7 +5,7 @@ type Role = User["role"] | undefined;
 const roleBaseMap: Record<User["role"], string> = {
   employer: "/employer",
   jobseeker: "/jobseeker",
-  admin: "/employer",
+  admin: "/admin",
 };
 
 export const getRoleBasePath = (role: Role) => {
@@ -13,7 +13,11 @@ export const getRoleBasePath = (role: Role) => {
   return roleBaseMap[role] || "/jobseeker";
 };
 
-export const getRoleDashboardPath = (role: Role) => `${getRoleBasePath(role)}/dashboard`;
+export const getRoleDashboardPath = (role: Role) => {
+  const base = getRoleBasePath(role);
+  if (role === "jobseeker") return `${base}/jobs`;
+  return `${base}/dashboard`;
+};
 
 export const getRoleRoute = (role: Role, path: string) => {
   const base = getRoleBasePath(role);

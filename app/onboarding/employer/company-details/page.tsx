@@ -19,7 +19,7 @@ import {
   setEmployerLastStep,
 } from "@/lib/onboardingProgress";
 
-const steps = ["Company Info", "Company Profile", "Documents", "HR Contact", "Goals", "Preferences", "Confirm"];
+const steps = ["Basic Info", "Company Profile", "Documents", "HR Contact", "Hiring Goals", "Preferences", "Confirm"];
 
 export default function CompanyDetails() {
   const [form, setForm] = useState({
@@ -127,7 +127,7 @@ export default function CompanyDetails() {
                 </div>
               </div>
             </div>
-            <div className="flex items-center gap-3">
+            <div className="flex justify-between gap-3">
               <button
                 type="button"
                 onClick={() => router.back()}
@@ -135,20 +135,9 @@ export default function CompanyDetails() {
               >
                 Back
               </button>
-              <Button onClick={handleSubmit} className="flex-1">
+              <Button onClick={handleSubmit} className="w-fit">
                 Continue
               </Button>
-              <button
-                type="button"
-                onClick={() => {
-                  saveEmployerDraft("company-details", form);
-                  toast({ title: "Draft saved" });
-                  router.replace("/employer/dashboard");
-                }}
-                className="rounded-full border border-slate-200 px-6 py-2 text-sm text-slate-700 hover:bg-slate-50"
-              >
-                Save & Exit
-              </button>
             </div>
           </div>
         </div>

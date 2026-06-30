@@ -14,6 +14,12 @@ import { User } from "@/types";
 import { toast } from "@/components/ui/use-toast";
 import { getRoleDashboardPath } from "@/lib/roleRoutes";
 
+export interface OnboardingStatus {
+  completed: boolean;
+  current_step: number;
+  role: "jobseeker" | "employer";
+}
+
 export interface AuthContextType {
   user: User | null;
   loading: boolean;
@@ -25,7 +31,7 @@ export interface AuthContextType {
     name: string,
   ) => Promise<void>;
   logout: () => Promise<void>;
-  checkOnboarding: () => Promise<boolean>;
+  checkOnboarding: () => Promise<OnboardingStatus | null>;
   refreshUser: () => Promise<void>;
 }
 
@@ -77,7 +83,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setUser(null);
     }
   }, []);
-
 
   const login = async (email: string, password: string) => {
     try {
@@ -151,18 +156,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     router.push("/auth/login");
   };
 
-  const checkOnboarding = async (): Promise<boolean> => {
-    if (!user) return false;
+  const checkOnboarding = async (): Promise<OnboardingStatus | null> => {
+    if (!user) return null;
     try {
       const res = await axiosClient.get("/auth/onboarding-status");
-      const data = res.data;
-      return data.completed === true;
+      return res.data as OnboardingStatus;
     } catch (err) {
       console.error("Failed to check onboarding status", err);
-      return false;
+      return null;
     }
   };
-
 
   return (
     <AuthContext.Provider

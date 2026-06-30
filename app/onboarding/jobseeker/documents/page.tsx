@@ -36,14 +36,7 @@ export default function JobseekerDocumentsPage() {
   const [existingDocs, setExistingDocs] = useState<ExistingDocument[]>([])
   const [newDocs, setNewDocs] = useState<NewDocument[]>([])
 
-  const steps = [
-    "Personal Info",
-    "Education Background",
-    "Work Experience",
-    "Skills & Interests",
-    "Documents",
-    "Referees",
-  ]
+  const steps = ["Basic Details", "Education", "Experience", "Skills & Interests", "Documents", "Referees", "Confirm"]
 
   // ✅ Fetch user's existing documents on mount
   useEffect(() => {

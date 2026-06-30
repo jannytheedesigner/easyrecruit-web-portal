@@ -28,14 +28,7 @@ export default function JobseekerRefereesPage() {
   const [loading, setLoading] = useState(false)
   const [initialLoading, setInitialLoading] = useState(true)
 
-  const steps = [
-    "Personal Info",
-    "Education Background",
-    "Work Experience",
-    "Skills & Interests",
-    "Documents",
-    "Referees",
-  ]
+  const steps = ["Basic Details", "Education", "Experience", "Skills & Interests", "Documents", "Referees", "Confirm"]
 
   // ✅ Load existing referees from backend
   useEffect(() => {

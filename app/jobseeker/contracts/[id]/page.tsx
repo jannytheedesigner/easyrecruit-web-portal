@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export default function JobSeekerContractDetailsPage({ params }: { params: { id: string } }) {
     return (
-        <div className="space-y-6">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
             <Link href="/jobseeker/contracts" className="flex items-center text-sm text-gray-600 hover:text-er-primary">
                 <ArrowLeft className="w-4 h-4 mr-2" />
                 Back to Contracts

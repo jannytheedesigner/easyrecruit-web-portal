@@ -28,7 +28,7 @@ export default function JobseekerSkillsExperiencePage() {
     { organisation: "", role: "", start_date: "", end_date: "", present: false, contract_type: "full-time", description: "" },
   ])
 
-  const steps = ["Personal Info", "Education Background", "Skills & Interest", "Work Experience", "Documents", "Referees"]
+  const steps = ["Basic Details", "Education", "Experience", "Skills & Interests", "Documents", "Referees", "Confirm"]
 
 
   const handleExperienceChange = (i: number, key: keyof ExperienceItem, value: any) => {

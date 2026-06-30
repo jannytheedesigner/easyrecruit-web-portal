@@ -37,7 +37,7 @@ export default function SkillsJobCategoriesPage() {
   const [availableInterests, setAvailableInterests] = useState<Interest[]>([])
   const [availableJobCategories, setAvailableJobCategories] = useState<JobCategory[]>([])
 
-  const steps = ["Personal Info", "Education Background", "Skills & Interest", "Work Experience", "Documents", "Referees"]
+  const steps = ["Basic Details", "Education", "Experience", "Skills & Interests", "Documents", "Referees", "Confirm"]
 
   useEffect(() => {
     const fetchLists = async () => {

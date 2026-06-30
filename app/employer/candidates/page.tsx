@@ -195,17 +195,17 @@ export default function TalentDirectoryPage() {
     return (
         <div className="space-y-8">
             {/* Header */}
-            <div className="bg-er-complimentary p-10 rounded-3xl flex flex-col gap-3">
+            <div className="bg-er-primary p-10 rounded-3xl flex flex-col gap-3">
                 <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
                     <div>
                         <div className="flex items-center gap-3 mb-2">
                             <div>
-                                <h1 className="text-3xl font-semibold text-white">Hiring Directory</h1>
-                                <p className="text-gray-100 mt-1">Discover and connect with top professionals</p>
+                                <h1 className="text-3xl font-semibold text-white">Talent Directory</h1>
+                                <p className="text-gray-100 mt-1">Discover and connect with elite professionals</p>
                             </div>
                         </div>
                     </div>
-                    <Button variant={"primaryRoundedCorner"} className="flex flex-row gap-2 bg-er-dark rounded-full text-base py-3 px-4 text-er-white">
+                    <Button variant={"primaryRoundedCorner"} className="flex flex-row gap-2 bg-er-secondary rounded-full text-base py-3 px-4 text-er-dark hover:scale-105 transition-transform">
                         <Sparkles className="w-5 h-5" />
                         Find Perfect Match
                     </Button>
@@ -213,48 +213,47 @@ export default function TalentDirectoryPage() {
 
                 {/* Stats Overview */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                    <div className="bg-er-white rounded-2xl p-6">
+                    <div className="bg-er-white rounded-3xl p-6 border border-slate-100">
                         <div className="flex items-center justify-between">
                             <div>
-                                <div className="text-sm text-gray-700 font-medium">Total Candidate</div>
-                                <div className="text-5xl font-medium text-er-dark mt-1">{stats.total}</div>
+                                <div className="text-sm text-slate-500 font-medium tracking-tight">Total Candidates</div>
+                                <div className="text-5xl font-bold text-slate-900 mt-1 font-display">{stats.total}</div>
                             </div>
-                            <div className="my-auto flex p-4 bg-er-primary rounded-md">
-                                <UsersIcon className="w-10 h-10 stroke-[1px] text-er-white" />
-                            </div>
-
-                        </div>
-                    </div>
-                    <div className="bg-er-white rounded-2xl p-6">
-                        <div className="flex items-center justify-between">
-                            <div>
-                                <div className="text-sm text-gray-700 font-medium">Immediate Start</div>
-                                <div className="text-5xl font-medium text-er-dark mt-1">{stats.available}</div>
-                            </div>
-                            <div className="my-auto flex p-4 bg-er-dark rounded-md">
-                                <Calendar className="w-10 h-10 stroke-[1px] text-er-white" />
+                            <div className="my-auto flex p-4 bg-er-primary/5 rounded-2xl">
+                                <UsersIcon className="w-8 h-8 stroke-[1.5px] text-er-primary" />
                             </div>
                         </div>
                     </div>
-                    <div className="bg-er-white rounded-2xl p-6">
+                    <div className="bg-er-white rounded-3xl p-6 border border-slate-100">
                         <div className="flex items-center justify-between">
                             <div>
-                                <div className="text-sm text-gray-700 font-medium">Top Candidate</div>
-                                <div className="text-5xl font-medium text-er-dark mt-1">{stats.premium}</div>
+                                <div className="text-sm text-slate-500 font-medium tracking-tight">Immediate Start</div>
+                                <div className="text-5xl font-bold text-slate-900 mt-1 font-display">{stats.available}</div>
                             </div>
-                            <div className="my-auto flex p-4 bg-er-secondary rounded-md">
-                                <Award className="w-10 h-10 stroke-[1px] text-er-white" />
+                            <div className="my-auto flex p-4 bg-green-500/10 rounded-2xl">
+                                <Calendar className="w-8 h-8 stroke-[1.5px] text-green-600" />
                             </div>
                         </div>
                     </div>
-                    <div className="bg-er-white rounded-2xl p-6">
+                    <div className="bg-er-white rounded-3xl p-6 border border-slate-100">
                         <div className="flex items-center justify-between">
                             <div>
-                                <div className="text-sm text-gray-700 font-medium">Saved Candidate</div>
-                                <div className="text-5xl font-medium text-er-dark mt-1">{stats.favorites}</div>
+                                <div className="text-sm text-slate-500 font-medium tracking-tight">Top Candidates</div>
+                                <div className="text-5xl font-bold text-slate-900 mt-1 font-display">{stats.premium}</div>
                             </div>
-                            <div className="my-auto flex p-4 bg-er-complimentary rounded-md">
-                                <BookmarkCheck className="w-10 h-10 stroke-[1px] text-er-white" />
+                            <div className="my-auto flex p-4 bg-er-secondary/10 rounded-2xl">
+                                <Award className="w-8 h-8 stroke-[1.5px] text-er-secondary-dark" />
+                            </div>
+                        </div>
+                    </div>
+                    <div className="bg-er-white rounded-3xl p-6 border border-slate-100">
+                        <div className="flex items-center justify-between">
+                            <div>
+                                <div className="text-sm text-slate-500 font-medium tracking-tight">Saved Candidates</div>
+                                <div className="text-5xl font-bold text-slate-900 mt-1 font-display">{stats.favorites}</div>
+                            </div>
+                            <div className="my-auto flex p-4 bg-er-complimentary/10 rounded-2xl">
+                                <BookmarkCheck className="w-8 h-8 stroke-[1.5px] text-er-complimentary" />
                             </div>
                         </div>
                     </div>
@@ -262,7 +261,7 @@ export default function TalentDirectoryPage() {
             </div>
 
             {/* Filters Bar */}
-            <div className="bg-white rounded-2xl p-6 border border-gray-200">
+            <div className="bg-white rounded-3xl p-6 border border-slate-100">
                 <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
                     {/* Search */}
                     {/* Search */}
@@ -348,95 +347,89 @@ export default function TalentDirectoryPage() {
                         {filteredTalents.map((talent) => (
                             <div
                                 key={talent.id}
-                                className="group bg-white rounded-2xl border border-gray-200 overflow-hidden hover:border-er-primary/15 transition-all duration-300"
+                                className="group relative bg-white rounded-3xl border border-slate-100 hover:border-er-primary/20 hover:shadow-xl hover:shadow-slate-200/50 transition-all duration-500 p-6 flex flex-col gap-4 overflow-hidden"
                             >
                                 {/* Talent Header */}
-                                <div className="relative p-6">
+                                <div className="relative">
                                     <button
                                         onClick={() => toggleFavorite(talent.id)}
-                                        className="absolute top-4 right-4 z-10 p-2 bg-white border border-gray-200 rounded-full transition-all"
+                                        className="absolute top-0 right-0 z-10 p-2 bg-slate-50 border border-slate-100 rounded-full transition-all group-hover:border-er-primary/20 hover:bg-slate-100"
                                     >
                                         {talent.is_favorite ? (
-                                            <BookmarkCheck className="w-5 h-5 text-er-complimentary fill-er-complimentary" />
+                                            <BookmarkCheck className="w-4 h-4 text-er-complimentary fill-er-complimentary" />
                                         ) : (
-                                            <Bookmark className="w-5 h-5 text-gray-400 hover:text-yellow-500" />
+                                            <Bookmark className="w-4 h-4 text-slate-400 hover:text-er-primary" />
                                         )}
                                     </button>
 
-                                    <div className="flex items-start gap-4 mb-4">
-                                        <div className={`w-12 h-12 rounded-md flex items-center justify-center flex-shrink-0 ${talent.avatar_color} text-white text-xl`}>
+                                    <div className="flex items-start gap-4">
+                                        <div className={`w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0 ${talent.avatar_color} text-white font-bold text-xl shadow-lg shadow-slate-200 group-hover:scale-105 transition-transform`}>
                                             {talent.name.charAt(0).toUpperCase()}
                                         </div>
-                                        <div className="flex-1 min-w-0 my-auto">
+                                        <div className="flex-1 min-w-0 my-auto pt-1">
                                             <div className="flex items-center gap-2">
-                                                <h3 className="text-lg font-bold text-gray-900 truncate">{talent.name}</h3>
+                                                <h3 className="text-lg font-bold text-slate-900 truncate group-hover:text-er-primary transition-colors">{talent.name}</h3>
                                                 {talent.rating && talent.rating >= 4.5 && (
-                                                    <span className="flex items-center gap-1 px-2 py-1 bg-yellow-100 text-yellow-700 rounded-full text-xs font-semibold">
+                                                    <span className="flex items-center gap-1 px-2 py-0.5 bg-yellow-50 text-yellow-600 border border-yellow-100 rounded-full text-[10px] font-bold uppercase tracking-widest">
                                                         <Star className="w-3 h-3 fill-yellow-500" />
                                                         {talent.rating}
                                                     </span>
                                                 )}
                                             </div>
-                                            <p className="text-sm text-primary font-medium">{talent.title}</p>
+                                            <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mt-0.5">{talent.title}</p>
+                                        </div>
+                                    </div>
+
+                                    {/* Quick Info Grid */}
+                                    <div className="grid grid-cols-2 gap-4 mt-6">
+                                        <div className="flex items-center gap-2">
+                                            <Briefcase className="w-4 h-4 text-slate-400" />
+                                            <div>
+                                                <div className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Experience</div>
+                                                <div className="text-sm font-semibold text-slate-900">{talent.experience} years</div>
+                                            </div>
+                                        </div>
+                                        <div className="flex items-center gap-2">
+                                            <MapPin className="w-4 h-4 text-slate-400" />
+                                            <div>
+                                                <div className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Location</div>
+                                                <div className="text-sm font-semibold text-slate-900 truncate">{talent.location}</div>
+                                            </div>
                                         </div>
                                     </div>
 
                                     {/* Skills */}
-                                    <div className="flex flex-wrap gap-2 mb-4">
+                                    <div className="flex flex-wrap gap-2 mt-6">
                                         {talent.skills?.slice(0, 3).map((skill, index) => (
                                             <span
                                                 key={index}
-                                                className="px-3 py-1.5 bg-er-primary/10 text-er-primary-dark rounded-full text-xs font-medium"
+                                                className="px-3 py-1.5 bg-er-primary/5 text-er-primary border border-er-primary/10 rounded-full text-[10px] font-bold uppercase tracking-widest"
                                             >
                                                 {skill}
                                             </span>
                                         ))}
                                         {talent.skills && talent.skills.length > 3 && (
-                                            <span className="px-3 py-1.5 bg-gray-100 text-gray-600 rounded-full text-xs font-medium">
+                                            <span className="px-3 py-1.5 bg-slate-50 text-slate-500 rounded-full text-[10px] font-bold uppercase tracking-widest">
                                                 +{talent.skills.length - 3} more
                                             </span>
                                         )}
                                     </div>
-
-                                    {/* Details */}
-                                    <div className="grid grid-cols-2 gap-4">
-                                        <div>
-                                            <div className="text-xs text-gray-600">Experience</div>
-                                            <div className="font-semibold text-gray-900">{talent.experience} years</div>
-                                        </div>
-                                        <div>
-                                            <div className="text-xs text-gray-600">Expected Salary</div>
-                                            <div className="font-semibold text-gray-900">
-                                                MWK{talent.salary_expectation?.toLocaleString()}
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <div className="text-xs text-gray-600">Availability</div>
-                                            <div className="font-semibold text-gray-900">{talent.availability}</div>
-                                        </div>
-                                        <div>
-                                            <div className="text-xs text-gray-600">Location</div>
-                                            <div className="font-semibold text-gray-900">{talent.location}</div>
-                                        </div>
-                                    </div>
                                 </div>
 
                                 {/* Talent Footer */}
-                                <div className="px-4 py-4 mt-auto bg-gray-100 m-3 rounded-md border border-gray-100">
+                                <div className="mt-auto pt-6 border-t border-slate-100">
                                     <div className="flex items-center justify-between">
-                                        <div className="flex items-center gap-2 text-sm text-gray-600">
-                                            <Briefcase className="w-4 h-4" />
-                                            <span>{talent.applications} applications</span>
+                                        <div className="flex flex-col">
+                                            <span className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Expected</span>
+                                            <span className="text-sm font-bold text-slate-900">MWK {talent.salary_expectation?.toLocaleString()}</span>
                                         </div>
                                         <div className="flex items-center gap-2">
-                                            <button className="p-2 text-gray-600 hover:text-primary hover:bg-blue-50 rounded-lg">
+                                            <button className="p-2.5 text-slate-400 hover:text-er-primary hover:bg-er-primary/5 rounded-xl transition-colors">
                                                 <Eye className="w-4 h-4" />
                                             </button>
-                                            <button className="p-2 text-gray-600 hover:text-green-600 hover:bg-green-50 rounded-lg">
-                                                <MessageSquare className="w-4 h-4" />
-                                            </button>
-                                            <button className="px-4 py-2 bg-er-primary rounded-full text-white hover:bg-er-primary-light transition-colors text-sm font-medium">
+                                            <button className="px-5 py-2.5 bg-slate-900 group-hover:bg-er-primary rounded-xl text-white text-[11px] font-bold uppercase tracking-widest transition-colors flex items-center gap-2">
                                                 Contact
+                                                <MessageSquare className="w-3.5 h-3.5" />
                                             </button>
                                         </div>
                                     </div>
@@ -446,7 +439,7 @@ export default function TalentDirectoryPage() {
                     </div>
                 ) : (
                     /* List View */
-                    <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden">
+                    <div className="bg-white rounded-3xl border border-slate-100 overflow-hidden shadow-sm">
                         <div className="overflow-x-auto">
                             <table className="w-full">
                                 <thead className="bg-gray-50 border-b border-gray-200">
@@ -527,7 +520,7 @@ export default function TalentDirectoryPage() {
 
             {
                 filteredTalents.length === 0 && (
-                    <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-16 border border-gray-200 text-center">
+                    <div className="bg-slate-50 rounded-3xl p-16 border border-slate-100 text-center">
                         <div className="w-24 h-24 mx-auto mb-6 bg-gradient-to-br from-primary/10 to-blue-600/10 rounded-full flex items-center justify-center">
                             <UsersIcon className="w-12 h-12 text-gray-400" />
                         </div>
@@ -553,7 +546,7 @@ export default function TalentDirectoryPage() {
             {/* Export/Save Section */}
             {
                 filteredTalents.length > 0 && (
-                    <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-white rounded-2xl p-6 border border-gray-200">
+                    <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-white rounded-3xl p-6 border border-slate-100 mt-8">
                         <div className="text-sm text-gray-600">
                             Found <span className="font-semibold text-gray-900">{filteredTalents.length}</span> matching professionals
                         </div>

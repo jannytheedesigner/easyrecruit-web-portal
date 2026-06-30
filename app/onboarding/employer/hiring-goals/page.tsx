@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/use-toast";
 import axiosClient, { initCsrf } from "@/lib/axiosClient";
 
-const steps = ["Company Info", "Company Profile", "Documents", "HR Contact", "Hiring Goals", "Preferences", "Confirm"];
+const steps = ["Basic Info", "Company Profile", "Documents", "HR Contact", "Hiring Goals", "Preferences", "Confirm"];
 
 export default function EmployerHiringGoalsPage() {
   const router = useRouter();

@@ -26,7 +26,7 @@ export default function JobseekerEducationPage() {
   const [loading, setLoading] = useState(false)
   const [initialLoading, setInitialLoading] = useState(true)
 
-  const steps = ["Personal", "Education", "Experience", "Skills & Interests", "Documents", "Referees", "Complete"]
+  const steps = ["Basic Details", "Education", "Experience", "Skills & Interests", "Documents", "Referees", "Confirm"]
 
   // ✅ Fetch previously saved education details
   useEffect(() => {

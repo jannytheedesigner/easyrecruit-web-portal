@@ -1,10 +1,5 @@
-@import url("https://fonts.googleapis.com/css2?family=Nata+Sans:wght@100..900&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Funnel+Sans:ital,wght@0,300..800;1,300..800&family=Gantari:ital,wght@0,100..900;1,100..900&family=Geist:wght@100..900&family=Hubot+Sans:ital,wght@0,200..900;1,200..900&family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Libre+Franklin:ital,wght@0,100..900;1,100..900&family=Liter&family=Manrope:wght@200..800&family=Mona+Sans:ital,wght@0,200..900;1,200..900&family=Onest:wght@100..900&family=Pathway+Extreme:ital,opsz,wght@0,8..144,100..900;1,8..144,100..900&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Sofia+Sans:ital,wght@0,1..1000;1,1..1000&family=Unbounded:wght@200..900&family=Wix+Madefor+Text:ital,wght@0,400..800;1,400..800&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Zalando+Sans+SemiExpanded:ital,wght@0,200..900;1,200..900&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&family=Anek+Telugu:wght@100..800&family=BBH+Sans+Bogle&family=Cairo:wght@200..1000&family=Changa+One:ital@0;1&family=Chiron+GoRound+TC:wght@200..900&family=Comfortaa:wght@300..700&family=Encode+Sans:wght@100..900&family=Exo+2:ital,wght@0,100..900;1,100..900&family=Fredoka:wght@300..700&family=Geologica:wght@100..900&family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Mozilla+Text:wght@200..700&family=Mulish:ital,wght@0,200..1000;1,200..1000&family=Parkinsans:wght@300..800&family=Ramabhadra&family=Red+Hat+Display:ital,wght@0,300..900;1,300..900&family=Rowdies:wght@300;400;700&family=Sawarabi+Gothic&family=Signika:wght@300..700&family=Unbounded:wght@200..900&family=Varela+Round&family=Zalando+Sans:ital,wght@0,200..900;1,200..900&display=swap");
-@import url("https://fonts.cdnfonts.com/css/switzer");
-@import url('https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&family=Google+Sans+Flex:opsz,wght@6..144,1..1000&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Unbounded:wght@200..900&family=Wix+Madefor+Display:wght@400..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:ital,wght@0,400..900;1,400..900&display=swap');
 @import "tailwindcss";
 @import "tw-animate-css";
 
@@ -133,7 +128,7 @@
 @layer base {
   * {
     @apply border-border outline-ring/50;
-    font-family: "Zalando Sans", "inter", serif;
+    font-family: "Schibsted Grotesk", "inter", serif;
   }
   body {
     @apply bg-background text-foreground;
@@ -161,16 +156,16 @@
   h3 {
     @apply font-medium;
     @apply tracking-tight;
-    font-family: "Zalando Sans", sans-serif;
+    font-family: "Schibsted Grotesk", sans-serif;
   }
 
   Button {
     @apply font-normal;
-    font-family: "Zalando Sans", sans-serif;
+    font-family: "Schibsted Grotesk", sans-serif;
   }
 
   .primary-font {
-    font-family: "Zalando Sans SemiExpanded", sans-serif;
+    font-family: "Schibsted Grotesk", sans-serif;
   }
 
   p {
@@ -178,7 +173,7 @@
   }
 
   .zalando {
-    font-family: "Zalando Sans", sans-serif;
+    font-family: "Schibsted Grotesk", sans-serif;
   }
 
   ol > li {

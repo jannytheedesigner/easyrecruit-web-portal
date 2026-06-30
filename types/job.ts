@@ -28,8 +28,8 @@ export interface Employer {
   company_name: string
   company_type: string
   industry: string
-  logo: string | null // Mapped from logo_url if needed or kept as is. JSON says logo_url
-  logo_url?: string
+  logo?: string | null
+  logo_url: string | null
   about: string
   district: string
   address: string
@@ -45,21 +45,60 @@ export interface Employer {
   updated_at: string
 }
 
+export interface Application {
+  id: number
+  job_id: number
+  job_seeker_id: number
+  cover_letter: string
+  bid_amount: string | null
+  estimated_timeline: string | null
+  status: string
+  match_score: string
+  submitted_at: string
+  created_at: string
+  updated_at: string
+  resume_id: number | null
+  cover_letter_id: number | null
+}
+
+export interface Proposal {
+  id: number
+  job_id: number
+  user_id: number
+  cover_letter: string
+  bid_amount: string
+  estimated_days: number
+  status: "pending" | "screening" | "shortlisted" | "technical_interview" | "final_interview" | "hired" | "rejected"
+  created_at: string
+  updated_at: string
+  user: {
+    id: number
+    name: string
+    email: string
+    profile?: {
+      avatar?: string
+      title?: string
+      location?: string
+      skills?: string[]
+    }
+  }
+}
+
 export interface Job {
   id: number
   employer_id: number
   title: string
   description: string
-  job_type: string // "full_time"
-  experience_level: string // "intermediate"
+  job_type: string // "full-time"
+  experience_level: string // "expert"
   job_category_id: number
-  budget_type: number // "fixed"
-  budget_min: number // "200000.00"
-  budget_max: number // "2000000.00"
-  duration: string // "12"
-  status: "draft" | "active" | "paused" | "archived" | "closed"
-  payment_status: string // "pending"
-  payment_amount: string // "0.00"
+  budget_type: string // "fixed"
+  budget_min: string // "1500.00"
+  budget_max: string // "2500.00"
+  duration?: string
+  status: "draft" | "published" | "paused" | "archived" | "closed" | "active"
+  payment_status: string
+  payment_amount: string
   published_at: string
   closed_at: string | null
   views_count: number
@@ -68,9 +107,15 @@ export interface Job {
   employer: Employer
   job_category: JobCategory
   skills: Skill[]
-  proposals: any[] // Define Proposal type if available, using any[] for now based on empty array in JSON
+  proposals: Proposal[]
+  applications: Application[]
+  
+  // New Audit fields
+  source: "internal" | "external"
+  external_link?: string
+  match_score?: number
 
-  // Legacy/Optional fields for backward compatibility or computed fields
+  // Legacy/Optional fields for backward compatibility
   location?: string
   applications_count?: number
 }
@@ -82,3 +127,4 @@ export const JOB_STATUSES = [
   "closed",
   "archived",
 ] as const;
+

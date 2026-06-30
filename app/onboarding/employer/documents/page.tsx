@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/use-toast";
 import axiosClient, { initCsrf } from "@/lib/axiosClient";
 
-const steps = ["Company Info", "Company Profile", "Documents", "HR Contact", "Goals", "Preferences", "Confirm"];
+const steps = ["Basic Info", "Company Profile", "Documents", "HR Contact", "Hiring Goals", "Preferences", "Confirm"];
 
 type DocType = "registration_cert" | "mra_tpin" | "business_license";
 interface DocItem { document_type: DocType; document_url: string }
@@ -38,11 +38,7 @@ export default function EmployerDocumentsPage() {
     setLoading(true);
     try {
       await initCsrf();
-      await axiosClient.post("/onboarding/employer/upload-documents", { documents }, {
-        headers: {
-          Authorization: `Bearer ${typeof window !== "undefined" ? localStorage.getItem("auth_token") : ""}`,
-        },
-      });
+      await axiosClient.post("/onboarding/employer/upload-documents", { documents });
       router.push("/onboarding/employer/hr-contact");
     } catch (err: any) {
       toast({ variant: "destructive", title: err?.response?.data?.message || "Failed to upload documents" });
@@ -56,11 +52,11 @@ export default function EmployerDocumentsPage() {
       <OnboardingLayout>
         <div className="h-fit flex flex-col items-center justify-center p-6 my-auto">
           
-          <form onSubmit={handleSubmit} className="w-full max-w-5xl h-fit space-y-6 my-auto">
+          <form onSubmit={handleSubmit} className="w-full max-w-5xl h-fit space-y-10 my-auto">
             <ProgressIndicator steps={steps} current={2} />
-            <div>
-              <h1 className="text-3xl font-bold">Verification documents</h1>
-              <p className="text-muted-foreground">Provide links to your official documents.</p>
+            <div className="mb-10">
+              <h1 className="text-3xl font-semibold text-slate-900 mb-2">Verification Documents</h1>
+              <p className="text-slate-600">Please provide links to your company's official registration and tax documents for verification.</p>
             </div>
 
             <div className="space-y-4">

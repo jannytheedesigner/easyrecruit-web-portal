@@ -14,8 +14,7 @@ export default function JobseekerPersonalDetailsPage() {
   const router = useRouter()
   const { user, loading: authLoading, checkOnboarding } = useAuth()
 
-  const steps = ["Personal Info", "Education Background", "Skills & Interest", "Work Experience", "Documents", "Referees"]
-
+  const steps = ["Basic Details", "Education", "Experience", "Skills & Interests", "Documents", "Referees", "Confirm"]
 
   const [form, setForm] = useState({
     national_id: "",
@@ -25,7 +24,7 @@ export default function JobseekerPersonalDetailsPage() {
     phone_secondary: "",
     district: "",
     town: "",
-    willing_to_relocate: false as boolean,
+    willing_to_relocate: false,
     preferred_location: "",
     current_job_title: "",
     current_status: "",

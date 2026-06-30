@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/use-toast";
 import axiosClient, { initCsrf } from "@/lib/axiosClient";
 
-const steps = ["Company Info", "Company Profile", "Documents", "HR Contact", "Goals", "Preferences", "Confirm"];
+const steps = ["Basic Info", "Company Profile", "Documents", "HR Contact", "Hiring Goals", "Preferences", "Confirm"];
 
 interface ContactItem { name: string; position: string; email: string; phone: string }
 
@@ -35,11 +35,7 @@ export default function EmployerHrContactPage() {
     setLoading(true);
     try {
       await initCsrf();
-      await axiosClient.post("/onboarding/employer/hr-contact", { contacts }, {
-        headers: {
-          Authorization: `Bearer ${typeof window !== "undefined" ? localStorage.getItem("auth_token") : ""}`,
-        },
-      });
+      await axiosClient.post("/onboarding/employer/hr-contact", { contacts });
       router.push("/onboarding/employer/hiring-goals");
     } catch (err: any) {
       toast({ variant: "destructive", title: err?.response?.data?.message || "Failed to save contacts" });
@@ -53,11 +49,11 @@ export default function EmployerHrContactPage() {
       <OnboardingLayout>
         <div className="h-fit flex flex-col items-center justify-center p-6 my-auto">
           
-          <form onSubmit={handleSubmit} className="w-full max-w-5xl space-y-6">
-            <ProgressIndicator steps={steps} current={3} />
-            <div>
-              <h1 className="text-3xl font-bold">HR contact setup</h1>
-              <p className="text-muted-foreground">Add at least one contact person for hiring.</p>
+          <form onSubmit={handleSubmit} className="w-full max-w-5xl space-y-10">
+            <ProgressIndicator steps={steps} current={1} />
+            <div className="mb-10">
+              <h1 className="text-3xl font-semibold text-slate-900 mb-2">HR Contact Setup</h1>
+              <p className="text-slate-600">Add at least one contact person who will be responsible for hiring and communication.</p>
             </div>
 
             <div className="space-y-4">
