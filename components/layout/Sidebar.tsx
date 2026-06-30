@@ -47,19 +47,18 @@ export default function Sidebar() {
                   ? "bg-primary text-primary-foreground"
                   : "hover:bg-accent hover:text-accent-foreground"
                 }`}
-            >
-              <Icon className="w-5 h-5" />
+            >              <Icon className="w-5 h-5" />
               <span>{link.label}</span>
             </Link>
           );
         })}
       </nav>
       <Link
-        href="/profile"
+        href={`${basePath}/settings`}
         className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-accent mt-auto"
       >
         <User className="w-5 h-5" />
-        <span>Profile</span>
+        <span>Settings</span>
       </Link>
     </aside>
   );

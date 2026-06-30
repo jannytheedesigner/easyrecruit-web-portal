@@ -148,14 +148,14 @@ export default function JobsPage() {
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 container mx-auto">
       {/* Header */}
       <div className="bg-er-primary p-10 rounded-3xl flex flex-col gap-3">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
           <div>
             <div className="flex items-center gap-3 mb-2">
               <div>
-                <h1 className="text-3xl font-semibold text-white">Recruitment Overview</h1>
+                <h1 className="text-3xl font-semibold text-white">Job Listings Overview</h1>
                 <p className="text-gray-100 mt-1">Track, manage and optimize your job postings</p>
               </div>
             </div>
@@ -173,48 +173,48 @@ export default function JobsPage() {
 
         {/* Stats Overview */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="bg-er-white rounded-2xl p-6">
+          <div className="bg-er-white rounded-3xl p-6 border border-slate-100">
             <div className="flex items-center justify-between">
               <div>
-                <div className="text-sm text-gray-700 font-medium">Total Jobs</div>
-                <div className="text-5xl font-bold text-er-dark mt-1">{stats.total}</div>
+                <div className="text-sm text-slate-500 font-medium tracking-tight">Total Jobs</div>
+                <div className="text-5xl font-bold text-slate-900 mt-1 font-display">{stats.total}</div>
               </div>
-              <div className="my-auto flex p-4 bg-er-primary rounded-md">
-                <Album className="w-10 h-10 stroke-[1px] text-er-white" />
+              <div className="my-auto flex p-4 bg-er-primary/5 rounded-2xl">
+                <Album className="w-8 h-8 stroke-[1.5px] text-er-primary" />
               </div>
 
             </div>
           </div>
-          <div className="bg-er-white rounded-2xl p-6">
+          <div className="bg-er-white rounded-3xl p-6 border border-slate-100">
             <div className="flex items-center justify-between">
               <div>
-                <div className="text-sm text-gray-700 font-medium">Active Positions</div>
-                <div className="text-5xl font-bold text-er-dark mt-1">{stats.active}</div>
+                <div className="text-sm text-slate-500 font-medium tracking-tight">Active Positions</div>
+                <div className="text-5xl font-bold text-slate-900 mt-1 font-display">{stats.active}</div>
               </div>
-              <div className="my-auto flex p-4 bg-er-complimentary rounded-md">
-                <TrendingUp className="w-10 h-10 stroke-[1px] text-er-white" />
+              <div className="my-auto flex p-4 bg-er-complimentary/10 rounded-2xl">
+                <TrendingUp className="w-8 h-8 stroke-[1.5px] text-er-complimentary" />
               </div>
             </div>
           </div>
-          <div className="bg-er-white rounded-2xl p-6">
+          <div className="bg-er-white rounded-3xl p-6 border border-slate-100">
             <div className="flex items-center justify-between">
               <div>
-                <div className="text-sm text-gray-700 font-medium">In Drafts</div>
-                <div className="text-5xl font-bold text-er-dark mt-1">{stats.drafts}</div>
+                <div className="text-sm text-slate-500 font-medium tracking-tight">In Drafts</div>
+                <div className="text-5xl font-bold text-slate-900 mt-1 font-display">{stats.drafts}</div>
               </div>
-              <div className="my-auto flex p-4 bg-er-secondary rounded-md">
-                <Clock className="w-10 h-10 stroke-[1px] text-er-white" />
+              <div className="my-auto flex p-4 bg-er-secondary/10 rounded-2xl">
+                <Clock className="w-8 h-8 stroke-[1.5px] text-er-secondary-dark" />
               </div>
             </div>
           </div>
-          <div className="bg-er-white rounded-2xl p-6">
+          <div className="bg-er-white rounded-3xl p-6 border border-slate-100">
             <div className="flex items-center justify-between">
               <div>
-                <div className="text-sm text-gray-700 font-medium">Closed Jobs</div>
-                <div className="text-5xl font-bold text-er-dark mt-1">{stats.closed}</div>
+                <div className="text-sm text-slate-500 font-medium tracking-tight">Closed Jobs</div>
+                <div className="text-5xl font-bold text-slate-900 mt-1 font-display">{stats.closed}</div>
               </div>
-              <div className="my-auto flex p-4 bg-er-dark rounded-md">
-                <Users className="w-10 h-10 stroke-[1px] text-er-white" />
+              <div className="my-auto flex p-4 bg-er-dark/10 rounded-2xl">
+                <Users className="w-8 h-8 stroke-[1.5px] text-er-dark" />
               </div>
             </div>
           </div>
@@ -223,7 +223,7 @@ export default function JobsPage() {
 
 
       {/* Filters Bar */}
-      <div className="bg-white rounded-2xl p-6 border border-gray-200">
+      <div className="bg-white rounded-3xl p-6 border border-slate-100">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
           {/* Search */}
           <div className="flex-1 relative">
@@ -334,7 +334,7 @@ export default function JobsPage() {
           {filteredJobs.map((job) => (
             <div
               key={job.id}
-              className="group relative bg-white rounded-2xl border border-gray-200 hover:border-er-primary/20 transition-all duration-300 p-5 flex flex-col gap-4"
+              className="group relative bg-white rounded-3xl border border-slate-100 hover:border-er-primary/20 hover:shadow-xl hover:shadow-slate-200/50 transition-all duration-500 p-6 flex flex-col gap-4 overflow-hidden"
             >
               {/* Top Row - Logo & Status */}
               <div className="flex items-center">
@@ -399,7 +399,7 @@ export default function JobsPage() {
               <div className="flex items-center justify-between mt-auto pt-3 border-t border-gray-100">
                 <div className="flex items-center gap-2 text-sm text-gray-500">
                   <Users className="w-4 h-4" />
-                  <span>{job.proposals?.length || 0} Applicants</span>
+                  <span>{job.applications?.length || job.proposals?.length || 0} Applicants</span>
                 </div>
 
                 <div className="flex items-center gap-2">
@@ -425,7 +425,7 @@ export default function JobsPage() {
         </div>
       ) : (
         /* List View */
-        <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden">
+        <div className="bg-white rounded-3xl border border-slate-100 overflow-hidden shadow-sm">
           <div className="overflow-x-auto">
             <table className="w-full min-w-[900px]">
               <thead className="bg-er-dark m-4 border-b border-gray-200">
@@ -474,7 +474,7 @@ export default function JobsPage() {
                     <td className="py-5 px-6">
                       <div className="flex items-center gap-2">
                         <Users className="w-4 h-4 text-gray-500" />
-                        <span className="font-semibold">{job.proposals?.length || 0}</span>
+                        <span className="font-semibold">{job.applications?.length || job.proposals?.length || 0}</span>
                       </div>
                     </td>
                     <td className="py-5 px-6">
@@ -535,7 +535,7 @@ export default function JobsPage() {
       )}
 
       {filteredJobs.length === 0 && (
-        <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-16 border border-gray-200 text-center">
+        <div className="bg-slate-50 rounded-3xl p-16 border border-slate-100 text-center">
           <div className="w-24 h-24 mx-auto mb-6 bg-gradient-to-br from-primary/10 to-blue-600/10 rounded-full flex items-center justify-center">
             <Briefcase className="w-12 h-12 text-gray-400" />
           </div>
@@ -562,7 +562,7 @@ export default function JobsPage() {
 
       {/* Pagination (if needed) */}
       {filteredJobs.length > 0 && (
-        <div className="flex items-center justify-between bg-white rounded-2xl p-6 border border-gray-200">
+        <div className="flex items-center justify-between bg-white rounded-3xl p-6 border border-slate-100">
           <div className="text-sm text-gray-600">
             Showing <span className="font-semibold">1-{filteredJobs.length}</span> of{' '}
             <span className="font-semibold">{filteredJobs.length}</span> jobs

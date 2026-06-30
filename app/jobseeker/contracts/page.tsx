@@ -1,11 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { FileText, Download, Eye, Clock, CheckCircle, AlertCircle } from "lucide-react";
+import { FileText, Download, Eye, Clock, CheckCircle, AlertCircle, Calendar, DollarSign, ArrowUpRight, TrendingUp } from "lucide-react";
 import axiosClient from "@/lib/axiosClient";
 import { Loader } from "@/components/Loader";
 import { formatDate, formatCurrency } from "@/lib/helpers";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 interface Contract {
     id: number;
@@ -36,29 +37,32 @@ export default function JobSeekerContractsPage() {
         }
     };
 
-    const getStatusColor = (status: string) => {
+    const getStatusStyle = (status: string) => {
         switch (status) {
             case "active":
-                return "bg-green-100 text-green-700 border-green-200";
+                return { 
+                    badge: "bg-er-complimentary/10 text-er-complimentary border-er-complimentary/20", 
+                    icon: <CheckCircle className="w-3 h-3 md:w-4 md:h-4" />,
+                    accent: "bg-er-complimentary/5"
+                };
             case "completed":
-                return "bg-blue-100 text-blue-700 border-blue-200";
+                return { 
+                    badge: "bg-er-primary/10 text-er-primary border-er-primary/20", 
+                    icon: <CheckCircle className="w-3 h-3 md:w-4 md:h-4" />,
+                    accent: "bg-er-primary/5"
+                };
             case "pending":
-                return "bg-yellow-100 text-yellow-700 border-yellow-200";
+                return { 
+                    badge: "bg-er-secondary/10 text-er-secondary-dark border-er-secondary/20", 
+                    icon: <Clock className="w-3 h-3 md:w-4 md:h-4" />,
+                    accent: "bg-er-secondary/5"
+                };
             default:
-                return "bg-gray-100 text-gray-700 border-gray-200";
-        }
-    };
-
-    const getStatusIcon = (status: string) => {
-        switch (status) {
-            case "active":
-                return <CheckCircle className="w-4 h-4" />;
-            case "completed":
-                return <CheckCircle className="w-4 h-4" />;
-            case "pending":
-                return <Clock className="w-4 h-4" />;
-            default:
-                return <AlertCircle className="w-4 h-4" />;
+                return { 
+                    badge: "bg-slate-50 text-slate-600 border-slate-200", 
+                    icon: <AlertCircle className="w-3 h-3 md:w-4 md:h-4" />,
+                    accent: "bg-slate-50"
+                };
         }
     };
 
@@ -70,133 +74,166 @@ export default function JobSeekerContractsPage() {
         );
     }
 
+    const activeContractsCount = contracts.filter(c => c.status === "active").length;
+    const completedContractsCount = contracts.filter(c => c.status === "completed").length;
+    const pendingContractsCount = contracts.filter(c => c.status === "pending").length;
+
     return (
-        <div className="space-y-6">
-            {/* Header */}
-            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-                <div>
-                    <div className="flex items-center gap-3 mb-2">
-                        <div className="p-3 bg-gradient-to-br from-primary to-blue-600 rounded-xl shadow-lg">
-                            <FileText className="w-6 h-6 text-white" />
-                        </div>
-                        <div>
-                            <h1 className="text-3xl font-bold text-gray-900">My Contracts</h1>
-                            <p className="text-gray-600 mt-1">View and manage your active contracts</p>
-                        </div>
-                    </div>
+        <div className="space-y-10 pb-12 container mx-auto px-4 sm:px-6 lg:px-8">
+            {/* Header Area */}
+            <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
+                <div className="space-y-2">
+                    <h1 className="text-4xl font-bold text-slate-900 font-display tracking-tight">
+                        Managed Contracts
+                    </h1>
+                    <p className="text-slate-500 font-medium">Coordinate and monitor your active professional agreements.</p>
+                </div>
+                <div className="flex items-center gap-3">
+                     <Link href="/jobseeker/jobs">
+                        <Button className="bg-er-primary hover:bg-er-primary-dark text-white rounded-2xl h-12 px-6 font-bold uppercase tracking-widest text-xs shadow-xl shadow-er-primary/20 transition-all hover:-translate-y-1">
+                            Find New Projects
+                        </Button>
+                    </Link>
                 </div>
             </div>
 
-            {/* Stats */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="bg-gradient-to-br from-green-50 to-green-100 border border-green-200 rounded-2xl p-6">
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <div className="text-sm text-green-700 font-medium">Active Contracts</div>
-                            <div className="text-3xl font-bold text-green-900 mt-1">
-                                {contracts.filter(c => c.status === "active").length}
-                            </div>
-                        </div>
-                        <div className="p-3 bg-green-500 text-white rounded-xl">
-                            <CheckCircle className="w-6 h-6" />
-                        </div>
-                    </div>
+            {/* Primary Content: Contracts Grid */}
+            <div className="space-y-6">
+                <div className="flex items-center justify-between">
+                    <h2 className="text-xs font-bold text-slate-400 uppercase tracking-[0.2em]">Active Pipeline</h2>
+                    <span className="text-[10px] font-bold text-er-primary bg-er-primary/5 px-3 py-1 rounded-full uppercase">
+                        {contracts.length} Total Contracts
+                    </span>
                 </div>
 
-                <div className="bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200 rounded-2xl p-6">
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <div className="text-sm text-blue-700 font-medium">Completed</div>
-                            <div className="text-3xl font-bold text-blue-900 mt-1">
-                                {contracts.filter(c => c.status === "completed").length}
-                            </div>
-                        </div>
-                        <div className="p-3 bg-blue-500 text-white rounded-xl">
-                            <FileText className="w-6 h-6" />
-                        </div>
-                    </div>
-                </div>
-
-                <div className="bg-gradient-to-br from-yellow-50 to-yellow-100 border border-yellow-200 rounded-2xl p-6">
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <div className="text-sm text-yellow-700 font-medium">Pending</div>
-                            <div className="text-3xl font-bold text-yellow-900 mt-1">
-                                {contracts.filter(c => c.status === "pending").length}
-                            </div>
-                        </div>
-                        <div className="p-3 bg-yellow-500 text-white rounded-xl">
-                            <Clock className="w-6 h-6" />
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            {/* Contracts List */}
-            {contracts.length > 0 ? (
-                <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden">
-                    <div className="overflow-x-auto">
-                        <table className="w-full">
-                            <thead className="bg-gray-50 border-b border-gray-200">
-                                <tr>
-                                    <th className="text-left py-4 px-6 text-sm font-semibold text-gray-900">Contract</th>
-                                    <th className="text-left py-4 px-6 text-sm font-semibold text-gray-900">Status</th>
-                                    <th className="text-left py-4 px-6 text-sm font-semibold text-gray-900">Start Date</th>
-                                    <th className="text-left py-4 px-6 text-sm font-semibold text-gray-900">End Date</th>
-                                    <th className="text-left py-4 px-6 text-sm font-semibold text-gray-900">Amount</th>
-                                    <th className="text-left py-4 px-6 text-sm font-semibold text-gray-900">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {contracts.map((contract) => (
-                                    <tr key={contract.id} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
-                                        <td className="py-4 px-6">
-                                            <div className="font-medium text-gray-900">{contract.title}</div>
-                                        </td>
-                                        <td className="py-4 px-6">
-                                            <span className={`px-3 py-1 rounded-full text-xs font-semibold border flex items-center gap-1 w-fit ${getStatusColor(contract.status)}`}>
-                                                {getStatusIcon(contract.status)}
-                                                {contract.status.toUpperCase()}
+                {contracts.length > 0 ? (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {contracts.map((contract) => {
+                            const style = getStatusStyle(contract.status);
+                            return (
+                                <div key={contract.id} className="bg-white p-7 rounded-[2rem] border border-slate-100 hover:border-er-primary/30 hover:shadow-2xl hover:shadow-slate-200/60 transition-all duration-500 group flex flex-col justify-between h-full relative overflow-hidden">
+                                    {/* Decorative Blur Background */}
+                                    <div className={`absolute top-0 right-0 w-32 h-32 ${style.accent} rounded-bl-[100%] transition-transform group-hover:scale-125 duration-700 pointer-events-none`} />
+                                    
+                                    <div className="relative z-10">
+                                        <div className="flex items-start justify-between mb-6">
+                                            <div className="w-14 h-14 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-400 group-hover:bg-er-primary/10 group-hover:text-er-primary group-hover:border-er-primary/20 transition-all duration-500">
+                                                <FileText className="w-6 h-6 stroke-[1.5px]" />
+                                            </div>
+                                            <span className={`px-4 py-2 rounded-full text-[10px] font-bold border uppercase tracking-widest flex items-center gap-2 ${style.badge}`}>
+                                                {style.icon}
+                                                {contract.status}
                                             </span>
-                                        </td>
-                                        <td className="py-4 px-6">
-                                            <div className="text-sm text-gray-700">{formatDate(contract.start_date)}</div>
-                                        </td>
-                                        <td className="py-4 px-6">
-                                            <div className="text-sm text-gray-700">
-                                                {contract.end_date ? formatDate(contract.end_date) : "Ongoing"}
+                                        </div>
+                                        
+                                        <div className="space-y-2 mb-8">
+                                            <h3 className="font-bold text-slate-900 text-xl group-hover:text-er-primary transition-colors leading-tight font-display">
+                                                {contract.title}
+                                            </h3>
+                                            <div className="flex items-center gap-2 text-[11px] font-bold text-slate-400 uppercase tracking-widest">
+                                                <Calendar className="w-3.5 h-3.5" />
+                                                Started {formatDate(contract.start_date)}
                                             </div>
-                                        </td>
-                                        <td className="py-4 px-6">
-                                            <div className="font-semibold text-gray-900">{formatCurrency(contract.amount)}</div>
-                                        </td>
-                                        <td className="py-4 px-6">
-                                            <div className="flex items-center gap-2">
-                                                <Button variant="outline" size="sm">
-                                                    <Eye className="w-4 h-4" />
-                                                </Button>
-                                                <Button variant="outline" size="sm">
-                                                    <Download className="w-4 h-4" />
-                                                </Button>
+                                        </div>
+
+                                        <div className="bg-slate-50/50 rounded-2xl p-4 mb-8 flex items-center justify-between border border-dashed border-slate-200 group-hover:bg-white group-hover:border-er-primary/10 transition-colors">
+                                            <div className="space-y-1">
+                                                <div className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Agreement value</div>
+                                                <div className="text-lg font-bold text-slate-900">{formatCurrency(contract.amount)}</div>
                                             </div>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
+                                            <div className="p-2.5 bg-white rounded-xl shadow-sm border border-slate-100 text-er-complimentary">
+                                                <TrendingUp className="w-4 h-4" />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="flex items-center gap-3 mt-auto pt-6 border-t border-slate-100 relative z-10">
+                                        <Link href={`/jobseeker/contracts/${contract.id}`} className="flex-1">
+                                            <Button variant="outline" className="w-full rounded-2xl text-[10px] font-bold uppercase tracking-[0.15em] h-12 border-slate-200 text-slate-600 hover:bg-er-primary hover:text-white hover:border-er-primary transition-all shadow-sm">
+                                                <Eye className="w-4 h-4 mr-2" />
+                                                Review Terms
+                                            </Button>
+                                        </Link>
+                                        <Button
+                                            variant="outline"
+                                            className="w-12 h-12 p-0 rounded-2xl border-slate-200 text-slate-400 hover:text-er-primary hover:bg-er-primary/5 hover:border-er-primary/20 transition-all shadow-sm"
+                                            title="Download PDF"
+                                        >
+                                            <Download className="w-4 h-4" />
+                                        </Button>
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+                ) : (
+                    <div className="bg-slate-50 rounded-[3rem] p-20 border border-slate-100 text-center relative overflow-hidden group">
+                        {/* Background flare */}
+                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-er-primary/5 rounded-full blur-[100px] group-hover:scale-150 transition-transform duration-1000" />
+                        
+                        <div className="relative z-10">
+                            <div className="w-28 h-28 mx-auto mb-8 bg-white rounded-[2rem] flex items-center justify-center shadow-2xl shadow-slate-200/50">
+                                <FileText className="w-12 h-12 text-slate-300 stroke-[1.5px]" />
+                            </div>
+                            <h3 className="text-3xl font-bold text-slate-900 mb-4 font-display">No contracts found</h3>
+                            <p className="text-slate-500 font-medium max-w-md mx-auto mb-10 leading-relaxed">
+                                You don't have any formal contracts active at the moment. Contracts are generated automatically once your proposal is accepted by an employer.
+                            </p>
+                            <Link href="/jobseeker/jobs">
+                                <Button className="bg-er-primary hover:bg-er-primary-dark text-white rounded-2xl h-14 px-10 font-bold uppercase tracking-widest text-xs shadow-2xl shadow-er-primary/30 transition-all hover:-translate-y-1">
+                                    Project Discovery
+                                </Button>
+                            </Link>
+                        </div>
+                    </div>
+                )}
+            </div>
+
+            {/* Secondary Content: Stats/Analytics */}
+            <div className="pt-10 space-y-8 border-t border-slate-100">
+                <h2 className="text-xs font-bold text-slate-400 uppercase tracking-[0.2em]">Summary Overview</h2>
+                
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div className="bg-white p-8 rounded-3xl border border-slate-100 transition-all duration-500 group relative overflow-hidden shadow-sm hover:shadow-md">
+                        <div className="absolute top-0 right-0 w-32 h-32 bg-er-complimentary/5 rounded-bl-[100%] -mr-10 -mt-10" />
+                        <div className="relative flex items-center justify-between">
+                            <div>
+                                <div className="text-[10px] font-bold text-slate-400 tracking-widest uppercase mb-1">Active Projects</div>
+                                <div className="text-3xl font-bold text-slate-900 font-display">{activeContractsCount}</div>
+                            </div>
+                            <div className="w-14 h-14 bg-er-complimentary/10 rounded-2xl flex items-center justify-center text-er-complimentary">
+                                <CheckCircle className="w-7 h-7" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="bg-white p-8 rounded-3xl border border-slate-100 transition-all duration-500 group relative overflow-hidden shadow-sm hover:shadow-md">
+                        <div className="absolute top-0 right-0 w-32 h-32 bg-er-primary/5 rounded-bl-[100%] -mr-10 -mt-10" />
+                        <div className="relative flex items-center justify-between">
+                            <div>
+                                <div className="text-[10px] font-bold text-slate-400 tracking-widest uppercase mb-1">Total Completed</div>
+                                <div className="text-3xl font-bold text-slate-900 font-display">{completedContractsCount}</div>
+                            </div>
+                            <div className="w-14 h-14 bg-er-primary/10 rounded-2xl flex items-center justify-center text-er-primary border border-er-primary/5">
+                                <FileText className="w-7 h-7" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="bg-white p-8 rounded-3xl border border-slate-100 transition-all duration-500 group relative overflow-hidden shadow-sm hover:shadow-md">
+                        <div className="absolute top-0 right-0 w-32 h-32 bg-er-secondary/5 rounded-bl-[100%] -mr-10 -mt-10" />
+                        <div className="relative flex items-center justify-between">
+                            <div>
+                                <div className="text-[10px] font-bold text-slate-400 tracking-widest uppercase mb-1">Awaiting Signature</div>
+                                <div className="text-3xl font-bold text-slate-900 font-display">{pendingContractsCount}</div>
+                            </div>
+                            <div className="w-14 h-14 bg-er-secondary/10 rounded-2xl flex items-center justify-center text-er-secondary-dark">
+                                <Clock className="w-7 h-7" />
+                            </div>
+                        </div>
                     </div>
                 </div>
-            ) : (
-                <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-16 border border-gray-200 text-center">
-                    <div className="w-24 h-24 mx-auto mb-6 bg-gradient-to-br from-primary/10 to-blue-600/10 rounded-full flex items-center justify-center">
-                        <FileText className="w-12 h-12 text-gray-400" />
-                    </div>
-                    <h3 className="text-2xl font-bold text-gray-900 mb-3">No active contracts</h3>
-                    <p className="text-gray-600 max-w-md mx-auto">
-                        You don't have any active contracts yet. Once you are hired, your contracts will appear here.
-                    </p>
-                </div>
-            )}
+            </div>
         </div>
     );
 }

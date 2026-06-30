@@ -144,12 +144,12 @@ export function JobForm({ initialData, onSubmit, isLoading = false, mode }: JobF
     }
 
     return (
-        <form onSubmit={handleSubmit} className="space-y-8 bg-white/0 p-0 rounded-none border border-gray-100">
+        <form onSubmit={handleSubmit} className="space-y-8 bg-white/0 p-0 rounded-none border border-gray-100 container mx-auto">
 
             {/* Header Section */}
-            <div className="border-b border-gray-100 p-8 bg-er-primary rounded-xl">
-                <h2 className="text-2xl font-bold text-white">{mode === 'create' ? 'Post a New Job' : 'Edit Job Details'}</h2>
-                <p className="text-gray-100 mt-1">Fill in the details below to {mode === 'create' ? 'create a new position' : 'update the position'}.</p>
+            <div className="p-10 bg-er-primary rounded-3xl shadow-lg shadow-er-primary/20 mb-6">
+                <h2 className="text-3xl font-bold text-white font-display">{mode === 'create' ? 'Post a New Job' : 'Edit Job Details'}</h2>
+                <p className="text-blue-100 mt-2 font-medium">Fill in the details below to {mode === 'create' ? 'create a new position' : 'update the position'}.</p>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -158,9 +158,9 @@ export function JobForm({ initialData, onSubmit, isLoading = false, mode }: JobF
                 <div className="lg:col-span-2 space-y-6">
 
                     {/* Basic Details Card */}
-                    <div className="bg-white p-6 rounded-2xl space-y-4">
-                        <h3 className="font-semibold text-gray-900 flex items-center gap-2">
-                            <FileText className="w-4 h-4 text-primary" />
+                    <div className="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm space-y-6">
+                        <h3 className="text-lg font-bold text-slate-900 flex items-center gap-2">
+                            <FileText className="w-5 h-5 text-er-primary" />
                             Job Details
                         </h3>
 
@@ -194,9 +194,9 @@ export function JobForm({ initialData, onSubmit, isLoading = false, mode }: JobF
                     </div>
 
                     {/* Skills Card */}
-                    <div className="bg-white p-6 rounded-2xl space-y-4">
-                        <h3 className="font-semibold text-gray-900 flex items-center gap-2">
-                            <Tag className="w-4 h-4 text-primary" />
+                    <div className="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm space-y-6">
+                        <h3 className="text-lg font-bold text-slate-900 flex items-center gap-2">
+                            <Tag className="w-5 h-5 text-er-primary" />
                             Skills & Competencies
                         </h3>
 
@@ -225,9 +225,9 @@ export function JobForm({ initialData, onSubmit, isLoading = false, mode }: JobF
                 <div className="space-y-6">
 
                     {/* Configuration Card */}
-                    <div className="bg-white p-6 rounded-2xl space-y-4">
-                        <h3 className="font-semibold text-gray-900 flex items-center gap-2">
-                            <Briefcase className="w-4 h-4 text-primary" />
+                    <div className="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm space-y-6">
+                        <h3 className="text-lg font-bold text-slate-900 flex items-center gap-2">
+                            <Briefcase className="w-5 h-5 text-er-primary" />
                             Configuration
                         </h3>
 
@@ -305,9 +305,9 @@ export function JobForm({ initialData, onSubmit, isLoading = false, mode }: JobF
                     </div>
 
                     {/* Budget Card */}
-                    <div className="bg-white p-6 rounded-2xl space-y-4">
-                        <h3 className="font-semibold text-gray-900 flex items-center gap-2">
-                            <Wallet className="w-4 h-4 text-primary" />
+                    <div className="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm space-y-6">
+                        <h3 className="text-lg font-bold text-slate-900 flex items-center gap-2">
+                            <Wallet className="w-5 h-5 text-er-primary" />
                             Budget & Compensation
                         </h3>
 
@@ -380,11 +380,11 @@ export function JobForm({ initialData, onSubmit, isLoading = false, mode }: JobF
             </div>
 
             {/* Footer Actions */}
-            <div className="flex items-center justify-end gap-4 pt-3 pb-8 border-t border-gray-100">
+            <div className="flex items-center justify-end gap-4 pt-6 pb-8 border-t border-slate-100">
                 <Button
                     type="button"
                     variant="outline"
-                    className=""
+                    className="px-8 py-6 rounded-full font-bold uppercase tracking-widest text-[11px] hover:bg-slate-50 transition-colors"
                     onClick={() => router.back()}
                 >
                     Cancel
@@ -392,9 +392,9 @@ export function JobForm({ initialData, onSubmit, isLoading = false, mode }: JobF
                 <Button
                     type="submit"
                     disabled={isLoading}
-                    className=""
+                    className="px-8 py-6 bg-er-primary hover:bg-er-primary-dark text-white rounded-full font-bold uppercase tracking-widest text-[11px] shadow-lg shadow-er-primary/30 transition-all"
                 >
-                    {isLoading ? 'Saving...' : (mode === 'create' ? 'Post Job' : 'Save Changes')}
+                    {isLoading ? 'Saving...' : (mode === 'create' ? 'Launch Position' : 'Save Changes')}
                 </Button>
             </div>
         </form>

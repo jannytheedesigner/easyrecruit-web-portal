@@ -10,7 +10,8 @@ import { Search, MapPin, Briefcase, DollarSign, Filter, Clock } from "lucide-rea
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import { JobService, Job } from "@/lib/services/job-service";
+import { JobService } from "@/lib/services/job-service";
+import type { Job } from "@/types/job";
 import { JobCard } from "@/components/jobs/JobCard";
 
 export default function JobsPage() {

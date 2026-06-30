@@ -74,7 +74,7 @@ export default function JobDetailPage() {
   }
 
   return (
-    <div className="space-y-6 pb-20">
+    <div className="space-y-6 pb-20 container mx-auto">
       {/* Navigation & Actions */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <button
@@ -88,6 +88,12 @@ export default function JobDetailPage() {
         </button>
 
         <div className="flex items-center gap-3">
+          <Link href={`/employer/jobs/${job.id}/applicants`}>
+            <Button className="gap-2 bg-er-primary hover:bg-er-primary/90 text-white font-bold">
+              <Users className="w-4 h-4" />
+              Manage Applications
+            </Button>
+          </Link>
           <Link href={`/employer/jobs/${job.id}/edit`}>
             <Button variant="outline" className="gap-2 bg-white">
               <Edit className="w-4 h-4" />
@@ -103,6 +109,7 @@ export default function JobDetailPage() {
             Delete
           </Button>
         </div>
+
       </div>
 
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
@@ -204,7 +211,7 @@ export default function JobDetailPage() {
 
           {/* Skills */}
           {job.skills && job.skills.length > 0 && (
-            <div className="bg-white rounded-2xl p-8 border border-gray-200 shadow-none">
+            <div className="bg-white rounded-2xl p-8 border border-gray-200">
               <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
                 <CheckCircle2 className="w-5 h-5 text-gray-400" />
                 Required Skills
@@ -221,6 +228,65 @@ export default function JobDetailPage() {
               </div>
             </div>
           )}
+
+          {/* Applicants & Proposals Section */}
+          <div className="bg-white rounded-2xl p-8 border border-gray-200">
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-xl font-bold text-gray-900 flex items-center gap-2">
+                <Users className="w-6 h-6 text-er-primary" />
+                Recent Applications ({job.applications?.length || 0})
+              </h3>
+              <Link href={`/employer/jobs/${job.id}/applicants`}>
+                <Button variant="link" className="text-er-primary font-bold">View All →</Button>
+              </Link>
+            </div>
+
+            {job.applications && job.applications.length > 0 ? (
+              <div className="space-y-4">
+                {job.applications.map((app) => (
+                  <div key={app.id} className="p-6 rounded-2xl border border-gray-100 bg-slate-50/50 hover:bg-white hover:border-er-primary/30 transition-all group">
+                    <div className="flex items-start justify-between mb-4">
+                      <div className="flex items-center gap-4">
+                        <div className="w-12 h-12 rounded-full bg-er-primary/10 flex items-center justify-center text-er-primary font-bold">
+                          {app.job_seeker_id}
+                        </div>
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <h4 className="font-bold text-gray-900">Applicant ID: {app.job_seeker_id}</h4>
+                            <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${app.status === 'applied' ? 'bg-blue-100 text-blue-700' :
+                                app.status === 'hired' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700'
+                              }`}>
+                              {app.status}
+                            </span>
+                          </div>
+                          <p className="text-xs text-gray-500">Submitted {formatDate(app.submitted_at || app.created_at)}</p>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-xs text-gray-400 uppercase font-bold tracking-tight mb-1">Match Score</p>
+                        <div className="text-lg font-bold text-er-primary">{Number(app.match_score).toFixed(0)}%</div>
+                      </div>
+                    </div>
+                    <div className="bg-white p-4 rounded-xl border border-gray-100 text-sm text-gray-600 italic line-clamp-2">
+                      "{app.cover_letter}"
+                    </div>
+                    <div className="mt-4 flex justify-end">
+                      <Link href={`/employer/jobs/${job.id}/applicants/${app.id}`}>
+                        <Button size="sm" variant="outline" className="rounded-xl font-bold bg-white group-hover:bg-er-primary group-hover:text-white transition-all">Review Application</Button>
+                      </Link>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="py-12 flex flex-col items-center justify-center text-center bg-gray-50 rounded-2xl border border-dashed border-gray-200">
+                <div className="p-4 bg-white rounded-full mb-4 shadow-sm">
+                  <Users className="w-8 h-8 text-gray-300" />
+                </div>
+                <p className="text-gray-500 font-medium">No applications received yet.</p>
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Sidebar - Right Column */}

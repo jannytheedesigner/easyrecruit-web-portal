@@ -1,10 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { FileText, Eye, Trash2, Filter, Search, CheckCircle, XCircle, Clock, TrendingUp } from "lucide-react";
+import { FileText, Eye, Trash2, Search, CheckCircle, XCircle, Clock, MapPin, Building, Briefcase } from "lucide-react";
 import axiosClient from "@/lib/axiosClient";
 import { Loader } from "@/components/Loader";
-import { formatDate, formatRelativeTime } from "@/lib/helpers";
+import { formatRelativeTime } from "@/lib/helpers";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
@@ -53,7 +53,7 @@ export default function ApplicationsPage() {
     };
 
     const filteredApplications = applications.filter((app) => {
-        const matchesSearch = app.job.title.toLowerCase().includes(searchTerm.toLowerCase());
+        const matchesSearch = app.job?.title?.toLowerCase().includes(searchTerm.toLowerCase()) || false;
         const matchesFilter = filterStatus === "all" || app.status === filterStatus;
         return matchesSearch && matchesFilter;
     });
@@ -65,29 +65,16 @@ export default function ApplicationsPage() {
         rejected: applications.filter(a => a.status === "rejected").length,
     };
 
-    const getStatusColor = (status: string) => {
+    const getStatusStyle = (status: string) => {
         switch (status) {
             case "accepted":
-                return "bg-green-100 text-green-700 border-green-200";
+                return { badge: "bg-er-complimentary/10 text-er-complimentary border-er-complimentary/20", icon: <CheckCircle className="w-4 h-4" /> };
             case "rejected":
-                return "bg-red-100 text-red-700 border-red-200";
+                return { badge: "bg-red-50 text-red-600 border-red-100", icon: <XCircle className="w-4 h-4" /> };
             case "pending":
-                return "bg-yellow-100 text-yellow-700 border-yellow-200";
+                return { badge: "bg-er-secondary/10 text-er-secondary-dark border-er-secondary/20", icon: <Clock className="w-4 h-4" /> };
             default:
-                return "bg-gray-100 text-gray-700 border-gray-200";
-        }
-    };
-
-    const getStatusIcon = (status: string) => {
-        switch (status) {
-            case "accepted":
-                return <CheckCircle className="w-4 h-4" />;
-            case "rejected":
-                return <XCircle className="w-4 h-4" />;
-            case "pending":
-                return <Clock className="w-4 h-4" />;
-            default:
-                return <FileText className="w-4 h-4" />;
+                return { badge: "bg-cyan-500 text-white border-cyan-500", icon: <FileText className="w-4 h-4" /> };
         }
     };
 
@@ -100,204 +87,181 @@ export default function ApplicationsPage() {
     }
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-10 pb-10 container mx-auto px-4 sm:px-6 lg:px-8">
             {/* Header */}
-            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-                <div>
-                    <div className="flex items-center gap-3 mb-2">
-                        <div className="p-3 bg-gradient-to-br from-primary to-blue-600 rounded-xl shadow-lg">
-                            <FileText className="w-6 h-6 text-white" />
+            <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
+                <div className="space-y-2">
+                    <h1 className="text-4xl font-bold text-slate-900 font-display tracking-tight">
+                        My Applications
+                    </h1>
+                    <p className="text-slate-500 font-medium">Track your job applications and opportunities.</p>
+                </div>
+            </div>
+
+            {/* Premium Stats Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div className="bg-white p-8 rounded-3xl border border-slate-100 transition-all duration-500 group relative overflow-hidden">
+                    <div className="relative space-y-4">
+                        <div className="w-14 h-14 bg-er-primary/10 rounded-full flex items-center justify-center text-er-primary">
+                            <Briefcase className="w-7 h-7" />
                         </div>
                         <div>
-                            <h1 className="text-3xl font-bold text-gray-900">My Applications</h1>
-                            <p className="text-gray-600 mt-1">Track and manage your job applications</p>
+                            <div className="text-xs font-bold text-slate-400 tracking-widest uppercase mb-1">Total Sent</div>
+                            <div className="text-3xl font-bold text-slate-900 font-display">{stats.total}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="bg-white p-8 rounded-3xl border border-slate-100 transition-all duration-500 group relative overflow-hidden">
+                    <div className="relative space-y-4">
+                        <div className="w-14 h-14 bg-er-secondary/10 rounded-full flex items-center justify-center text-er-secondary-dark">
+                            <Clock className="w-7 h-7" />
+                        </div>
+                        <div>
+                            <div className="text-xs font-bold text-slate-400 tracking-widest uppercase mb-1">Pending</div>
+                            <div className="text-3xl font-bold text-slate-900 font-display">{stats.pending}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="bg-white p-8 rounded-3xl border border-slate-100 transition-all duration-500 group relative overflow-hidden">
+                    <div className="relative space-y-4">
+                        <div className="w-14 h-14 bg-er-complimentary/10 rounded-full flex items-center justify-center text-er-complimentary">
+                            <CheckCircle className="w-7 h-7" />
+                        </div>
+                        <div>
+                            <div className="text-xs font-bold text-slate-400 tracking-widest uppercase mb-1">Accepted</div>
+                            <div className="text-3xl font-bold text-slate-900 font-display">{stats.accepted}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="bg-white p-8 rounded-3xl border border-slate-100 transition-all duration-500 group relative overflow-hidden">
+                    <div className="relative space-y-4">
+                        <div className="w-14 h-14 bg-red-100 rounded-full flex items-center justify-center text-red-600">
+                            <XCircle className="w-7 h-7" />
+                        </div>
+                        <div>
+                            <div className="text-xs font-bold text-slate-400 tracking-widest uppercase mb-1">Rejected</div>
+                            <div className="text-3xl font-bold text-slate-900 font-display">{stats.rejected}</div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            {/* Stats */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-                <div className="bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200 rounded-2xl p-6">
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <div className="text-sm text-blue-700 font-medium">Total</div>
-                            <div className="text-3xl font-bold text-blue-900 mt-1">{stats.total}</div>
-                        </div>
-                        <div className="p-3 bg-blue-500 text-white rounded-xl">
-                            <FileText className="w-6 h-6" />
-                        </div>
-                    </div>
-                </div>
-
-                <div className="bg-gradient-to-br from-yellow-50 to-yellow-100 border border-yellow-200 rounded-2xl p-6">
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <div className="text-sm text-yellow-700 font-medium">Pending</div>
-                            <div className="text-3xl font-bold text-yellow-900 mt-1">{stats.pending}</div>
-                        </div>
-                        <div className="p-3 bg-yellow-500 text-white rounded-xl">
-                            <Clock className="w-6 h-6" />
-                        </div>
-                    </div>
-                </div>
-
-                <div className="bg-gradient-to-br from-green-50 to-green-100 border border-green-200 rounded-2xl p-6">
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <div className="text-sm text-green-700 font-medium">Accepted</div>
-                            <div className="text-3xl font-bold text-green-900 mt-1">{stats.accepted}</div>
-                        </div>
-                        <div className="p-3 bg-green-500 text-white rounded-xl">
-                            <CheckCircle className="w-6 h-6" />
-                        </div>
-                    </div>
-                </div>
-
-                <div className="bg-gradient-to-br from-red-50 to-red-100 border border-red-200 rounded-2xl p-6">
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <div className="text-sm text-red-700 font-medium">Rejected</div>
-                            <div className="text-3xl font-bold text-red-900 mt-1">{stats.rejected}</div>
-                        </div>
-                        <div className="p-3 bg-red-500 text-white rounded-xl">
-                            <XCircle className="w-6 h-6" />
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            {/* Filters */}
-            <div className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm">
-                <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
-                    <div className="flex-1 relative">
-                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+            {/* Filters Area */}
+            <div className="bg-white rounded-full p-4 md:p-6 border border-slate-100">
+                <div className="flex flex-col md:flex-row items-center justify-between gap-4 md:gap-6">
+                    <div className="w-full md:flex-1 relative">
+                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
                         <input
                             type="text"
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
-                            placeholder="Search applications by job title..."
-                            className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent bg-gray-50"
+                            placeholder="Search your applications..."
+                            className="w-full pl-12 pr-4 py-4 border border-slate-200 rounded-full focus:outline-none focus:ring-2 focus:ring-er-primary/20 focus:border-er-primary text-sm font-medium text-slate-700 bg-slate-50 transition-all"
                         />
                     </div>
 
-                    <div className="flex items-center gap-2">
-                        <Filter className="w-5 h-5 text-gray-400" />
-                        <select
-                            value={filterStatus}
-                            onChange={(e) => setFilterStatus(e.target.value)}
-                            className="px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent bg-gray-50 min-w-40"
-                        >
-                            <option value="all">All Status</option>
-                            <option value="pending">Pending</option>
-                            <option value="accepted">Accepted</option>
-                            <option value="rejected">Rejected</option>
-                        </select>
+                    <div className="w-full md:w-auto flex flex-wrap items-center gap-2">
+                        {["all", "pending", "accepted", "rejected"].map((status) => (
+                            <button
+                                key={status}
+                                onClick={() => setFilterStatus(status)}
+                                className={`px-4 py-2.5 md:px-5 md:py-3 rounded-full text-[11px] font-bold uppercase tracking-widest transition-all duration-300 ${filterStatus === status
+                                        ? status === "accepted" ? "bg-er-complimentary text-white shadow-lg shadow-er-complimentary/30"
+                                            : status === "rejected" ? "bg-red-500 text-white shadow-lg shadow-red-500/30"
+                                                : status === "pending" ? "bg-er-secondary text-er-dark shadow-lg shadow-er-secondary/30"
+                                                    : "bg-er-primary text-white shadow-lg shadow-er-primary/30"
+                                        : "bg-slate-50 text-slate-500 hover:bg-slate-100 border border-slate-200"
+                                    }`}
+                            >
+                                {status}
+                            </button>
+                        ))}
                     </div>
-                </div>
-
-                <div className="flex flex-wrap gap-3 mt-6">
-                    <button
-                        onClick={() => setFilterStatus("all")}
-                        className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${filterStatus === "all" ? "bg-primary text-white" : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`}
-                    >
-                        All Applications
-                    </button>
-                    <button
-                        onClick={() => setFilterStatus("pending")}
-                        className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${filterStatus === "pending" ? "bg-yellow-500 text-white" : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`}
-                    >
-                        Pending
-                    </button>
-                    <button
-                        onClick={() => setFilterStatus("accepted")}
-                        className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${filterStatus === "accepted" ? "bg-green-500 text-white" : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`}
-                    >
-                        Accepted
-                    </button>
-                    <button
-                        onClick={() => setFilterStatus("rejected")}
-                        className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${filterStatus === "rejected" ? "bg-red-500 text-white" : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`}
-                    >
-                        Rejected
-                    </button>
                 </div>
             </div>
 
-            {/* Applications List */}
+            {/* Applications Cards Layout */}
             {filteredApplications.length > 0 ? (
-                <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden">
-                    <div className="overflow-x-auto">
-                        <table className="w-full">
-                            <thead className="bg-gray-50 border-b border-gray-200">
-                                <tr>
-                                    <th className="text-left py-4 px-6 text-sm font-semibold text-gray-900">Job Title</th>
-                                    <th className="text-left py-4 px-6 text-sm font-semibold text-gray-900">Company</th>
-                                    <th className="text-left py-4 px-6 text-sm font-semibold text-gray-900">Location</th>
-                                    <th className="text-left py-4 px-6 text-sm font-semibold text-gray-900">Status</th>
-                                    <th className="text-left py-4 px-6 text-sm font-semibold text-gray-900">Applied</th>
-                                    <th className="text-left py-4 px-6 text-sm font-semibold text-gray-900">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {filteredApplications.map((app) => (
-                                    <tr key={app.id} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
-                                        <td className="py-4 px-6">
-                                            <div className="font-medium text-gray-900">{app.job.title}</div>
-                                        </td>
-                                        <td className="py-4 px-6">
-                                            <div className="text-sm text-gray-700">{app.job.company || "N/A"}</div>
-                                        </td>
-                                        <td className="py-4 px-6">
-                                            <div className="text-sm text-gray-700">{app.job.location || "N/A"}</div>
-                                        </td>
-                                        <td className="py-4 px-6">
-                                            <span className={`px-3 py-1 rounded-full text-xs font-semibold border flex items-center gap-1 w-fit ${getStatusColor(app.status)}`}>
-                                                {getStatusIcon(app.status)}
-                                                {app.status.toUpperCase()}
-                                            </span>
-                                        </td>
-                                        <td className="py-4 px-6">
-                                            <div className="text-sm text-gray-700">{formatRelativeTime(app.created_at)}</div>
-                                        </td>
-                                        <td className="py-4 px-6">
-                                            <div className="flex items-center gap-2">
-                                                <Link href={`/jobseeker/jobs/${app.job.id}`}>
-                                                    <Button variant="outline" size="sm">
-                                                        <Eye className="w-4 h-4" />
-                                                    </Button>
-                                                </Link>
-                                                {app.status === "pending" && (
-                                                    <Button
-                                                        onClick={() => deleteApplication(app.id)}
-                                                        variant="outline"
-                                                        size="sm"
-                                                        className="text-red-600 hover:bg-red-50"
-                                                    >
-                                                        <Trash2 className="w-4 h-4" />
-                                                    </Button>
-                                                )}
-                                            </div>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {filteredApplications.map((app) => {
+                        const style = getStatusStyle(app.status);
+                        return (
+                            <div key={app.id} className="bg-white p-6 rounded-3xl transition-all duration-500 group flex flex-col justify-between h-full relative overflow-hidden">
+                                {/* Decorative Accent */}
+                                {app.status === "accepted" && <div className="absolute top-0 right-0 w-24 h-24 bg-er-complimentary/5 rounded-bl-[100%] transition-transform group-hover:scale-125 pointer-events-none" />}
+                                {app.status === "pending" && <div className="absolute top-0 right-0 w-24 h-24 bg-er-secondary/5 rounded-bl-[100%] transition-transform group-hover:scale-125 pointer-events-none" />}
+
+                                <div>
+                                    <div className="flex items-start justify-between mb-4 relative z-10">
+                                        <div className="w-12 h-12 rounded-2xl bg-slate-50 flex items-center justify-center text-slate-400 group-hover:bg-er-primary/10 group-hover:text-er-primary transition-colors border border-slate-100">
+                                            <Briefcase className="w-5 h-5" />
+                                        </div>
+                                        <span className={`px-3 py-1.5 rounded-full text-[10px] font-bold border-1 uppercase tracking-wider flex items-center gap-1.5 ${style.badge}`}>
+
+                                            {app.status}
+                                        </span>
+                                    </div>
+
+                                    <div className="space-y-1 mb-6 relative z-10">
+                                        <h3 className="font-bold text-slate-900 text-lg group-hover:text-er-primary transition-colors line-clamp-1 font-display">
+                                            {app.job?.title || "Unknown Position"}
+                                        </h3>
+                                        <div className="flex items-center gap-1.5 text-xs font-bold text-slate-400 uppercase tracking-widest">
+                                            <Building className="w-3.5 h-3.5" />
+                                            {app.job?.company || "Confidential Company"}
+                                        </div>
+                                    </div>
+
+                                    <div className="flex flex-wrap gap-2 mb-6 relative z-10">
+                                        <span className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-50 rounded-lg text-[10px] font-bold text-slate-500 uppercase">
+                                            <MapPin className="w-3 h-3" /> {app.job?.location || "Remote"}
+                                        </span>
+                                        <span className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-50 rounded-lg text-[10px] font-bold text-slate-500 uppercase">
+                                            <Clock className="w-3 h-3" /> {formatRelativeTime(app.created_at)}
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div className="flex items-center gap-3 mt-auto pt-4 border-t border-slate-100 relative z-10">
+                                    <Link href={`/jobseeker/jobs/${app.job?.id}`} className="flex-1">
+                                        <Button variant="outline" className="w-full rounded-full text-sm font-bold py-4 bg-er-primary text-white hover:bg-er-primary hover:text-white">
+                                            <Eye className="w-4 h-4 mr-2" />
+                                            View Job
+                                        </Button>
+                                    </Link>
+                                    {app.status === "pending" && (
+                                        <Button
+                                            onClick={() => deleteApplication(app.id)}
+                                            variant="outline"
+                                            className="w-11 h-11 p-0 rounded-xl border-slate-200 text-slate-400 hover:text-red-600 hover:bg-red-50 hover:border-red-100 transition-colors"
+                                            title="Withdraw Application"
+                                        >
+                                            <Trash2 className="w-4 h-4" />
+                                        </Button>
+                                    )}
+                                </div>
+                            </div>
+                        );
+                    })}
                 </div>
             ) : (
-                <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-16 border border-gray-200 text-center">
-                    <div className="w-24 h-24 mx-auto mb-6 bg-gradient-to-br from-primary/10 to-blue-600/10 rounded-full flex items-center justify-center">
-                        <FileText className="w-12 h-12 text-gray-400" />
+                <div className="bg-slate-50 rounded-3xl p-16 border border-slate-100 text-center">
+                    <div className="w-24 h-24 mx-auto mb-6 bg-white rounded-full flex items-center justify-center shadow-xl shadow-slate-200/40">
+                        <FileText className="w-10 h-10 text-slate-300" />
                     </div>
-                    <h3 className="text-2xl font-bold text-gray-900 mb-3">No applications found</h3>
-                    <p className="text-gray-600 max-w-md mx-auto mb-8">
+                    <h3 className="text-2xl font-bold text-slate-900 mb-3 font-display">No applications found</h3>
+                    <p className="text-slate-500 font-medium max-w-md mx-auto mb-8">
                         {filterStatus === "all"
-                            ? "You haven't applied to any jobs yet. Start browsing jobs to find your next opportunity!"
-                            : `No ${filterStatus} applications found. Try adjusting your filters.`}
+                            ? "Your application pipeline is currently empty. Start exploring our job market to find your next strategic role."
+                            : `You don't have any ${filterStatus} applications. Adjust your filters or browse more jobs.`}
                     </p>
                     <Link href="/jobseeker/jobs">
-                        <Button className="bg-primary text-white">Browse Jobs</Button>
+                        <Button className="bg-er-primary hover:bg-er-primary-dark text-white rounded-full h-12 px-8 font-bold uppercase tracking-widest text-xs">
+                            Explore Market
+                        </Button>
                     </Link>
                 </div>
             )}
