@@ -4,13 +4,11 @@
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { useAuth } from "@/hooks/useAuth"
-import { Bell, Moon, Sun, Search, PowerOff, CirclePowerIcon, Wallet, ChevronDown, Settings, LogOut } from "lucide-react"
-import { formatCurrency } from "@/lib/helpers"
+import { Bell, Moon, Sun, Search, ChevronDown, Settings, LogOut, Menu, X } from "lucide-react"
 import axiosClient from "@/lib/axiosClient"
 import { useMemo, useState, useRef, useEffect } from "react"
 import { Logo } from "oxisverse-logo-system"
 import { getRoleBasePath, getRoleDashboardPath } from "@/lib/roleRoutes"
-
 
 export function Navbar() {
   const { user, logout } = useAuth()
@@ -20,16 +18,12 @@ export function Navbar() {
   if (pathname?.startsWith("/jobseeker/cvs")) {
     return null
   }
+
   const [dark, setDark] = useState(false)
   const [query, setQuery] = useState("")
   const [isProfileOpen, setIsProfileOpen] = useState(false)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const profileDropdownRef = useRef<HTMLDivElement>(null)
-
-  const wallTitle = useMemo(() => {
-    if (user?.role === "employer") return "EasyEmployerWall"
-    if (user?.role === "jobseeker") return "EasyJobWall"
-    return "Dashboard"
-  }, [user?.role])
 
   const basePath = getRoleBasePath(user?.role)
   const homeHref = getRoleDashboardPath(user?.role)
@@ -63,7 +57,6 @@ export function Navbar() {
 
   const [balance, setBalance] = useState<number | null>(null)
 
-  // Handle click outside dropdown
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (profileDropdownRef.current && !profileDropdownRef.current.contains(event.target as Node)) {
@@ -77,13 +70,15 @@ export function Navbar() {
     return () => document.removeEventListener("mousedown", handleClickOutside)
   }, [isProfileOpen])
 
-  useState(() => {
+  useEffect(() => {
     if (user) {
-      axiosClient.get("/wallet/balance").then(res => {
-        setBalance(res.data.data?.balance || 0)
-      }).catch(() => setBalance(0))
+      axiosClient.get("/wallet/balance")
+        .then((res) => {
+          setBalance(res.data.data?.balance || 0)
+        })
+        .catch(() => setBalance(0))
     }
-  })
+  }, [user])
 
   const onSearch = (e: React.FormEvent) => {
     e.preventDefault()
@@ -92,191 +87,188 @@ export function Navbar() {
   }
 
   return (
-    <header className="sticky top-0 z-50 bg-gray-100 border-b container mx-auto border-border flex items-center justify-between px-4 sm:px-6">
-      <div className="flex items-center gap-4 min-w-0">
-        <Link href={homeHref} className="text-base py-3 px-4 bg-er-white rounded-full font-semibold text-primary whitespace-nowrap">
-          <Logo
-            brandName="easyrecruit"
-            type="horizontal"
-            variant="secondary"
-            format="svg"
-            width={180}
-            height={40}
-            alt="EasyRecruit Logo"
-            className="flex w-[7em]"
-            priority
-          />
-        </Link>
-
-      </div>
-      <div className="max-w-5xl mx-auto flex flex-row">
-        <div className="hidden md:flex items-center gap-1">
-          {navLinks.map((l) => {
-            const active = pathname?.startsWith(l.href)
-            return (
-              <Link
-                key={l.href}
-                href={l.href}
-                className={`px-3 py-5 text-sm border-b-4 transition-colors hover:text-gray-600 ${active ? "bg-none border-b-4 border-er-primary font-medium text-er-primary-dark" : "border-er-primary/0 hover:border-b-accent hover:text-accent-foreground"
-                  }`}
-              >
-                {l.label}
-              </Link>
-            )
-          })}
-        </div>
-        <form onSubmit={onSearch} className="hidden lg:flex items-center gap-2 flex-1 max-w-xl mx-4">
-          <div className="flex items-center gap-2 w-full bg-background border border-border rounded-lg px-3 h-10">
-            <Search className="w-4 h-4 text-muted-foreground" />
-            <input
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search jobs"
-              className="w-full bg-transparent outline-none text-sm"
+    <header className="sticky top-0 z-50 border-b border-slate-200/80 bg-white/85 backdrop-blur-xl">
+      <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3 sm:px-6 lg:px-8">
+        <div className="flex min-w-0 items-center gap-3">
+          <Link href={homeHref} className="rounded-full border border-slate-200/80 bg-white/90 px-3 py-2 shadow-sm">
+            <Logo
+              brandName="easyrecruit"
+              type="horizontal"
+              variant="secondary"
+              format="svg"
+              width={140}
+              height={34}
+              alt="EasyRecruit Logo"
+              className="flex w-[7em]"
+              priority
             />
-          </div>
-        </form>
-      </div>
-
-
-      <div className="flex items-center gap-3">
-        {/* {user && user.role !== 'admin' && (
-          <Link
-            href={`${basePath}/wallet`}
-            className="hidden sm:flex items-center gap-2 px-3 py-1.5 bg-er-primary/10 text-er-primary-dark rounded-full border border-er-primary/20 hover:bg-er-primary/20 transition-colors"
-          >
-            <Wallet className="w-4 h-4" />
-            <span className="text-xs font-bold whitespace-nowrap">
-              {balance !== null ? formatCurrency(balance) : "..."}
-            </span>
           </Link>
-        )} */}
-        <Link
-          href={`${basePath}/notifications`}
-          className="w-9 h-9 rounded-full bg-white text-accent-foreground flex items-center justify-center"
-          aria-label="Notifications"
-        >
-          <Bell className="w-4 h-4" />
-        </Link>
 
-        {/* Profile Dropdown */}
-        <div className="relative" ref={profileDropdownRef}>
-          <button
-            onClick={() => setIsProfileOpen(!isProfileOpen)}
-            className="flex items-center gap-2 hover:opacity-75 transition-opacity"
-            aria-label="Profile menu"
-          >
-            <div className="w-9 h-9 rounded-full bg-gradient-to-br from-er-primary to-er-primary-dark flex items-center justify-center text-white font-bold">
-              {user?.name?.charAt(0) || user?.email?.charAt(0) || "U"}
+          <div className="hidden lg:flex items-center gap-1 rounded-full border border-slate-200/80 bg-slate-50/80 p-1">
+            {navLinks.map((l) => {
+              const active = pathname?.startsWith(l.href)
+              return (
+                <Link
+                  key={l.href}
+                  href={l.href}
+                  className={`er-nav-pill ${active ? "active" : "text-slate-600 hover:bg-white hover:text-er-primary"}`}
+                >
+                  {l.label}
+                </Link>
+              )
+            })}
+          </div>
+        </div>
+
+        <div className="hidden flex-1 items-center justify-end xl:flex">
+          <form onSubmit={onSearch} className="flex w-full max-w-xl items-center gap-2">
+            <div className="flex h-11 w-full items-center gap-2 rounded-full border border-slate-200/80 bg-slate-50/80 px-4 shadow-sm">
+              <Search className="h-4 w-4 text-slate-500" />
+              <input
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="Search jobs"
+                className="w-full bg-transparent text-sm outline-none"
+              />
             </div>
+          </form>
+        </div>
+
+        <div className="flex items-center gap-2 sm:gap-3">
+          <Link
+            href={`${basePath}/notifications`}
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-slate-200/80 bg-white text-slate-700 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
+            aria-label="Notifications"
+          >
+            <Bell className="h-4 w-4" />
+          </Link>
+
+          <button
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-slate-200/80 bg-white text-slate-700 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md xl:hidden"
+            onClick={() => setMobileMenuOpen((prev) => !prev)}
+            aria-label="Toggle navigation"
+          >
+            {mobileMenuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
           </button>
 
-          {/* Dropdown Menu */}
-          {isProfileOpen && (
-            <div className="absolute right-0 mt-2 w-72 bg-white rounded-2xl border border-border z-50">
-              {/* Profile Header */}
-              <div className="p-4 border-b border-border flex items-center gap-3">
-                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-er-primary to-er-primary-dark flex items-center justify-center text-white font-bold text-lg">
-                  {user?.name?.charAt(0) || user?.email?.charAt(0) || "U"}
-                </div>
-                <div className="flex-1">
-                  <p className="text-sm font-bold text-foreground">{user?.name || "User"}</p>
-                  <div className="flex items-center gap-1 mt-1">
-                    <div className="w-2 h-2 rounded-full bg-green-500"></div>
-                    <p className="text-xs text-muted-foreground">Online for messages</p>
+          <div className="relative" ref={profileDropdownRef}>
+            <button
+              onClick={() => setIsProfileOpen(!isProfileOpen)}
+              className="flex items-center gap-2 rounded-full border border-slate-200/80 bg-white p-1 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
+              aria-label="Profile menu"
+            >
+              <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-er-primary to-er-primary-dark font-bold text-white">
+                {user?.name?.charAt(0) || user?.email?.charAt(0) || "U"}
+              </div>
+            </button>
+
+            {isProfileOpen && (
+              <div className="absolute right-0 mt-2 w-72 rounded-[1.25rem] border border-slate-200 bg-white shadow-[0_24px_55px_-24px_rgba(13,33,161,0.35)] z-50">
+                <div className="flex items-center gap-3 border-b border-slate-200 p-4">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-er-primary to-er-primary-dark text-lg font-bold text-white">
+                    {user?.name?.charAt(0) || user?.email?.charAt(0) || "U"}
+                  </div>
+                  <div className="flex-1">
+                    <p className="text-sm font-bold text-slate-900">{user?.name || "User"}</p>
+                    <div className="mt-1 flex items-center gap-1">
+                      <div className="h-2 w-2 rounded-full bg-green-500"></div>
+                      <p className="text-xs text-slate-500">Online for messages</p>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              {/* Menu Items */}
-              <div className="py-2 px-2">
-                <Link
-                  href={`/profile`}
-                  onClick={() => setIsProfileOpen(false)}
-                  className="flex items-center gap-3 px-3 py-2.5 hover:bg-accent/50 transition-colors text-sm text-foreground"
-                >
-                  <div className="w-4 h-4 rounded-full border-2 border-muted-foreground"></div>
-                  Your profile
-                </Link>
+                <div className="px-2 py-2">
+                  <Link href="/profile" onClick={() => setIsProfileOpen(false)} className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-slate-700 transition hover:bg-slate-50">
+                    <div className="h-4 w-4 rounded-full border-2 border-slate-400"></div>
+                    Your profile
+                  </Link>
 
-                <Link
-                  href={`/profile`}
-                  onClick={() => setIsProfileOpen(false)}
-                  className="flex items-center gap-3 px-3 py-2.5 hover:bg-accent/50 transition-colors text-sm text-foreground"
-                >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                  </svg>
-                  Stats and trends
-                </Link>
+                  <Link href="/profile" onClick={() => setIsProfileOpen(false)} className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-slate-700 transition hover:bg-slate-50">
+                    <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                    </svg>
+                    Stats and trends
+                  </Link>
 
-                <Link
-                  href={`/profile`}
-                  onClick={() => setIsProfileOpen(false)}
-                  className="flex items-center gap-3 px-3 py-2.5 hover:bg-accent/50 transition-colors text-sm text-foreground"
-                >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                  Account health
-                </Link>
+                  <Link href="/profile" onClick={() => setIsProfileOpen(false)} className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-slate-700 transition hover:bg-slate-50">
+                    <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    Account health
+                  </Link>
 
-                <Link
-                  href={`/profile`}
-                  onClick={() => setIsProfileOpen(false)}
-                  className="flex items-center gap-3 px-3 py-2.5 hover:bg-accent/50 transition-colors text-sm text-foreground"
-                >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
-                  </svg>
-                  Membership plan
-                </Link>
+                  <Link href="/profile" onClick={() => setIsProfileOpen(false)} className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-slate-700 transition hover:bg-slate-50">
+                    <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                    </svg>
+                    Membership plan
+                  </Link>
 
-                {/* Theme Selector */}
-                <div className="px-4 py-2.5 hover:bg-accent/50 transition-colors">
-                  <button
-                    className="w-full flex items-center justify-between text-sm text-foreground"
-                    onClick={() => setDark(!dark)}
-                  >
-                    <div className="flex items-center gap-3">
-                      {dark ? (
-                        <Moon className="w-4 h-4" />
-                      ) : (
-                        <Sun className="w-4 h-4" />
-                      )}
-                      <span>Theme: {dark ? "Dark" : "Light"}</span>
-                    </div>
-                    <ChevronDown className="w-4 h-4 text-muted-foreground" />
-                  </button>
+                  <div className="px-4 py-2.5 transition hover:bg-slate-50">
+                    <button className="flex w-full items-center justify-between text-sm text-slate-700" onClick={() => setDark(!dark)}>
+                      <div className="flex items-center gap-3">
+                        {dark ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
+                        <span>Theme: {dark ? "Dark" : "Light"}</span>
+                      </div>
+                      <ChevronDown className="h-4 w-4 text-slate-400" />
+                    </button>
+                  </div>
+
+                  <Link href="/profile/password" onClick={() => setIsProfileOpen(false)} className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-slate-700 transition hover:bg-slate-50">
+                    <Settings className="h-4 w-4" />
+                    Account settings
+                  </Link>
                 </div>
 
-                <Link
-                  href={`/profile/password`}
-                  onClick={() => setIsProfileOpen(false)}
-                  className="flex items-center gap-3 px-3 py-2.5 hover:bg-accent/50 transition-colors text-sm text-foreground"
-                >
-                  <Settings className="w-4 h-4" />
-                  Account settings
-                </Link>
+                <div className="border-t border-slate-200 p-2">
+                  <button
+                    onClick={() => {
+                      setIsProfileOpen(false)
+                      logout()
+                    }}
+                    className="flex w-full items-center gap-3 rounded-xl px-4 py-2.5 text-sm font-medium text-slate-500 transition hover:bg-slate-50"
+                  >
+                    <LogOut className="h-4 w-4" />
+                    Log out
+                  </button>
+                </div>
               </div>
-
-              {/* Logout Button */}
-              <div className="border-t border-border p-2">
-                <button
-                  onClick={() => {
-                    setIsProfileOpen(false)
-                    logout()
-                  }}
-                  className="w-full flex items-center gap-3 px-4 py-2.5 hover:bg-gray-50 transition-colors text-sm text-gray-500 font-medium rounded"
-                >
-                  <LogOut className="w-4 h-4" />
-                  Log out
-                </button>
-              </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
       </div>
+
+      {mobileMenuOpen && (
+        <div className="border-t border-slate-200 bg-white/95 px-4 py-4 shadow-lg xl:hidden">
+          <form onSubmit={onSearch} className="mb-4">
+            <div className="flex h-11 items-center gap-2 rounded-full border border-slate-200/80 bg-slate-50/80 px-4 shadow-sm">
+              <Search className="h-4 w-4 text-slate-500" />
+              <input
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="Search jobs"
+                className="w-full bg-transparent text-sm outline-none"
+              />
+            </div>
+          </form>
+
+          <div className="flex flex-col gap-2">
+            {navLinks.map((l) => {
+              const active = pathname?.startsWith(l.href)
+              return (
+                <Link
+                  key={l.href}
+                  href={l.href}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={`rounded-2xl px-3 py-3 text-sm font-medium ${active ? "bg-er-primary/10 text-er-primary" : "bg-white text-slate-700 shadow-sm"}`}
+                >
+                  {l.label}
+                </Link>
+              )
+            })}
+          </div>
+        </div>
+      )}
     </header>
   )
 }

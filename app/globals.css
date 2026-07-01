@@ -1,5 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Unbounded:wght@200..900&family=Wix+Madefor+Display:wght@400..800&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:ital,wght@0,400..900;1,400..900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Unbounded:wght@200..900&family=Wix+Madefor+Display:wght@400..800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:ital,wght@0,400..900;1,400..900&display=swap");
 @import "tailwindcss";
 @import "tw-animate-css";
 
@@ -123,6 +123,41 @@
   --sidebar-accent-foreground: oklch(0.984 0.003 247.858);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.551 0.027 264.364);
+}
+
+body {
+  min-height: 100vh;
+  background-image:
+    radial-gradient(
+      circle at top left,
+      rgba(238, 198, 67, 0.18),
+      transparent 28%
+    ),
+    linear-gradient(135deg, #f8faff 0%, #f3f6ff 100%);
+  color: #011638;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+.er-surface-card {
+  @apply rounded-[1.75rem] border border-slate-200/80 bg-white/90 shadow-[0_24px_55px_-24px_rgba(13,33,161,0.34)] backdrop-blur-xl;
+}
+
+.er-surface-soft {
+  @apply rounded-[1.5rem] border border-slate-200/70 bg-[linear-gradient(135deg,_rgba(255,255,255,0.98),_rgba(241,245,255,0.95))];
+}
+
+.er-nav-pill {
+  @apply rounded-full border border-transparent px-4 py-2 text-sm font-semibold transition-all duration-200;
+}
+
+.er-nav-pill.active {
+  @apply border-er-primary/20 bg-er-primary/10 text-er-primary;
 }
 
 @layer base {
@@ -304,4 +339,3 @@
 .animate-logo-slide {
   animation: logo-slide 28s linear infinite;
 }
-

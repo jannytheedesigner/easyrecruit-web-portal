@@ -13,29 +13,32 @@ export default function Sidebar() {
   const links =
     user?.role === "employer"
       ? [
-          { href: `${basePath}/dashboard`, label: "Dashboard", icon: Home },
-          { href: `${basePath}/jobs`, label: "Jobs", icon: Briefcase },
-          { href: `${basePath}/users`, label: "Candidates", icon: Users },
-          { href: `${basePath}/contracts`, label: "Contracts", icon: FileText },
-          { href: `${basePath}/payments`, label: "Payments", icon: Wallet },
-          { href: `${basePath}/wallet`, label: "Wallet", icon: Wallet },
-          { href: `${basePath}/notifications`, label: "Notifications", icon: Bell },
-          { href: `${basePath}/reports`, label: "Reports", icon: BarChart3 },
-        ]
+        { href: `${basePath}/dashboard`, label: "Dashboard", icon: Home },
+        { href: `${basePath}/jobs`, label: "Jobs", icon: Briefcase },
+        { href: `${basePath}/users`, label: "Candidates", icon: Users },
+        { href: `${basePath}/contracts`, label: "Contracts", icon: FileText },
+        { href: `${basePath}/payments`, label: "Payments", icon: Wallet },
+        { href: `${basePath}/wallet`, label: "Wallet", icon: Wallet },
+        { href: `${basePath}/notifications`, label: "Notifications", icon: Bell },
+        { href: `${basePath}/reports`, label: "Reports", icon: BarChart3 },
+      ]
       : [
-          { href: `${basePath}/dashboard`, label: "Dashboard", icon: Home },
-          { href: `${basePath}/jobs`, label: "Find Jobs", icon: Briefcase },
-          { href: `${basePath}/contracts`, label: "Contracts", icon: FileText },
-          { href: `${basePath}/payments`, label: "Earnings", icon: Wallet },
-          { href: `${basePath}/notifications`, label: "Notifications", icon: Bell },
-        ];
+        { href: `${basePath}/dashboard`, label: "Dashboard", icon: Home },
+        { href: `${basePath}/jobs`, label: "Find Jobs", icon: Briefcase },
+        { href: `${basePath}/contracts`, label: "Contracts", icon: FileText },
+        { href: `${basePath}/payments`, label: "Earnings", icon: Wallet },
+        { href: `${basePath}/notifications`, label: "Notifications", icon: Bell },
+      ];
 
   return (
-    <aside className="w-64 bg-sidebar text-sidebar-foreground p-4 flex flex-col">
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold">EasyRecruit</h1>
+    <aside className="hidden w-72 flex-col border-r border-slate-200/70 bg-[linear-gradient(180deg,_#f8faff_0%,_#ffffff_100%)] p-5 shadow-[0_20px_45px_-24px_rgba(13,33,161,0.26)] lg:flex">
+      <div className="mb-8 rounded-[1.5rem] border border-slate-200/80 bg-white/90 p-4 shadow-sm">
+        <p className="text-xs font-semibold uppercase tracking-[0.24em] text-er-primary">Portal</p>
+        <h1 className="mt-2 text-2xl font-semibold text-slate-900">EasyRecruit</h1>
+        <p className="mt-1 text-sm text-slate-600">Modern hiring, simplified.</p>
       </div>
-      <nav className="space-y-1 flex-1">
+
+      <nav className="flex-1 space-y-1.5">
         {links.map((link) => {
           const Icon = link.icon;
           const isActive = pathname.startsWith(link.href);
@@ -43,21 +46,23 @@ export default function Sidebar() {
             <Link
               key={link.href}
               href={link.href}
-              className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${isActive
-                  ? "bg-primary text-primary-foreground"
-                  : "hover:bg-accent hover:text-accent-foreground"
+              className={`flex items-center gap-3 rounded-2xl px-3 py-3 text-sm font-medium transition-all ${isActive
+                ? "bg-er-primary text-white shadow-lg shadow-er-primary/20"
+                : "text-slate-600 hover:bg-er-primary/10 hover:text-er-primary"
                 }`}
-            >              <Icon className="w-5 h-5" />
+            >
+              <Icon className="h-5 w-5" />
               <span>{link.label}</span>
             </Link>
           );
         })}
       </nav>
+
       <Link
         href={`${basePath}/settings`}
-        className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-accent mt-auto"
+        className="mt-auto flex items-center gap-3 rounded-2xl border border-slate-200/80 bg-white/90 px-3 py-3 text-sm font-medium text-slate-700 transition-all hover:border-er-primary/30 hover:bg-er-primary/10 hover:text-er-primary"
       >
-        <User className="w-5 h-5" />
+        <User className="h-5 w-5" />
         <span>Settings</span>
       </Link>
     </aside>
