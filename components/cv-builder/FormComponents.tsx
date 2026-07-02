@@ -6,29 +6,34 @@ interface FormInputProps
     label?: string;
     description?: string;
     error?: string;
+    icon?: React.ComponentType<{ className?: string }>;
 }
 
 export function FormInput({
     label,
     description,
     error,
+    icon: Icon,
     ...props
 }: FormInputProps) {
     return (
         <div className="space-y-2">
             {label && (
-                <label className="block text-sm font-bold text-gray-900">
-                    {label}
-                </label>
+                <div className="flex items-center gap-2">
+                    {Icon && <Icon className="w-4 h-4 text-gray-400" />}
+                    <label className="block text-sm font-semibold text-gray-900">
+                        {label}
+                    </label>
+                </div>
             )}
             {description && (
                 <p className="text-sm text-gray-500">{description}</p>
             )}
             <input
                 {...props}
-                className={`w-full px-4 py-2 bg-gray-50 border rounded-lg outline-none transition-colors ${error
-                        ? "border-red-300 focus:border-red-400 focus:bg-white"
-                        : "border-gray-200 focus:border-er-primary/30 focus:bg-white"
+                className={`w-full px-4 py-2 bg-white border rounded-lg outline-none shadow-sm transition-colors ${error
+                    ? "border-red-300 focus:border-red-400"
+                    : "border-gray-200 focus:border-er-primary/30"
                     }`}
             />
             {error && (
@@ -44,6 +49,7 @@ interface FormSelectProps
     description?: string;
     error?: string;
     options: Array<{ value: string | number; label: string }>;
+    icon?: React.ComponentType<{ className?: string }>;
 }
 
 export function FormSelect({
@@ -51,23 +57,27 @@ export function FormSelect({
     description,
     error,
     options,
+    icon: Icon,
     ...props
 }: FormSelectProps) {
     return (
         <div className="space-y-2">
             {label && (
-                <label className="block text-sm font-bold text-gray-900">
-                    {label}
-                </label>
+                <div className="flex items-center gap-2">
+                    {Icon && <Icon className="w-4 h-4 text-gray-400" />}
+                    <label className="block text-sm font-semibold text-gray-900">
+                        {label}
+                    </label>
+                </div>
             )}
             {description && (
                 <p className="text-sm text-gray-500">{description}</p>
             )}
             <select
                 {...props}
-                className={`w-full px-4 py-2 bg-gray-50 border rounded-lg outline-none transition-colors ${error
-                        ? "border-red-300 focus:border-red-400"
-                        : "border-gray-200 focus:border-er-primary/30"
+                className={`w-full px-4 py-2 bg-white border rounded-lg outline-none transition-colors ${error
+                    ? "border-red-300 focus:border-red-400"
+                    : "border-gray-200 focus:border-er-primary/30"
                     }`}
             >
                 <option value="">Select an option</option>
@@ -89,29 +99,34 @@ interface FormTextareaProps
     label?: string;
     description?: string;
     error?: string;
+    icon?: React.ComponentType<{ className?: string }>;
 }
 
 export function FormTextarea({
     label,
     description,
     error,
+    icon: Icon,
     ...props
 }: FormTextareaProps) {
     return (
         <div className="space-y-2">
             {label && (
-                <label className="block text-sm font-bold text-gray-900">
-                    {label}
-                </label>
+                <div className="flex items-center gap-2">
+                    {Icon && <Icon className="w-4 h-4 text-gray-400" />}
+                    <label className="block text-sm font-semibold text-gray-900">
+                        {label}
+                    </label>
+                </div>
             )}
             {description && (
                 <p className="text-sm text-gray-500">{description}</p>
             )}
             <textarea
                 {...props}
-                className={`w-full px-4 py-2 bg-gray-50 border rounded-lg outline-none transition-colors resize-vertical ${error
-                        ? "border-red-300 focus:border-red-400"
-                        : "border-gray-200 focus:border-er-primary/30"
+                className={`w-full px-4 py-2 bg-white border rounded-lg outline-none transition-colors resize-vertical shadow-sm ${error
+                    ? "border-red-300 focus:border-red-400"
+                    : "border-gray-200 focus:border-er-primary/30"
                     }`}
             />
             {error && (
@@ -221,30 +236,43 @@ export function FormCheckboxGroup({
             )}
             <div
                 className="grid gap-3"
-                style={{ gridTemplateColumns: `repeat(auto-fill, minmax(250px, 1fr))` }}
+                style={{ gridTemplateColumns: `repeat(auto-fill, minmax(220px, 1fr))` }}
             >
-                {options.map((opt) => (
-                    <label
-                        key={opt.id}
-                        className="flex items-center gap-3 p-3 bg-gray-50 border border-gray-200 rounded-lg cursor-pointer hover:bg-white hover:border-gray-300 transition-colors"
-                    >
-                        <input
-                            type="checkbox"
-                            checked={value.includes(opt.id)}
-                            onChange={(e) => {
-                                if (e.target.checked) {
-                                    onChange([...value, opt.id]);
-                                } else {
-                                    onChange(value.filter((v) => v !== opt.id));
-                                }
+                {options.map((opt) => {
+                    const selected = value.includes(opt.id);
+                    return (
+                        <button
+                            key={opt.id}
+                            type="button"
+                            onClick={() => {
+                                if (!selected) onChange([...value, opt.id]);
+                                else onChange(value.filter((v) => v !== opt.id));
                             }}
-                            className="w-4 h-4 rounded border-gray-300 text-er-primary focus:ring-2 focus:ring-er-primary/50"
-                        />
-                        <span className="text-sm font-medium text-gray-900">
-                            {opt.name}
-                        </span>
-                    </label>
-                ))}
+                            className={`flex items-center gap-3 p-3 rounded-lg transition-colors border ${selected ? 'bg-white border-er-primary/30 shadow-sm' : 'bg-gray-50 border-gray-200 hover:bg-white hover:border-gray-300'}`}
+                        >
+                            <input
+                                type="checkbox"
+                                checked={selected}
+                                readOnly
+                                className="hidden"
+                            />
+                            <span className={`w-6 h-6 rounded-full flex items-center justify-center ${selected ? 'bg-er-primary text-white' : 'bg-white text-gray-400 border border-gray-200'}`}>
+                                {selected ? (
+                                    <svg className="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                        <path d="M20 6L9 17l-5-5" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                    </svg>
+                                ) : (
+                                    <svg className="w-3 h-3 text-gray-300" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                        <circle cx="12" cy="12" r="6" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                                    </svg>
+                                )}
+                            </span>
+                            <span className="text-sm font-medium text-gray-900">
+                                {opt.name}
+                            </span>
+                        </button>
+                    );
+                })}
             </div>
         </div>
     );

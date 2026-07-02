@@ -11,6 +11,7 @@ interface CVPreviewProps {
         experiences: WorkExperience[];
         skills: SkillProficiency[];
         interests?: any[];
+        summary?: string;
         resumeSettings: {
             title: string;
             template_name: string;
@@ -20,7 +21,7 @@ interface CVPreviewProps {
 }
 
 export function CVPreview({ data }: CVPreviewProps) {
-    const { profile, education, experiences, skills, resumeSettings, availableSkills } = data;
+    const { profile, education, experiences, skills, summary, resumeSettings, availableSkills } = data;
 
     const getSkillName = (s: SkillProficiency) =>
         s.name || availableSkills?.find(sk => sk.id === s.id)?.name || "Technical Skill";
@@ -38,7 +39,7 @@ export function CVPreview({ data }: CVPreviewProps) {
     const Watermark = () => (
         <div className="absolute inset-0 pointer-events-none flex items-center justify-center opacity-[0.015] -rotate-45 select-none overflow-hidden z-0">
             <span className="text-[12rem] font-black tracking-widest uppercase whitespace-nowrap text-slate-900">
-                EASYCV · EASYRECRUIT · 
+                EASYCV · EASYRECRUIT ·
             </span>
         </div>
     );
@@ -63,77 +64,6 @@ export function CVPreview({ data }: CVPreviewProps) {
                 <Watermark />
 
                 <div className="flex flex-1 relative z-10">
-                    {/* Left Rail (Sidebar) */}
-                    <div className="w-[320px] bg-slate-50/80 backdrop-blur-sm p-10 space-y-12 border-r border-slate-100">
-                        {/* Profile Header in Sidebar */}
-                        <div className="space-y-4">
-                            <div className="w-20 h-20 bg-slate-900 rounded-2xl flex items-center justify-center text-white text-3xl font-black">
-                                {profile.current_job_title?.charAt(0) || "U"}
-                            </div>
-                            <h1 className="text-2xl font-black text-slate-900 leading-none tracking-tight">
-                                {profile.full_name || "Your Name"}
-                            </h1>
-                            <p className="text-xs font-bold text-er-primary uppercase tracking-widest">{profile.current_job_title}</p>
-                            <div className="space-y-2.5 pt-2">
-                                <div className="flex items-center gap-3 text-xs font-bold text-slate-500">
-                                    <Mail className="w-4 h-4 text-slate-400" />
-                                    <span>{profile.email}</span>
-                                </div>
-                                <div className="flex items-center gap-3 text-xs font-bold text-slate-500">
-                                    <Phone className="w-4 h-4 text-slate-400" />
-                                    <span>{profile.phone}</span>
-                                </div>
-                                <div className="flex items-center gap-3 text-xs font-bold text-slate-500">
-                                    <MapPin className="w-4 h-4 text-slate-400" />
-                                    <span>{profile.district}, {profile.town}</span>
-                                </div>
-                                <div className="flex items-center gap-3 text-xs font-bold text-slate-500">
-                                    <Briefcase className="w-4 h-4 text-slate-400" />
-                                    <span>{profile.experience_years} Years Experience</span>
-                                </div>
-                                <div className="flex items-center gap-3 text-xs font-bold text-slate-500">
-                                    <Globe className="w-4 h-4 text-slate-400" />
-                                    <span>{profile.languages?.join(", ") || "English"}</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Skills Section */}
-                        <section className="space-y-6">
-                            <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.25em] flex items-center gap-2">
-                                <Star className="w-3.5 h-3.5" /> Proficiencies
-                            </h3>
-                            <div className="space-y-5">
-                                {skills.map((s, idx) => (
-                                    <div key={idx} className="group">
-                                        <div className="flex justify-between items-center mb-2">
-                                            <span className="text-xs font-black text-slate-700">{getSkillName(s)}</span>
-                                            <span className="text-[9px] font-bold text-slate-400 uppercase">{s.proficiency_level}</span>
-                                        </div>
-                                        <div className="h-1.5 bg-white border border-slate-100 rounded-full overflow-hidden">
-                                            <div 
-                                                className="h-full bg-slate-900 rounded-full transition-all duration-1000" 
-                                                style={{ width: `${proficiencyPercent(s.proficiency_level)}%` }}
-                                            />
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        </section>
-
-                        {/* Details Card */}
-                        <section className="bg-slate-900 rounded-2xl p-6 text-white space-y-4">
-                            <div>
-                                <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-1">Expected Compensation</p>
-                                <p className="text-sm font-bold">MWK {profile.expected_salary?.toLocaleString()}</p>
-                            </div>
-                            <div className="flex items-center gap-2 text-[10px] font-bold">
-                                <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                                <span>{profile.willing_to_relocate ? "Open to Global Relocation" : "Prefers Local Roles"}</span>
-                            </div>
-                        </section>
-                    </div>
-
                     {/* Main Content Area */}
                     <div className="flex-1 p-12 space-y-12">
                         {/* Summary / Intro */}
@@ -143,7 +73,7 @@ export function CVPreview({ data }: CVPreviewProps) {
                                 <div className="flex-1 h-[2px] bg-slate-100" />
                             </div>
                             <p className="text-sm text-slate-500 leading-relaxed font-medium">
-                                Professional {profile.current_job_title} with {profile.experience_years} years of strategic experience in regional and international markets. Committed to delivering excellence through specialized skills in {skills.slice(0, 3).map(s => getSkillName(s)).join(", ")}.
+                                {summary || `Professional ${profile.current_job_title} with ${profile.experience_years} years of experience. Committed to delivering excellence through specialized skills in ${skills.slice(0, 3).map(s => getSkillName(s)).join(", ")}.`}
                             </p>
                         </section>
 
@@ -195,6 +125,72 @@ export function CVPreview({ data }: CVPreviewProps) {
                                 ))}
                             </div>
                         </section>
+
+                        {/* Right Rail (Sidebar) */}
+                    </div>
+                    <div className="w-[300px] bg-slate-50/80 p-8 space-y-8 border-l border-slate-100">
+                        <div className="space-y-4">
+                            <div className="w-20 h-20 bg-slate-900 rounded-2xl flex items-center justify-center text-white text-3xl font-black">
+                                {profile.current_job_title?.charAt(0) || "U"}
+                            </div>
+                            <h2 className="text-xl font-black text-slate-900 leading-none tracking-tight">{profile.full_name || "Your Name"}</h2>
+                            <p className="text-xs font-bold text-er-primary uppercase tracking-widest">{profile.current_job_title}</p>
+                            <div className="space-y-2.5 pt-2">
+                                <div className="flex items-center gap-3 text-xs font-bold text-slate-500">
+                                    <Mail className="w-4 h-4 text-slate-400" />
+                                    <span>{profile.email}</span>
+                                </div>
+                                <div className="flex items-center gap-3 text-xs font-bold text-slate-500">
+                                    <Phone className="w-4 h-4 text-slate-400" />
+                                    <span>{profile.phone}</span>
+                                </div>
+                                <div className="flex items-center gap-3 text-xs font-bold text-slate-500">
+                                    <MapPin className="w-4 h-4 text-slate-400" />
+                                    <span>{profile.district}, {profile.town}</span>
+                                </div>
+                                <div className="flex items-center gap-3 text-xs font-bold text-slate-500">
+                                    <Briefcase className="w-4 h-4 text-slate-400" />
+                                    <span>{profile.experience_years} Years Experience</span>
+                                </div>
+                                <div className="flex items-center gap-3 text-xs font-bold text-slate-500">
+                                    <Globe className="w-4 h-4 text-slate-400" />
+                                    <span>{profile.languages?.join(", ") || "English"}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <section className="space-y-6">
+                            <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.25em] flex items-center gap-2">
+                                <Star className="w-3.5 h-3.5" /> Proficiencies
+                            </h3>
+                            <div className="space-y-5">
+                                {skills.map((s, idx) => (
+                                    <div key={idx} className="group">
+                                        <div className="flex justify-between items-center mb-2">
+                                            <span className="text-xs font-black text-slate-700">{getSkillName(s)}</span>
+                                            <span className="text-[9px] font-bold text-slate-400 uppercase">{s.proficiency_level}</span>
+                                        </div>
+                                        <div className="h-1.5 bg-white border border-slate-100 rounded-full overflow-hidden">
+                                            <div
+                                                className="h-full bg-slate-900 rounded-full transition-all duration-1000"
+                                                style={{ width: `${proficiencyPercent(s.proficiency_level)}%` }}
+                                            />
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </section>
+
+                        <section className="bg-slate-900 rounded-2xl p-6 text-white space-y-4">
+                            <div>
+                                <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-1">Expected Compensation</p>
+                                <p className="text-sm font-bold">MWK {profile.expected_salary?.toLocaleString()}</p>
+                            </div>
+                            <div className="flex items-center gap-2 text-[10px] font-bold">
+                                <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                                <span>{profile.willing_to_relocate ? "Open to Global Relocation" : "Prefers Local Roles"}</span>
+                            </div>
+                        </section>
                     </div>
                 </div>
 
@@ -232,7 +228,7 @@ export function CVPreview({ data }: CVPreviewProps) {
                             <section>
                                 <h3 className="text-xs font-black uppercase tracking-[0.3em] border-b border-slate-200 pb-2 mb-6">Executive Summary</h3>
                                 <p className="text-sm leading-relaxed text-slate-700 italic">
-                                    Accomplished {profile.current_job_title} with over {profile.experience_years} years of professional excellence. Demonstrated expertise in high-level operations and strategic project management, with a track record of driving significant business outcomes in {profile.district} and beyond.
+                                    {summary || `Accomplished ${profile.current_job_title} with over ${profile.experience_years} years of professional excellence. Demonstrated expertise in high-level operations and strategic project management, with a track record of driving significant business outcomes in ${profile.district} and beyond.`}
                                 </p>
                             </section>
 
@@ -295,7 +291,7 @@ export function CVPreview({ data }: CVPreviewProps) {
     return (
         <div className="bg-white min-h-[1100px] p-20 shadow-2xl relative font-sans text-slate-900">
             <Watermark />
-            
+
             <div className="relative z-10 space-y-16">
                 <header className="flex justify-between items-start border-b border-slate-100 pb-12">
                     <div className="space-y-4">

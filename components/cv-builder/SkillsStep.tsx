@@ -1,4 +1,4 @@
-import { Plus, X } from "lucide-react";
+import { Plus, X, Zap } from "lucide-react";
 import { FormSelect, FormCheckboxGroup } from "./FormComponents";
 import { SkillProficiency } from "@/types/resume";
 
@@ -58,14 +58,14 @@ export function SkillsStep({
     return (
         <div className="space-y-8">
             {/* Technical Skills */}
+
             <div className="space-y-4">
-                <div>
-                    <h3 className="text-lg font-bold text-gray-900 mb-2">
-                        Technical Skills
-                    </h3>
-                    <p className="text-gray-600">
-                        Add the technical skills you have and your proficiency level.
-                    </p>
+                <div className="flex items-center gap-3">
+                    <Zap className="w-5 h-5 text-gray-600" />
+                    <div>
+                        <h3 className="text-lg font-bold text-gray-900 mb-0">Technical Skills</h3>
+                        <p className="text-sm text-gray-600">Add the technical skills you have and your proficiency level.</p>
+                    </div>
                 </div>
 
                 <div className="space-y-3 max-h-80 overflow-y-auto">

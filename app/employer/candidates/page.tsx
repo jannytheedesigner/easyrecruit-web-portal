@@ -24,131 +24,38 @@ export default function TalentDirectoryPage() {
     const [viewMode, setViewMode] = useState<"grid" | "list">("grid")
     const [favorites, setFavorites] = useState<string[]>([])
 
-    // Mock data for talents (will be replaced with real API)
-    const mockTalents: Talent[] = [
-        {
-            id: "1",
-            name: "Alex Johnson",
-            email: "alex.johnson@email.com",
-            role: "jobseeker",
-            title: "Senior Frontend Developer",
-            location: "San Francisco, CA",
-            skills: ["React", "TypeScript", "Next.js", "Tailwind", "GraphQL"],
-            experience: 8,
-            salary_expectation: 120000,
-            availability: "Immediate",
-            rating: 4.8,
-            profile_views: 245,
-            applications: 12,
-            is_favorite: true,
-            avatar_color: "bg-gradient-to-br from-blue-500 to-blue-600",
-            created_at: "2024-01-15T10:30:00Z"
-        },
-        {
-            id: "2",
-            name: "Maria Garcia",
-            email: "maria.garcia@email.com",
-            role: "jobseeker",
-            title: "UX/UI Designer",
-            location: "New York, NY",
-            skills: ["Figma", "Adobe XD", "User Research", "Prototyping", "Design Systems"],
-            experience: 6,
-            salary_expectation: 95000,
-            availability: "Immediate",
-            rating: 4.9,
-            profile_views: 189,
-            applications: 8,
-            is_favorite: false,
-            avatar_color: "bg-gradient-to-br from-purple-500 to-purple-600",
-            created_at: "2024-02-10T14:20:00Z"
-        },
-        {
-            id: "3",
-            name: "David Chen",
-            email: "david.chen@email.com",
-            role: "jobseeker",
-            title: "Full Stack Developer",
-            location: "Remote",
-            skills: ["Node.js", "Python", "AWS", "Docker", "PostgreSQL"],
-            experience: 7,
-            salary_expectation: 110000,
-            availability: "1 Week",
-            rating: 4.7,
-            profile_views: 156,
-            applications: 15,
-            is_favorite: false,
-            avatar_color: "bg-gradient-to-br from-green-500 to-green-600",
-            created_at: "2024-01-28T09:15:00Z"
-        },
-        {
-            id: "4",
-            name: "Sarah Williams",
-            email: "sarah.williams@email.com",
-            role: "jobseeker",
-            title: "Product Manager",
-            location: "Austin, TX",
-            skills: ["Agile", "Product Strategy", "Data Analysis", "Roadmapping", "Team Leadership"],
-            experience: 9,
-            salary_expectation: 135000,
-            availability: "Immediate",
-            rating: 4.6,
-            profile_views: 178,
-            applications: 6,
-            is_favorite: true,
-            avatar_color: "bg-gradient-to-br from-pink-500 to-pink-600",
-            created_at: "2024-02-05T11:45:00Z"
-        },
-        {
-            id: "5",
-            name: "Michael Brown",
-            email: "michael.brown@email.com",
-            role: "jobseeker",
-            title: "DevOps Engineer",
-            location: "Lilongwe, City Center",
-            skills: ["Kubernetes", "Terraform", "CI/CD", "Monitoring", "Security"],
-            experience: 5,
-            salary_expectation: 105000,
-            availability: "3 Weeks",
-            rating: 4.5,
-            profile_views: 134,
-            applications: 10,
-            is_favorite: false,
-            avatar_color: "bg-gradient-to-br from-yellow-500 to-yellow-600",
-            created_at: "2024-02-12T16:30:00Z"
-        },
-        {
-            id: "6",
-            name: "Emma Davis",
-            email: "emma.davis@email.com",
-            role: "jobseeker",
-            title: "Data Scientist",
-            location: "Boston, MA",
-            skills: ["Python", "Machine Learning", "SQL", "Tableau", "Statistics"],
-            experience: 4,
-            salary_expectation: 98000,
-            availability: "Immediate",
-            rating: 4.8,
-            profile_views: 167,
-            applications: 7,
-            is_favorite: false,
-            avatar_color: "bg-gradient-to-br from-red-500 to-red-600",
-            created_at: "2024-02-08T13:20:00Z"
-        }
-    ]
-
     useEffect(() => {
         fetchTalents()
     }, [])
 
     const fetchTalents = async () => {
         try {
-            // For now, use mock data
-            // Later replace with: const response = await axiosClient.get("/talents")
-            setTalents(mockTalents)
+            const response = await axiosClient.get("/candidates/search")
+            const data = response.data?.data || []
+            
+            const mappedData: Talent[] = data.map((item: any) => ({
+                id: item.id,
+                user_id: item.user_id,
+                name: item.user?.name || `Candidate #${item.id}`,
+                email: item.user?.email || "",
+                role: "jobseeker", // default from API context
+                current_job_title: item.current_job_title || "Professional",
+                location: [item.town, item.district].filter(Boolean).join(", ") || "Location not specified",
+                skills: item.skills || [],
+                experience_years: item.experience_years || 0,
+                expected_salary: item.expected_salary || 0,
+                availability: item.current_status === "unemployed" ? "Immediate" : "Currently Employed",
+                rating: 0, // Not provided directly in basic payload, assuming 0/null
+                profile_views: 0, 
+                applications: 0,
+                is_favorite: favorites.includes(String(item.id)), // map based on local state
+                avatar_color: ["bg-gradient-to-br from-blue-500 to-blue-600", "bg-gradient-to-br from-purple-500 to-purple-600", "bg-gradient-to-br from-green-500 to-green-600", "bg-gradient-to-br from-pink-500 to-pink-600", "bg-gradient-to-br from-yellow-500 to-yellow-600"][Number(item.id) % 5],
+                created_at: item.created_at
+            }))
+            
+            setTalents(mappedData)
         } catch (error) {
             console.error("Failed to fetch talents:", error)
-            // Fallback to mock data
-            setTalents(mockTalents)
         } finally {
             setLoading(false)
         }
@@ -169,10 +76,10 @@ export default function TalentDirectoryPage() {
 
     const filteredTalents = talents.filter((talent) => {
         const matchesSearch =
-            talent.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            talent.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            talent.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            talent.skills?.some(skill => skill.toLowerCase().includes(searchTerm.toLowerCase()))
+            talent.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            talent.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            talent.current_job_title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            talent.skills?.some(skill => skill.name.toLowerCase().includes(searchTerm.toLowerCase()))
         const matchesFilter = filterRole === "all" || talent.role === filterRole
         return matchesSearch && matchesFilter
     })
@@ -352,7 +259,7 @@ export default function TalentDirectoryPage() {
                                 {/* Talent Header */}
                                 <div className="relative">
                                     <button
-                                        onClick={() => toggleFavorite(talent.id)}
+                                        onClick={() => toggleFavorite(String(talent.id))}
                                         className="absolute top-0 right-0 z-10 p-2 bg-slate-50 border border-slate-100 rounded-full transition-all group-hover:border-er-primary/20 hover:bg-slate-100"
                                     >
                                         {talent.is_favorite ? (
@@ -364,7 +271,7 @@ export default function TalentDirectoryPage() {
 
                                     <div className="flex items-start gap-4">
                                         <div className={`w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0 ${talent.avatar_color} text-white font-bold text-xl shadow-lg shadow-slate-200 group-hover:scale-105 transition-transform`}>
-                                            {talent.name.charAt(0).toUpperCase()}
+                                            {talent.name ? talent.name.charAt(0).toUpperCase() : "U"}
                                         </div>
                                         <div className="flex-1 min-w-0 my-auto pt-1">
                                             <div className="flex items-center gap-2">
@@ -376,7 +283,7 @@ export default function TalentDirectoryPage() {
                                                     </span>
                                                 )}
                                             </div>
-                                            <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mt-0.5">{talent.title}</p>
+                                            <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mt-0.5">{talent.current_job_title}</p>
                                         </div>
                                     </div>
 
@@ -386,7 +293,7 @@ export default function TalentDirectoryPage() {
                                             <Briefcase className="w-4 h-4 text-slate-400" />
                                             <div>
                                                 <div className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Experience</div>
-                                                <div className="text-sm font-semibold text-slate-900">{talent.experience} years</div>
+                                                <div className="text-sm font-semibold text-slate-900">{talent.experience_years} years</div>
                                             </div>
                                         </div>
                                         <div className="flex items-center gap-2">
@@ -405,7 +312,7 @@ export default function TalentDirectoryPage() {
                                                 key={index}
                                                 className="px-3 py-1.5 bg-er-primary/5 text-er-primary border border-er-primary/10 rounded-full text-[10px] font-bold uppercase tracking-widest"
                                             >
-                                                {skill}
+                                                {skill.name}
                                             </span>
                                         ))}
                                         {talent.skills && talent.skills.length > 3 && (
@@ -421,7 +328,7 @@ export default function TalentDirectoryPage() {
                                     <div className="flex items-center justify-between">
                                         <div className="flex flex-col">
                                             <span className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Expected</span>
-                                            <span className="text-sm font-bold text-slate-900">MWK {talent.salary_expectation?.toLocaleString()}</span>
+                                            <span className="text-sm font-bold text-slate-900">MWK {Number(talent.expected_salary)?.toLocaleString() || "N/A"}</span>
                                         </div>
                                         <div className="flex items-center gap-2">
                                             <button className="p-2.5 text-slate-400 hover:text-er-primary hover:bg-er-primary/5 rounded-xl transition-colors">
@@ -459,7 +366,7 @@ export default function TalentDirectoryPage() {
                                             <td className="py-4 px-6">
                                                 <div className="flex items-center gap-3">
                                                     <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${talent.avatar_color} text-white font-bold`}>
-                                                        {talent.name.charAt(0).toUpperCase()}
+                                                        {talent.name ? talent.name.charAt(0).toUpperCase() : "U"}
                                                     </div>
                                                     <div>
                                                         <div className="font-medium text-gray-900">{talent.name}</div>
@@ -468,7 +375,7 @@ export default function TalentDirectoryPage() {
                                                 </div>
                                             </td>
                                             <td className="py-4 px-6">
-                                                <div className="font-medium text-gray-900">{talent.title}</div>
+                                                <div className="font-medium text-gray-900">{talent.current_job_title}</div>
                                             </td>
                                             <td className="py-4 px-6">
                                                 <div className="flex items-center gap-2 text-gray-700">
@@ -477,11 +384,11 @@ export default function TalentDirectoryPage() {
                                                 </div>
                                             </td>
                                             <td className="py-4 px-6">
-                                                <div className="font-semibold text-gray-900">{talent.experience} years</div>
+                                                <div className="font-semibold text-gray-900">{talent.experience_years} years</div>
                                             </td>
                                             <td className="py-4 px-6">
                                                 <div className="font-semibold text-gray-900">
-                                                    ${talent.salary_expectation?.toLocaleString()}
+                                                    MWK {Number(talent.expected_salary)?.toLocaleString() || "N/A"}
                                                 </div>
                                             </td>
                                             <td className="py-4 px-6">
@@ -492,7 +399,7 @@ export default function TalentDirectoryPage() {
                                             <td className="py-4 px-6">
                                                 <div className="flex items-center gap-2">
                                                     <button
-                                                        onClick={() => toggleFavorite(talent.id)}
+                                                        onClick={() => toggleFavorite(String(talent.id))}
                                                         className="p-2 text-gray-400 hover:text-yellow-500 hover:bg-yellow-50 rounded-lg"
                                                     >
                                                         {talent.is_favorite ? (

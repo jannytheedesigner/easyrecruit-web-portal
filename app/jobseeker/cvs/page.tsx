@@ -11,7 +11,7 @@ import Link from "next/link";
 interface CV {
     id: number;
     title: string;
-    template: string;
+    template_name: string;
     is_default: boolean;
     created_at: string;
     updated_at: string;
@@ -168,7 +168,7 @@ export default function CVsPage() {
                                     {cv.title}
                                 </h3>
                                 <div className="flex items-center gap-3 text-[10px] font-bold uppercase tracking-widest text-slate-400">
-                                    <span className="bg-slate-50 px-2 py-0.5 rounded border border-slate-100">{cv.template} Style</span>
+                                    <span className="bg-slate-50 px-2 py-0.5 rounded border border-slate-100">{cv.template_name} Style</span>
                                     <span>•</span>
                                     <span className="flex items-center gap-1.5">
                                         <Calendar className="w-3 h-3" /> {formatRelativeTime(cv.updated_at)}

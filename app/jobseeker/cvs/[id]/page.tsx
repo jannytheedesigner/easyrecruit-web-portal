@@ -6,7 +6,7 @@ import {
     ArrowLeft, Download, Save, Plus, Trash2, FileText, User, Briefcase,
     GraduationCap, Award, ChevronDown, ChevronUp, Palette, Eye,
     CheckCircle, Loader2, RefreshCw, ExternalLink, Sparkles, Star,
-    LayoutTemplate, Pencil
+    LayoutTemplate, Pencil, AlignLeft
 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import axiosClient, { initCsrf } from "@/lib/axiosClient";
@@ -20,6 +20,7 @@ import { ProfileDetails, EducationHistory, WorkExperience, SkillProficiency } fr
 interface CVRecord {
     id: number;
     title: string;
+    summary?: string;
     template_name: string;
     is_default: boolean;
     pdf_url?: string;
@@ -44,7 +45,7 @@ const Section = ({ title, icon: Icon, children, defaultOpen = false }: { title: 
     const [isOpen, setIsOpen] = useState(defaultOpen);
     return (
         <div className="bg-white border border-slate-100 rounded-2xl p-5 shadow-sm">
-            <div 
+            <div
                 className="flex items-center justify-between cursor-pointer"
                 onClick={() => setIsOpen(!isOpen)}
             >
@@ -72,8 +73,11 @@ export default function CVPreviewPage() {
     const [saving, setSaving] = useState(false);
     const [downloading, setDownloading] = useState(false);
     const [activeTab, setActiveTab] = useState<"preview" | "edit">("preview");
+    const [lastSaved, setLastSaved] = useState<Date | null>(null);
 
     const [cv, setCv] = useState<CVRecord | null>(null);
+    // summary is kept as its own state for clarity and passed to the preview
+    const [summary, setSummary] = useState("");
     const [profile, setProfile] = useState<ProfileDetails>({
         current_job_title: "", experience_years: 0, expected_salary: 0,
         district: "", town: "", languages: [], willing_to_relocate: false,
@@ -89,7 +93,7 @@ export default function CVPreviewPage() {
             try {
                 await initCsrf();
 
-                // Fetch core CV data and available skills
+                // Fetch core CV data and available skills in parallel
                 const [cvRes, skillsRes] = await Promise.all([
                     axiosClient.get(`/resumes/${cvId}`).catch(err => {
                         console.error("CV fetch failed:", err);
@@ -100,44 +104,49 @@ export default function CVPreviewPage() {
 
                 const cvData = cvRes.data?.data || cvRes.data;
                 if (!cvData) throw new Error("CV not found");
-                
+
                 setCv(cvData);
+                setSummary(cvData.summary || "");
                 setAvailableSkills(skillsRes.data?.data || []);
 
-                // Load profile details with multiple fallbacks
+                // Load profile sections in parallel
                 const [profileRes, eduRes, expRes, skIntRes] = await Promise.all([
-                    axiosClient.get("/onboarding/jobseeker/basic-details").catch(() => 
+                    axiosClient.get("/onboarding/jobseeker/basic-details").catch(() =>
                         axiosClient.get("/profile").catch(() => ({ data: {} }))
                     ),
                     axiosClient.get("/onboarding/jobseeker/education-background").catch(() => ({ data: {} })),
                     axiosClient.get("/onboarding/jobseeker/work-experience").catch(() => ({ data: {} })),
                     axiosClient.get("/onboarding/jobseeker/skills-and-interests").catch(() => ({ data: {} })),
                 ]);
-                
-                // Extract jobseeker data
+
+                // Extract jobseeker data (handle both wrapped and flat responses)
                 const d = profileRes.data?.jobseeker || profileRes.data?.data?.jobseeker || profileRes.data?.data || profileRes.data || {};
-                
+
                 setProfile({
                     full_name: d.user?.name || user?.name || "",
                     email: d.user?.email || user?.email || "",
                     phone: d.phone || d.phone_primary || "",
-                    current_job_title: cvData.title || d.current_job_title || "", 
+                    current_job_title: d.current_job_title || cvData.title || "",
                     experience_years: Number(d.experience_years) || 0,
                     expected_salary: Number(d.expected_salary) || 0,
                     district: d.district || "",
                     town: d.town || "",
-                    languages: Array.isArray(d.languages) ? d.languages : (d.languages ? (typeof d.languages === 'string' ? JSON.parse(d.languages) : d.languages) : []),
+                    languages: Array.isArray(d.languages)
+                        ? d.languages
+                        : d.languages
+                            ? (typeof d.languages === "string" ? JSON.parse(d.languages) : d.languages)
+                            : [],
                     willing_to_relocate: d.willing_to_relocate === 1 || d.willing_to_relocate === true,
                 });
 
                 if (eduRes.data?.educations || eduRes.data?.data?.educations) {
                     const edus = eduRes.data?.educations || eduRes.data?.data?.educations || [];
-                    setEducation(edus.map((e: any) => ({ 
-                        ...e, 
-                        year_completed: Number(e.year_completed) 
+                    setEducation(edus.map((e: any) => ({
+                        ...e,
+                        year_completed: Number(e.year_completed)
                     })));
                 }
-                
+
                 if (expRes.data?.experiences || expRes.data?.data?.experiences) {
                     setExperiences(expRes.data?.experiences || expRes.data?.data?.experiences || []);
                 }
@@ -164,19 +173,56 @@ export default function CVPreviewPage() {
 
 
     const handleSave = async () => {
+        if (!cv) return;
         setSaving(true);
         try {
             await Promise.all([
-                axiosClient.put("/profile/details", profile),
-                cv && axiosClient.put(`/resumes/${cvId}`, { title: cv.title, template_name: cv.template_name, is_default: cv.is_default }),
+                // 1. Save CV record (title, template, summary, default flag)
+                axiosClient.put(`/resumes/${cvId}`, {
+                    title: cv.title,
+                    template_name: cv.template_name,
+                    is_default: cv.is_default,
+                    summary,
+                }),
+                // 2. Save jobseeker profile via the correct onboarding endpoint
+                axiosClient.post("/onboarding/jobseeker/basic-details", {
+                    current_job_title: profile.current_job_title,
+                    experience_years: profile.experience_years,
+                    expected_salary: profile.expected_salary,
+                    district: profile.district,
+                    town: profile.town,
+                    languages: profile.languages,
+                    willing_to_relocate: profile.willing_to_relocate,
+                }),
             ]);
-            // Save education & experiences
+
+            // 3. Upsert education entries (PUT if id exists, POST if new)
             const validEdu = education.filter(e => e.level && e.qualification && e.institution);
-            if (validEdu.length > 0) await Promise.all(validEdu.map(e => e.id ? axiosClient.put(`/job-seeker-educations/${e.id}`, e) : axiosClient.post("/job-seeker-educations", e)));
+            if (validEdu.length > 0) {
+                await Promise.all(
+                    validEdu.map(e =>
+                        e.id
+                            ? axiosClient.put(`/job-seeker-educations/${e.id}`, e)
+                            : axiosClient.post("/job-seeker-educations", e)
+                    )
+                );
+            }
 
+            // 4. Upsert experience entries
             const validExp = experiences.filter(e => e.organisation && e.role && e.start_date);
-            if (validExp.length > 0) await Promise.all(validExp.map(e => e.id ? axiosClient.put(`/job-seeker-experiences/${e.id}`, e) : axiosClient.post("/job-seeker-experiences", e)));
+            if (validExp.length > 0) {
+                await Promise.all(
+                    validExp.map(e =>
+                        e.id
+                            ? axiosClient.put(`/job-seeker-experiences/${e.id}`, e)
+                            : axiosClient.post("/job-seeker-experiences", e)
+                    )
+                );
+            }
 
+            // Update local cv state with saved summary
+            setCv(prev => prev ? { ...prev, summary } : prev);
+            setLastSaved(new Date());
             toast({ title: "✅ Saved!", description: "All changes have been saved successfully." });
         } catch (err: any) {
             toast({ title: "Error saving", description: err?.response?.data?.message || "Something went wrong", variant: "destructive" });
@@ -193,13 +239,13 @@ export default function CVPreviewPage() {
             if (pdfUrl) {
                 window.open(pdfUrl, "_blank");
             } else {
-                // Fallback: direct download
-                const response = await axiosClient.get(`/resumes/${cvId}/download`, { responseType: 'blob' });
-                const blob = new Blob([response.data], { type: 'application/pdf' });
+                // Fallback: direct download blob
+                const response = await axiosClient.get(`/resumes/${cvId}/download`, { responseType: "blob" });
+                const blob = new Blob([response.data], { type: "application/pdf" });
                 const url = window.URL.createObjectURL(blob);
-                const a = document.createElement('a');
+                const a = document.createElement("a");
                 a.href = url;
-                a.download = `${cv?.title?.replace(/\s+/g, '_') || 'resume'}.pdf`;
+                a.download = `${cv?.title?.replace(/\s+/g, "_") || "resume"}.pdf`;
                 document.body.appendChild(a);
                 a.click();
                 document.body.removeChild(a);
@@ -246,7 +292,12 @@ export default function CVPreviewPage() {
                     </Link>
                     <div>
                         <h1 className="font-black text-slate-900 text-sm leading-none">{cv.title}</h1>
-                        <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-0.5">CV Studio · {cv.template_name} template</p>
+                        <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-0.5">
+                            CV Studio · {cv.template_name} template
+                            {lastSaved && (
+                                <span className="ml-2 text-emerald-500">· Saved {lastSaved.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</span>
+                            )}
+                        </p>
                     </div>
                     {cv.is_default && (
                         <span className="flex items-center gap-1.5 bg-er-primary/10 text-er-primary text-[9px] font-black uppercase tracking-widest px-2.5 py-1 rounded-full">
@@ -328,6 +379,22 @@ export default function CVPreviewPage() {
                             className="w-full px-4 py-3 bg-slate-50 rounded-xl border-2 border-transparent focus:border-er-primary/30 focus:bg-white outline-none font-bold text-slate-900 text-sm transition-all"
                             placeholder="e.g. Senior Developer 2025"
                         />
+                    </div>
+
+                    {/* Professional Summary */}
+                    <div className="bg-white border border-slate-100 rounded-2xl p-5 shadow-sm">
+                        <div className="flex items-center gap-2 mb-2">
+                            <AlignLeft className="w-4 h-4 text-er-primary" />
+                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Professional Summary</label>
+                        </div>
+                        <textarea
+                            value={summary}
+                            onChange={e => setSummary(e.target.value)}
+                            rows={5}
+                            className="w-full px-4 py-3 bg-slate-50 rounded-xl border-2 border-transparent focus:border-er-primary/30 focus:bg-white outline-none text-slate-900 text-sm transition-all resize-none leading-relaxed"
+                            placeholder="Write a compelling professional summary that highlights your key skills, experience, and career goals…"
+                        />
+                        <p className="text-[10px] text-slate-400 mt-1.5">{summary.length} characters</p>
                     </div>
 
                     {/* Bio Section */}
@@ -423,7 +490,7 @@ export default function CVPreviewPage() {
                     <Section title="Education" icon={GraduationCap}>
                         <div className="space-y-4 pt-4">
                             {education.map((edu, idx) => (
-                                <div key={idx} className="bg-slate-50 p-4 rounded-xl border border-slate-100 relative">
+                                <div key={edu.id ?? idx} className="bg-slate-50 p-4 rounded-xl border border-slate-100 relative">
                                     <button
                                         onClick={() => setEducation(education.filter((_, i) => i !== idx))}
                                         className="absolute top-3 right-3 p-1 text-slate-300 hover:text-red-500 transition-colors"
@@ -463,7 +530,7 @@ export default function CVPreviewPage() {
                     <Section title="Work Experience" icon={Briefcase}>
                         <div className="space-y-4 pt-4">
                             {experiences.map((exp, idx) => (
-                                <div key={idx} className="bg-slate-50 p-4 rounded-xl border border-slate-100 relative">
+                                <div key={exp.id ?? idx} className="bg-slate-50 p-4 rounded-xl border border-slate-100 relative">
                                     <button
                                         onClick={() => setExperiences(experiences.filter((_, i) => i !== idx))}
                                         className="absolute top-3 right-3 p-1 text-slate-300 hover:text-red-500 transition-colors"
@@ -597,6 +664,7 @@ export default function CVPreviewPage() {
                                         education,
                                         experiences,
                                         skills,
+                                        summary,
                                         resumeSettings: {
                                             title: cv.title,
                                             template_name: cv.template_name,

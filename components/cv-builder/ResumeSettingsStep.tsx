@@ -1,4 +1,5 @@
 import { FormInput, FormSelect, FormCheckbox } from "./FormComponents";
+import { ImageIcon } from "lucide-react";
 
 interface ResumeSettingsStepProps {
     data: {
@@ -17,6 +18,7 @@ export function ResumeSettingsStep({
         <div className="space-y-6">
             <FormInput
                 label="Resume Title"
+                icon={ImageIcon}
                 placeholder="e.g. Software Engineer Resume"
                 description="Give your resume a memorable name so you can identify it later."
                 value={data.title}
@@ -32,9 +34,8 @@ export function ResumeSettingsStep({
                 }
                 options={[
                     { value: "modern", label: "Modern" },
-                    { value: "classic", label: "Classic" },
-                    { value: "creative", label: "Creative" },
-                    { value: "professional", label: "Professional" },
+                    { value: "executive", label: "Executive" },
+                    { value: "minimal", label: "Minimal" },
                 ]}
             />
 

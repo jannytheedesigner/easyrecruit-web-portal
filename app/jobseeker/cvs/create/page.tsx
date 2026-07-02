@@ -21,6 +21,7 @@ import {
     ResumeSettingsStep,
     ResultStep,
 } from "@/components/cv-builder";
+import { CVPreview } from "@/components/cv-preview";
 import axiosClient from "@/lib/axiosClient";
 
 const STEPS = [
@@ -173,6 +174,19 @@ export default function CreateCVPage() {
             onBack={handleBack}
             isLoading={isProcessing}
             isFinalStep={currentStep === STEPS.length - 1}
+            preview={<CVPreview data={{
+                profile: data.profile,
+                education: data.education,
+                experiences: data.experiences,
+                skills: data.skills,
+                interests: data.interests,
+                summary: '',
+                resumeSettings: {
+                    title: data.resumeData?.title || '',
+                    template_name: data.resumeData?.template_name || 'modern',
+                },
+                availableSkills: availableSkills,
+            }} />}
         >
             {/* Profile Step */}
             {currentStep === 0 && (

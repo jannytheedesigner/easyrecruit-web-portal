@@ -64,7 +64,7 @@ export default function EmployerDashboardPage() {
 
     const fetchStats = async () => {
         try {
-            const response = await axiosClient.get("/dashboard/stats/employer");
+            const response = await axiosClient.get("employer/dashboard/stats");
             setStats(response.data.data || response.data);
         } catch (e) {
             console.error("Failed to fetch employer stats", e);

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, ChevronRight, Loader as LoaderIcon } from "lucide-react";
+import { ArrowLeft, ChevronRight, Loader as LoaderIcon, Save, Edit, Download } from "lucide-react";
 import { ReactNode } from "react";
 
 interface CVBuilderStep {
@@ -20,6 +20,7 @@ interface CVBuilderLayoutProps {
     isLoading?: boolean;
     isFinalStep?: boolean;
     showProgressBar?: boolean;
+    preview?: ReactNode;
 }
 
 export function CVBuilderLayout({
@@ -31,6 +32,7 @@ export function CVBuilderLayout({
     isLoading = false,
     isFinalStep = false,
     showProgressBar = true,
+    preview,
 }: CVBuilderLayoutProps) {
     const router = useRouter();
     const progressPercentage = ((currentStep + 1) / steps.length) * 100;
@@ -79,10 +81,10 @@ export function CVBuilderLayout({
                                 <div key={idx} className="flex items-center">
                                     <div
                                         className={`flex items-center gap-1 px-2 py-1 rounded-md text-xs font-bold transition-all ${currentStep === idx
-                                                ? "bg-er-primary/10 text-er-primary"
-                                                : currentStep > idx
-                                                    ? "bg-green-100 text-green-600"
-                                                    : "text-gray-400"
+                                            ? "bg-er-primary/10 text-er-primary"
+                                            : currentStep > idx
+                                                ? "bg-green-100 text-green-600"
+                                                : "text-gray-400"
                                             }`}
                                     >
                                         <step.icon className="w-3 h-3" />
@@ -134,60 +136,55 @@ export function CVBuilderLayout({
 
             {/* Main Content */}
             <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-                <div className="flex flex-col lg:flex-row gap-12">
-                    {/* Content Area */}
-                    <div className="flex-1">
-                        <div className="bg-white border border-gray-200 rounded-xl p-8">
-                            {/* Step Title */}
-                            <div className="mb-8 pb-6 border-b border-gray-200">
-                                <h2 className="text-2xl font-bold text-gray-900 mb-2">
+                <div className="flex flex-col lg:flex-row gap-8">
+                    {/* Left: Form / Steps */}
+                    <div className="w-full lg:w-2/5">
+                        <div className="bg-white border border-gray-200 rounded-xl p-6 lg:p-8">
+                            <div className="mb-6 pb-4 border-b border-gray-100">
+                                <h2 className="text-xl lg:text-2xl font-extrabold text-gray-900 mb-1">
                                     {steps[currentStep]?.title}
                                 </h2>
-                                <p className="text-gray-600">
+                                <p className="text-sm text-gray-600">
                                     {steps[currentStep]?.description}
                                 </p>
                             </div>
 
-                            {/* Content */}
                             {children}
                         </div>
                     </div>
 
-                    {/* Sidebar - Step Progress */}
-                    <div className="hidden lg:block w-full lg:w-64">
-                        <div className="bg-white border border-gray-200 rounded-xl p-6 sticky top-24">
-                            <h3 className="text-sm font-bold text-gray-900 mb-4">Progress</h3>
-                            <div className="space-y-3">
-                                {steps.map((step, idx) => (
-                                    <div
-                                        key={idx}
-                                        className={`flex items-center gap-3 p-3 rounded-lg transition-colors ${currentStep === idx
-                                                ? "bg-er-primary/5 border border-er-primary/20"
-                                                : currentStep > idx
-                                                    ? "bg-green-50 border border-green-200"
-                                                    : "bg-gray-50 border border-gray-200"
-                                            }`}
-                                    >
-                                        <div
-                                            className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 ${currentStep === idx
-                                                    ? "bg-er-primary text-white"
-                                                    : currentStep > idx
-                                                        ? "bg-green-600 text-white"
-                                                        : "bg-gray-300 text-white"
-                                                }`}
-                                        >
-                                            {currentStep > idx ? "✓" : idx + 1}
-                                        </div>
-                                        <div>
-                                            <p className="text-xs font-bold text-gray-900">
-                                                {step.title}
-                                            </p>
-                                            <p className="text-xs text-gray-500 line-clamp-1">
-                                                {step.description}
-                                            </p>
-                                        </div>
-                                    </div>
-                                ))}
+                    {/* Right: Live Preview */}
+                    <div className="w-full lg:w-3/5 flex items-start">
+                        <div className="w-full bg-gray-100 rounded-2xl p-8 flex flex-col items-center">
+                            <div className="w-full max-w-3xl flex items-center justify-between mb-6">
+                                <div className="flex items-center gap-3">
+                                    <button onClick={onBack} className="flex items-center gap-2 px-3 py-2 bg-white border border-gray-200 rounded-md text-sm font-medium">
+                                        <ArrowLeft className="w-4 h-4 text-gray-600" />
+                                        Back
+                                    </button>
+                                    <button className="flex items-center gap-2 px-3 py-2 bg-white border border-gray-200 rounded-md text-sm font-medium">
+                                        <Save className="w-4 h-4 text-gray-600" />
+                                        Save Draft
+                                    </button>
+                                </div>
+                                <div className="flex items-center gap-3">
+                                    <button className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-md text-sm font-medium">
+                                        <Edit className="w-4 h-4 text-gray-600" />
+                                        Edit CV
+                                    </button>
+                                    <button className="flex items-center gap-2 px-4 py-2 bg-er-primary text-white rounded-md text-sm font-medium">
+                                        <Download className="w-4 h-4" />
+                                        Download PDF
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div className="w-full flex justify-center">
+                                <div className="bg-white shadow-xl border border-gray-200 rounded-md w-full max-w-[900px] overflow-hidden">
+                                    {preview ? preview : (
+                                        <div className="p-12 text-center text-gray-500">CV Preview will appear here</div>
+                                    )}
+                                </div>
                             </div>
                         </div>
                     </div>

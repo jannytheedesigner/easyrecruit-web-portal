@@ -2,6 +2,7 @@ export interface Resume {
   id: number;
   user_id: number;
   title: string;
+  summary?: string;
   template_name: string;
   is_default: boolean;
   pdf_url?: string;

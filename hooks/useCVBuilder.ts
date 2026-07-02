@@ -215,7 +215,9 @@ export const useCVBuilder = () => {
             if (validEdu.length > 0) {
                 await Promise.all(
                     validEdu.map((e) =>
-                        axiosClient.post('/job-seeker-educations', e)
+                        e.id
+                            ? axiosClient.put(`/job-seeker-educations/${e.id}`, e)
+                            : axiosClient.post('/job-seeker-educations', e)
                     )
                 );
             }
@@ -239,7 +241,9 @@ export const useCVBuilder = () => {
             if (validExp.length > 0) {
                 await Promise.all(
                     validExp.map((e) =>
-                        axiosClient.post('/job-seeker-experiences', e)
+                        e.id
+                            ? axiosClient.put(`/job-seeker-experiences/${e.id}`, e)
+                            : axiosClient.post('/job-seeker-experiences', e)
                     )
                 );
             }

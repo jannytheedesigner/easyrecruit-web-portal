@@ -58,7 +58,21 @@ export default function JobseekerPersonalDetailsPage() {
           const data = res.data.jobseeker
           setForm((prev) => ({
             ...prev,
-            ...data,
+            national_id: data.national_id ?? "",
+            gender: data.gender ?? "",
+            date_of_birth: data.date_of_birth ?? "",
+            phone_primary: data.phone_primary ?? "",
+            phone_secondary: data.phone_secondary ?? "",
+            district: data.district ?? "",
+            town: data.town ?? "",
+            willing_to_relocate: data.willing_to_relocate ?? false,
+            preferred_location: data.preferred_location ?? "",
+            current_job_title: data.current_job_title ?? "",
+            current_status: data.current_status ?? "",
+            experience_years: data.experience_years ?? "",
+            expected_salary: data.expected_salary ?? "",
+            driving_license: data.driving_license ?? "",
+            profile_picture: data.profile_picture ?? "",
             languages: Array.isArray(data.languages)
               ? data.languages
               : data.languages

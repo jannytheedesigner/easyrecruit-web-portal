@@ -1,7 +1,7 @@
 // lib/axiosClient.ts
 import axios from "axios";
 
-const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000/api";
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || "https://easyrecruit.beestack.online/api";
 // Derive the app origin (without /api) for Sanctum cookie endpoint
 const API_ORIGIN = API_BASE.replace(/\/?api\/?$/, "");
 

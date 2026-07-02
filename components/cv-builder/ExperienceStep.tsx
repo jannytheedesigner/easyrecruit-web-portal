@@ -1,5 +1,6 @@
 import { Plus } from "lucide-react";
 import { FormInput, FormSelect, FormTextarea, FormCard } from "./FormComponents";
+import { Briefcase } from "lucide-react";
 import { WorkExperience } from "@/types/resume";
 
 interface ExperienceStepProps {
@@ -42,9 +43,10 @@ export function ExperienceStep({ data, onChange }: ExperienceStepProps) {
     return (
         <div className="space-y-6">
             <div className="flex justify-between items-center">
-                <p className="text-gray-600">
-                    Add your professional work experience and employment history.
-                </p>
+                <div className="flex items-center gap-3">
+                    <Briefcase className="w-5 h-5 text-gray-600" />
+                    <p className="text-gray-600">Add your professional work experience and employment history.</p>
+                </div>
                 <button
                     onClick={addExperience}
                     className="flex items-center gap-2 px-4 py-2 bg-er-primary hover:bg-er-primary/90 text-white font-medium rounded-lg transition-colors"

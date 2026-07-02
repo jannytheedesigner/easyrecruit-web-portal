@@ -1,5 +1,6 @@
 import { Plus } from "lucide-react";
 import { FormInput, FormCard } from "./FormComponents";
+import { GraduationCap } from "lucide-react";
 import { EducationHistory } from "@/types/resume";
 
 interface EducationStepProps {
@@ -36,9 +37,10 @@ export function EducationStep({ data, onChange }: EducationStepProps) {
     return (
         <div className="space-y-6">
             <div className="flex justify-between items-center">
-                <p className="text-gray-600">
-                    Add your educational qualifications and certifications.
-                </p>
+                <div className="flex items-center gap-3">
+                    <GraduationCap className="w-5 h-5 text-gray-600" />
+                    <p className="text-gray-600">Add your educational qualifications and certifications.</p>
+                </div>
                 <button
                     onClick={addEducation}
                     className="flex items-center gap-2 px-4 py-2 bg-er-primary hover:bg-er-primary/90 text-white font-medium rounded-lg transition-colors"
